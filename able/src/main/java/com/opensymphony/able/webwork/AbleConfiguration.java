@@ -23,11 +23,11 @@ import java.io.File;
 /**
  * @author Patrick Lightbody (plightbo at gmail dot com)
  */
-public class JuiceConfiguration implements Configuration {
+public class AbleConfiguration implements Configuration {
     private ServletContext servletContext;
     private PackageConfig webworkDefault;
 
-    public JuiceConfiguration(ServletContext servletContext) {
+    public AbleConfiguration(ServletContext servletContext) {
         this.servletContext = servletContext;
 
         XmlConfigurationProvider xml = new XmlConfigurationProvider("webwork-default.xml");

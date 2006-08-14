@@ -10,7 +10,7 @@ import java.util.Date;
 @Results(results = {
 @Result(type = Flash.class, location = "registered")
         })
-public class RegisterAction extends JuiceActionSupport {
+public class RegisterAction extends AbleActionSupport {
     private User user;
     private String password;
     private String confirmPassword;

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @Results(results = {
 @Result(type = Redirect.class, location = "home")
         })
-public class LoginAction extends JuiceActionSupport implements ServletResponseAware {
+public class LoginAction extends AbleActionSupport implements ServletResponseAware {
     private String username;
     private String password;
     private boolean remember;

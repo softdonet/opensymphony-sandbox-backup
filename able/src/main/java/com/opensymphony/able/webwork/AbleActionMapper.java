@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * @author Patrick Lightbody (plightbo at gmail dot com)
  */
-public class JuiceActionMapper implements ActionMapper {
+public class AbleActionMapper implements ActionMapper {
     public ActionMapping getMapping(HttpServletRequest request) {
         String path = request.getServletPath();
 

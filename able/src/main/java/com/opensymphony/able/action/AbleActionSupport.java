@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:plightbo@gmail.com">Patrick Lightbody</a>
  */
-public class JuiceActionSupport extends ActionSupport implements SessionAware {
+public class AbleActionSupport extends ActionSupport implements SessionAware {
     protected UserService userService;
     protected User currentUser;
 

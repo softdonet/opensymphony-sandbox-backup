@@ -3,7 +3,7 @@ package com.opensymphony.able.action;
 /**
  * @author <a href="mailto:plightbo@gmail.com">Patrick Lightbody</a>
  */
-public class ForgotPasswordAction extends JuiceActionSupport {
+public class ForgotPasswordAction extends AbleActionSupport {
     private String username;
 
     public String execute() throws Exception {

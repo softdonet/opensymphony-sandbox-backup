@@ -21,7 +21,7 @@ public class MailServiceImpl implements MailService {
         try {
             Message msg = new MimeMessage(session);
             try {
-                msg.setFrom(new InternetAddress("support@able.com", "Juice"));
+                msg.setFrom(new InternetAddress("support@able.com", "Able Support"));
             } catch (UnsupportedEncodingException e) {
                 throw new MailException("Unexpected encoding problem while constructing From address", e);
             }

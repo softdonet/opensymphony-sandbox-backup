@@ -87,7 +87,7 @@ public class UserService extends DaoService<User> {
         dao.update("password", user);
 
         // email it out
-        mailService.send(user.getEmail(), "Juice: Reset Password", "Your new password is: " + password);
+        mailService.send(user.getEmail(), "Able: Reset Password", "Your new password is: " + password);
     }
 
     public void changePassword(User user, String newPassword) {

@@ -4,7 +4,7 @@
 <decorator:useHtmlPage id="p"/>
 <html>
 <head>
-    <title>Juice</title>
+    <title>Able</title>
     <ww:head/>
     <decorator:head/>
 </head>
@@ -17,7 +17,7 @@
 		<div id="page">
 			<decorator:body/>
             <div class="copyright">
-                Juice-based App v1.0.<%= UpgradeService.getBuildNumber() %> | Copyright &copy; 2006, Acme Corp
+                Able-based App v1.0.<%= UpgradeService.getBuildNumber() %> | Copyright &copy; 2006, Acme Corp
             </div>
         </div>
 	</div>

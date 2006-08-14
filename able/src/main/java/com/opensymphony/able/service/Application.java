@@ -1,7 +1,7 @@
 package com.opensymphony.able.service;
 
 import com.opensymphony.able.util.ScriptRunner;
-import com.opensymphony.able.webwork.JuiceConfiguration;
+import com.opensymphony.able.webwork.AbleConfiguration;
 import com.opensymphony.util.ClassLoaderUtil;
 import com.opensymphony.xwork.config.ConfigurationManager;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -37,7 +37,7 @@ public class Application implements ServletContextAware {
     }
 
     public void init() {
-        ConfigurationManager.setConfiguration(new JuiceConfiguration(servletContext));
+        ConfigurationManager.setConfiguration(new AbleConfiguration(servletContext));
 
         String url = dataSource.getUrl();
 
@@ -90,7 +90,7 @@ public class Application implements ServletContextAware {
                 ps.executeUpdate();
             }
         } catch (Exception e) {
-            String msg = "Could not dispose Juice";
+            String msg = "Could not dispose Able";
             logger.info(msg);
             logger.throwing(Application.class.getName(), "dispose", e);
             throw new RuntimeException(msg, e);

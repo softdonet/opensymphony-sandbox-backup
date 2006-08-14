@@ -1,9 +1,9 @@
 package com.opensymphony.able.action.user;
 
-import com.opensymphony.able.action.JuiceActionSupport;
+import com.opensymphony.able.action.AbleActionSupport;
 import com.opensymphony.able.model.User;
 
-public class UserActionSupport extends JuiceActionSupport {
+public class UserActionSupport extends AbleActionSupport {
     protected long userId;
     protected User user;
 

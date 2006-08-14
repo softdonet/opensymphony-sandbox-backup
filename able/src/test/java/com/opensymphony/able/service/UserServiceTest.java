@@ -194,7 +194,7 @@ public class UserServiceTest extends IntegrationTest {
         Assert.assertFalse(oldPassword.equals(newPassword));
 
         Assert.assertEquals(args[0], original.getEmail());
-        Assert.assertEquals(args[1], "Juice: Reset Password");
+        Assert.assertEquals(args[1], "Able: Reset Password");
     }
 
     @Test

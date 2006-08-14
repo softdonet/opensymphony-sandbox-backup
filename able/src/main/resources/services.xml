@@ -11,7 +11,7 @@
 
     <bean id="userService" class="com.opensymphony.able.service.UserService" init-method="init"/>
 
-    <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+    <bean id="sqlMapClient" class="com.opensymphony.able.database.ReloadingSqlMapClientFactoryBean">
         <property name="configLocation" value="classpath:sql/sql-map.xml"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
