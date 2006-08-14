@@ -89,6 +89,7 @@ public class AbleConfiguration implements Configuration {
                             webworkDefault.getDefaultInterceptorRef(),
                             new LinkedHashMap()));
                     ac.addInterceptor(new InterceptorMapping("flash", new FlashInterceptor()));
+                    ac.addInterceptor(new InterceptorMapping("partial", new PartialInterceptor()));
 
                     if (null != clazz.getAnnotation(Secure.class)) {
                         ac.addInterceptor(new InterceptorMapping("secure", new SecurityInterceptor()));
