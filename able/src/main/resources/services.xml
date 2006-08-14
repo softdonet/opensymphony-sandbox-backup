@@ -1,0 +1,19 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-autowire="byType">
+
+    <bean id="init" class="com.opensymphony.able.service.Application" lazy-init="false"
+          init-method="init" destroy-method="dispose"/>
+
+    <bean id="upgrade" class="com.opensymphony.able.service.UpgradeService" lazy-init="false"
+          init-method="init"/>
+
+    <bean id="userService" class="com.opensymphony.able.service.UserService" init-method="init"/>
+
+    <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+        <property name="configLocation" value="classpath:sql/sql-map.xml"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,18 @@
+<configuration>
+    <ideaConfig>able.iml</ideaConfig>
+    <context>/</context>
+    <port>8080</port>
+    <!--<sources>-->
+        <!--<dir>src/main/java</dir>-->
+    <!--</sources>-->
+    <classDirs>
+        <dir>src/main/resources</dir>
+        <dir>target/classes</dir>
+    </classDirs>
+    <webDirs>
+        <webDir>
+            <path>/</path>
+            <dir>src/main/webapp</dir>
+        </webDir>
+    </webDirs>
+</configuration>

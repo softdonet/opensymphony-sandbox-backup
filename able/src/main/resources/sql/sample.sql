@@ -1,0 +1,6 @@
+INSERT INTO users (user_id, username, name, email, password_hash, creation_date, update_date) VALUES (1001, 'plightbo', 'Patrick Lightbody', 'plightbo@gmail.com', 'z8yZIIFLQ14VbFs5r8uHL5ecH5U=', '2006-04-10', '2006-04-10');
+INSERT INTO users (user_id, username, name, email, password_hash, creation_date, update_date) VALUES (1002, 'nick', 'Nicholas Hill', 'nick.hill@gmail.com', '0DPiKuNIrrVmD8IUCuw1hQxNqZc=', '2006-04-10', '2006-04-10');
+INSERT INTO users (user_id, username, name, email, password_hash, creation_date, update_date) VALUES (1003, 'travis', 'Travis Hoang', 'travhoang@yahoo.com', '0DPiKuNIrrVmD8IUCuw1hQxNqZc=', '2006-04-10', '2006-04-10');
+INSERT INTO users (user_id, username, name, email, password_hash, creation_date, update_date) VALUES (1004, 'jhouse', 'James House', 'jhouse@revolition.net', 'Sos80YdpAyQWlgxiMAtmNPC69Zo=', '2006-04-18', '2006-04-18');
+INSERT INTO users (user_id, username, name, email, password_hash, creation_date, update_date) VALUES (1005, 'ian', 'Ian White', 'ian@fuzzygroove.com', '0DPiKuNIrrVmD8IUCuw1hQxNqZc=', '2006-04-10', '2006-04-10');
+INSERT INTO users (user_id, username, name, email, password_hash, creation_date, update_date) VALUES (1006, 'loser', 'Looser Dude', 'me@loser.com', '0DPiKuNIrrVmD8IUCuw1hQxNqZc=', '2006-04-10', '2006-04-10');

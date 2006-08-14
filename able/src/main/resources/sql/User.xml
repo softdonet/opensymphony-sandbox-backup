@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="User">
+    <typeAlias alias="user" type="com.opensymphony.able.model.User"/>
+
+    <resultMap id="user" class="user" >
+        <result property="id" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="email" column="email"/>
+        <result property="name" column="name"/>
+        <result property="passwordHash" column="password_hash"/>
+        <result property="creationDate" column="creation_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+
+    <insert id="insert-hsql" parameterClass="user">
+        INSERT INTO users (username, email, name, password_hash, creation_date, update_date)
+        VALUES (#username#, #email#, #name#, #passwordHash#, #creationDate#, #updateDate#)
+        <selectKey keyProperty="id" resultClass="long">
+            CALL IDENTITY()
+        </selectKey>
+    </insert>
+
+    <insert id="insert-postgres" parameterClass="user">
+        INSERT INTO users (username, email, name, password_hash, creation_date,  update_date)
+        VALUES (#username#, #email#, #name#, #passwordHash#, #creationDate#, #updateDate#)
+        <selectKey keyProperty="id" resultClass="long">
+            SELECT currval('users_seq')
+        </selectKey>
+    </insert>
+
+    <select id="selectById" resultMap="user" parameterClass="long">
+        SELECT user_id, username, email, name, password_hash, creation_date, update_date
+        FROM users
+        WHERE user_id = #value#
+    </select>
+
+    <select id="selectByUsername" resultMap="user" parameterClass="string">
+        SELECT user_id, username, email, name, password_hash, creation_date, update_date
+        FROM users
+        WHERE username = #value#
+    </select>
+
+    <select id="selectByEmail" resultMap="user" parameterClass="string">
+        SELECT user_id, username, email, name, password_hash, creation_date, update_date
+        FROM users
+        WHERE email = #value#
+    </select>
+
+    <select id="selectByUpdatedAfter" resultMap="user" parameterClass="date">
+        SELECT user_id, username, email, name, password_hash, creation_date, update_date
+        FROM users
+        WHERE update_date > #value#
+    </select>
+
+    <select id="selectByUsernameIgnoreCase" resultMap="user" parameterClass="string">
+        SELECT user_id, username, email, name, password_hash, creation_date, update_date
+        FROM users
+        WHERE upper(username) = upper(#value#)
+    </select>
+
+    <select id="selectAll" resultMap="user" >
+        SELECT user_id, username, email, name, password_hash, creation_date, update_date
+        FROM users
+        ORDER BY username
+    </select>
+
+    <update id="update" parameterClass="user">
+        UPDATE users
+        SET email = #email#, name = #name#, update_date = #updateDate#
+        WHERE user_id = #id#
+    </update>
+
+    <update id="updatePassword" parameterClass="user">
+        UPDATE users
+        SET password_hash = #passwordHash#
+        WHERE user_id = #id#
+    </update>
+
+    <delete id="deleteById" parameterClass="long">
+        DELETE FROM users WHERE user_id = #value#
+    </delete>
+</sqlMap>
