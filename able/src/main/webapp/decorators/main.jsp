@@ -27,13 +27,13 @@
             <h3>Menu</h3>
             <ul>
                 <ww:if test="currentUser != null">
-                    <li><a href="/user/settings!input">My Settings</a></li>
-                    <li><a href="/user/${currentUser.id}/profile">My Profile</a></li>
-                    <li><a href="/logout">Logout</a></li>
+                    <li><a href="<ww:url action="user/settings" method="input"/>">My Settings</a></li>
+                    <li><a href="<ww:url value="/user/${currentUser.id}/profile"/>">My Profile</a></li>
+                    <li><a href="<ww:url action="logout"/>">Logout</a></li>
                 </ww:if>
                 <ww:else>
-                    <li><a href="/register!input">Register</a></li>
-                    <li><a href="/login!input">Login</a></li>
+                    <li><a href="<ww:url action="register" method="input"/>">Register</a></li>
+                    <li><a href="<ww:url action="login" method="input"/>">Login</a></li>
                 </ww:else>
             </ul>
         </div>

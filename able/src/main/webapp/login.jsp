@@ -12,13 +12,11 @@
 
     <ww:checkbox label="Remember me please" name="remember" value="false" />
     <ww:submit value="Submit"/>
-
-
 </ww:form>
 
 <p/>
 
-<a href="forgotPassword!input">Forgot your password?</a>
+<a href="<ww:url action="forgotPassword" method="input"/>">Forgot your password?</a>
 
 </body>
 </html>

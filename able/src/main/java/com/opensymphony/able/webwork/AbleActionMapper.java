@@ -84,6 +84,12 @@ public class AbleActionMapper implements ActionMapper {
             }
         }
 
-        return uri.toString();
+        String s = uri.toString();
+
+        if (mapping.getMethod() != null) {
+            s = s + "!" + mapping.getMethod();
+        }
+
+        return s;
     }
 }
