@@ -56,10 +56,6 @@ public class UserService extends DaoService<User> {
         return dao.select("byUpdatedAfter", updatedAfter);
     }
 
-    public List<User> findByNewsletter() {
-        return dao.select("byNewsletter", true);
-    }
-
     public int getUserCount() {
         return (Integer) dao.selectValue("count");
     }
