@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+  <groupId>org.hibernate</groupId>
+  <artifactId>hibernate-entitymanager</artifactId>
+  <version>3.2.0.cr1</version>
+  <versioning>
+    <versions>
+      <version>3.2.0.cr1</version>
+    </versions>
+    <lastUpdated>20060905183958</lastUpdated>
+  </versioning>
+</metadata>

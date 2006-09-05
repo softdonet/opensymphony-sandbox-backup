@@ -11,11 +11,25 @@
   <packaging>pom</packaging>
   <modules>
     <!-- 
-    <module>maven-apt-plugin</module>
-     -->
+      <module>maven-apt-plugin</module>
+    -->
     <module>able-apt</module>
     <module>able-core</module>
     <module>able-web</module>
   </modules>
+
+  <repositories>
+    <repository>
+      <id>project-repo</id>
+      <name>project repo</name>
+      <url>file:${basedir}/${topDirectoryLocation}/maven-repo</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 </project>
 
