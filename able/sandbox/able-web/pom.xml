@@ -79,6 +79,10 @@
           <groupId>javax.persistence</groupId>
           <artifactId>ejb</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>javax.transaction</groupId>
+          <artifactId>jta</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -89,6 +93,10 @@
         <exclusion>
           <groupId>javax.persistence</groupId>
           <artifactId>ejb</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.transaction</groupId>
+          <artifactId>jta</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
