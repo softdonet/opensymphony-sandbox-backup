@@ -26,6 +26,7 @@ public class UriStrategy {
 
     public String getEntityPrimaryKeyString(JpaCrudActionSupport action) {
         HttpServletRequest request = action.getContext().getRequest();
+        /*
         String requestURI = request.getRequestURI();
         
         // lets assume the last part of the URI is the primary key as a String value
@@ -33,6 +34,7 @@ public class UriStrategy {
         if (idx >= 0) {
             return requestURI.substring(idx + 1);
         }
+        */
         return request.getParameter("id");
     }
     

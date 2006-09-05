@@ -3,6 +3,12 @@
 <body>
 
 <stripes:form action="/User.action">
+
+<stripes:useActionBean binding="/User.action" var="actionBean"/>
+
+<p>actionBean: ${actionBean} entity name ${actionBean.entityName} with uri ${actionBean.entityUri}</p>
+
+
   <stripes:errors />
 
   <table class="display">

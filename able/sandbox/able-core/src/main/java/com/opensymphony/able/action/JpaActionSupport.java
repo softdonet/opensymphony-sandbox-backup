@@ -22,6 +22,9 @@ import net.sourceforge.stripes.integration.spring.SpringBean;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import java.util.List;
 
 /**
  * Base class for any JPA based {@link ActionBean}
@@ -45,7 +48,23 @@ public abstract class JpaActionSupport implements ActionBean {
     }
 
     public EntityManager getEntityManager() {
+        if (entityManager == null) {
+            throw new IllegalArgumentException("The JPA EntityManager has not been Injected!");
+        }
         return entityManager;
+    }
+
+    public List query(String queryText) {
+        return getEntityManager().createQuery(queryText).getResultList();
+    }
+
+    public List query(String queryText, Object... parameters) {
+        Query query = getEntityManager().createQuery(queryText);
+        int index = 0;
+        for (Object object : parameters) {
+            query.setParameter(index++, object);
+        }
+        return query.getResultList();
     }
 
     // Implementation methods

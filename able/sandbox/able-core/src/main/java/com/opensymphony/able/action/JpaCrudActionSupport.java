@@ -16,9 +16,6 @@
  */
 package com.opensymphony.able.action;
 
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.TypeConverter;
-
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.DefaultHandler;
 import net.sourceforge.stripes.action.DontValidate;
@@ -26,16 +23,25 @@ import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.TypeConverter;
+
 import java.beans.Introspector;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 
 /**
- * Base class for any CRUD based JPA {@link ActionBean} to view or edit an entity by ID
+ * Base class for any CRUD based JPA {@link ActionBean} to view or edit an
+ * entity by ID
  * 
  * @version $Revision$
  */
 public abstract class JpaCrudActionSupport<K, E> extends JpaActionSupport {
+    private static final Log log = LogFactory.getLog(JpaCrudActionSupport.class);
+    
     private K id;
     private E entity;
     private Class<K> idClass;
@@ -115,7 +121,7 @@ public abstract class JpaCrudActionSupport<K, E> extends JpaActionSupport {
     public Class<K> getIdClass() {
         return idClass;
     }
-    
+
     /**
      * Returns the simple name of the entity
      */
@@ -136,15 +142,21 @@ public abstract class JpaCrudActionSupport<K, E> extends JpaActionSupport {
         return entityUri;
     }
 
+    @SuppressWarnings("unchecked")
+    public List<E> getAllEntities() {
+        return query("from " + getEntityName());
+    }
+
     // Implementation methods
     // -------------------------------------------------------------------------
     @SuppressWarnings("unchecked")
     protected void preBind() {
         // TODO lets bind the request parameter for the ID to the id attribute
-        String idValue = uriStrategy.getEditUri(this);
+        String idValue = uriStrategy.getEntityPrimaryKeyString(this);
         if (idValue != null) {
             idValue = idValue.trim();
             if (idValue.length() > 0) {
+                log.info("Converting primary key: "+ idValue + " to type: " + idClass.getName());
                 K value = (K) typeConverter.convertIfNecessary(idValue, idClass);
                 setId(value);
             }
