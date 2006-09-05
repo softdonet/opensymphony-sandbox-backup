@@ -1,0 +1,13 @@
+$license
+
+package $packageName;
+
+import $declaration.qualifiedName;
+
+import com.opensymphony.able.action.JpaCrudActionSupport;
+
+/**
+ * Action class for entity {@link $declaration.simpleName}
+ */
+public class $className extends JpaCrudActionSupport<$primaryKeyType, $declaration.simpleName> {
+}
