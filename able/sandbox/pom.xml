@@ -31,5 +31,15 @@
       </snapshots>
     </repository>
   </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>project-repo</id>
+      <url>file:${basedir}/${topDirectoryLocation}/maven-repo</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
+
 </project>
 
