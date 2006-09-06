@@ -1,12 +1,14 @@
 package com.opensymphony.able.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import java.util.Date;
 
 /**
- * @author Nicholas Hill <a href="mailto:nick.hill@gmail.com">nick.hill@gmail.com</a>
+ * @author Nicholas Hill <a
+ *         href="mailto:nick.hill@gmail.com">nick.hill@gmail.com</a>
  * @author <a href="mailto:jhouse@revolition.net">James House</a>
  */
 @Entity
@@ -31,6 +33,7 @@ public class User {
     }
 
     @Id
+    @GeneratedValue
     public Long getId() {
         return id;
     }
@@ -88,8 +91,10 @@ public class User {
     }
 
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         final User user = (User) o;
 

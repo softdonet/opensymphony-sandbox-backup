@@ -28,7 +28,7 @@
         <td>${row.username}</td>
         <td>${row.name}</td>
         <td>${row.email}</td>
-        <td><stripes:link href="/User.action" event="view">
+        <td><stripes:link href="/User.action" event="preEdit">
                                 Edit
                                 <stripes:param name="id" value="${row.id}" />
         </stripes:link></td>

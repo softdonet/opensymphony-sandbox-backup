@@ -17,6 +17,7 @@
 package com.opensymphony.able.entity;
 
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 
@@ -25,7 +26,9 @@ import javax.persistence.Transient;
 
 public class PropertyInfo {
 
-	private final EntityInfo entity;
+	private static final Object[] EMPTY_ARGS = {};
+    
+    private final EntityInfo entity;
 	private final PropertyDescriptor descriptor;
 	private boolean idProperty;
 
@@ -89,4 +92,13 @@ public class PropertyInfo {
 	public boolean isIdProperty() {
 		return idProperty;
 	}
+
+    public Object getValue(Object entity) {
+        try {
+            return descriptor.getReadMethod().invoke(entity, EMPTY_ARGS);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to extract property: " + getName() + " from: " + entity + ". Reason: " + e, e);
+        }
+    }
 }

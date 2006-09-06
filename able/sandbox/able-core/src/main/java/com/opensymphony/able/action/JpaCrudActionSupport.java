@@ -43,14 +43,13 @@ import java.util.List;
  */
 public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     private static final Log log = LogFactory.getLog(JpaCrudActionSupport.class);
-    
+
     private Object id;
     private E entity;
     private Class<E> entityClass;
-	private EntityInfo entityInfo;
+    private EntityInfo entityInfo;
     private UriStrategy uriStrategy = new UriStrategy();
     private TypeConverter typeConverter = new BeanWrapperImpl();
-
 
     public JpaCrudActionSupport() {
         ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
@@ -69,14 +68,18 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
 
     public Resolution save() {
         if (getId() != null) {
-            getEntityManager().persist(getEntity());
-            // TODO set the ID value
+            getJpaTemplate().persist(getEntity());
+            setId(entityInfo.getIdValue((getEntity())));
         }
 
         // TODO
         // getContext().addMsg( "saved " + getEntityName(); );
 
-        return new RedirectResolution(uriStrategy.getEditUri(this));
+        String uri = uriStrategy.getHomeUri(this);
+        if (id != null) {
+            uri = uriStrategy.getEditUri(this) + id;
+        }
+        return new RedirectResolution(uri);
     }
 
     @DontValidate
@@ -129,10 +132,10 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     }
 
     public EntityInfo getEntityInfo() {
-		return entityInfo;
-	}
+        return entityInfo;
+    }
 
-	// Implementation methods
+    // Implementation methods
     // -------------------------------------------------------------------------
     @SuppressWarnings("unchecked")
     protected void preBind() {
@@ -142,7 +145,7 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
             idValue = idValue.trim();
             if (idValue.length() > 0) {
                 Class idClass = entityInfo.getIdClass();
-				log.info("Converting primary key: "+ idValue + " to type: " + idClass .getName());
+                log.info("Converting primary key: " + idValue + " to type: " + idClass.getName());
                 Object value = typeConverter.convertIfNecessary(idValue, idClass);
                 setId(value);
             }
@@ -153,7 +156,7 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
      * Looks up the entity by primary key
      */
     protected E findByPrimaryKey() {
-        return getEntityManager().find(entityClass, id);
+        return getJpaTemplate().find(entityClass, id);
     }
 
     /**

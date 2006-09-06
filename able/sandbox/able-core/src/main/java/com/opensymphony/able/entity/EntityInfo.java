@@ -22,108 +22,111 @@ import java.util.*;
 import org.springframework.beans.BeanUtils;
 
 public class EntityInfo {
-	private Class entityClass;
-	private String entityName;
-	private String entityUri;
-	private String actionUri;
-	private List<PropertyInfo> properties = new ArrayList<PropertyInfo>();
-	private PropertyInfo idProperty;
+    private Class entityClass;
+    private String entityName;
+    private String entityUri;
+    private String actionUri;
+    private List<PropertyInfo> properties = new ArrayList<PropertyInfo>();
+    private PropertyInfo idProperty;
 
-	public EntityInfo(Class entityClass) {
-		this.entityClass = entityClass;
-		introspect(entityClass);
-	}
+    public EntityInfo(Class entityClass) {
+        this.entityClass = entityClass;
+        introspect(entityClass);
+    }
 
-	public Class getEntityClass() {
-		return entityClass;
-	}
+    public Class getEntityClass() {
+        return entityClass;
+    }
 
-	public Class getIdClass() {
-		if (idProperty != null) {
-			return idProperty.getPropertyType();
-		}
-		return null;
-	}
+    public Class getIdClass() {
+        if (idProperty != null) {
+            return idProperty.getPropertyType();
+        }
+        return null;
+    }
 
-	public PropertyInfo getIdProperty() {
-		return idProperty;
-	}
+    public PropertyInfo getIdProperty() {
+        return idProperty;
+    }
 
-	public List<PropertyInfo> getProperties() {
-		return Collections.unmodifiableList(properties);
-	}
+    public List<PropertyInfo> getProperties() {
+        return Collections.unmodifiableList(properties);
+    }
 
-	/**
-	 * Returns the simple name of the entity
-	 */
-	public String getEntityName() {
-		if (entityName == null) {
-			entityName = createEntityName();
-		}
-		return entityName;
-	}
+    public Object getIdValue(Object entity) {
+        if (idProperty != null) {
+            return idProperty.getValue(entity);
+        }
+        return null;
+    }
 
-	/**
-	 * Returns the Action URI name for the entity
-	 */
-	public String getActionUri() {
-		if (actionUri == null) {
-			actionUri = createActionUri();
-		}
-		return actionUri;
-	}
+    /**
+     * Returns the simple name of the entity
+     */
+    public String getEntityName() {
+        if (entityName == null) {
+            entityName = createEntityName();
+        }
+        return entityName;
+    }
 
+    /**
+     * Returns the Action URI name for the entity
+     */
+    public String getActionUri() {
+        if (actionUri == null) {
+            actionUri = createActionUri();
+        }
+        return actionUri;
+    }
 
-	/**
-	 * Returns the URI name for the entity
-	 */
-	public String getEntityUri() {
-		if (entityUri == null) {
-			entityUri = createEntityUri();
-		}
-		return entityUri;
-	}
+    /**
+     * Returns the URI name for the entity
+     */
+    public String getEntityUri() {
+        if (entityUri == null) {
+            entityUri = createEntityUri();
+        }
+        return entityUri;
+    }
 
-	protected String createEntityName() {
-		String answer = getEntityClass().getName();
-		int idx = answer.lastIndexOf('.');
-		if (idx >= 0) {
-			answer = answer.substring(idx + 1);
-		}
-		return answer;
-	}
+    protected String createEntityName() {
+        String answer = getEntityClass().getName();
+        int idx = answer.lastIndexOf('.');
+        if (idx >= 0) {
+            answer = answer.substring(idx + 1);
+        }
+        return answer;
+    }
 
-	protected String createEntityUri() {
-		return Introspector.decapitalize(getEntityName());
-	}
-	
-	protected String createActionUri() {
-		return "/" + getEntityName() + ".action";
-	}
+    protected String createEntityUri() {
+        return Introspector.decapitalize(getEntityName());
+    }
 
-	/**
-	 * Lets introspect all the properties
-	 */
-	protected void introspect(Class type) {
-		PropertyDescriptor[] propertyDescriptors = BeanUtils
-				.getPropertyDescriptors(entityClass);
-		for (PropertyDescriptor descriptor : propertyDescriptors) {
-			String name = descriptor.getName();
-			if (name.equals("class"))
-				continue;
+    protected String createActionUri() {
+        return "/" + getEntityName() + ".action";
+    }
 
-			System.out.println("found descriptor: " + name);
-			PropertyInfo propertyInfo = new PropertyInfo(this, descriptor);
-			properties.add(propertyInfo);
-			if (propertyInfo.isIdProperty()) {
-				if (idProperty != null) {
-					throw new IllegalStateException(
-							"Duplicate @Id properties defined for: "
-									+ idProperty + " and " + propertyInfo);
-				}
-				this.idProperty = propertyInfo;
-			}
-		}
-	}
+    /**
+     * Lets introspect all the properties
+     */
+    protected void introspect(Class type) {
+        PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(entityClass);
+        for (PropertyDescriptor descriptor : propertyDescriptors) {
+            String name = descriptor.getName();
+            if (name.equals("class")) {
+                continue;
+            }
+
+            PropertyInfo propertyInfo = new PropertyInfo(this, descriptor);
+            properties.add(propertyInfo);
+            if (propertyInfo.isIdProperty()) {
+                if (idProperty != null) {
+                    throw new IllegalStateException("Duplicate @Id properties defined for: " + idProperty + " and " + propertyInfo);
+                }
+                this.idProperty = propertyInfo;
+            }
+        }
+    }
 
 }
