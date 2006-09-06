@@ -39,15 +39,15 @@ public class UriStrategy {
     }
     
     public String getHomeUri(JpaCrudActionSupport action) {
-        return "/" + action.getEntityUri() + "/index.jsp";
+        return "/" + action.getEntityInfo().getEntityUri() + "/index.jsp";
     }
     
     public String getViewUri(JpaCrudActionSupport action) {
-        return "/" + action.getEntityUri() + "/view.jsp";
+        return "/" + action.getEntityInfo().getEntityUri() + "/view.jsp";
     }
     
     public String getEditUri(JpaCrudActionSupport action) {
-        return "/" + action.getEntityUri() + "/edit.jsp?id=" + action.getId();
+        return "/" + action.getEntityInfo().getEntityUri() + "/edit.jsp?id=" + action.getId();
     }
     
 }

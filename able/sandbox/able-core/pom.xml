@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <project>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.opensymphony.able</groupId>
+    <artifactId>able-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  
   <groupId>com.opensymphony.able</groupId>
   <artifactId>able-core</artifactId>
   <name>Able JPA Core library</name>

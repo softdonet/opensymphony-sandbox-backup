@@ -16,6 +16,7 @@
  */
 package com.opensymphony.able.apt;
 
+import com.opensymphony.able.entity.*;
 import com.sun.mirror.apt.AnnotationProcessorEnvironment;
 import com.sun.mirror.declaration.ClassDeclaration;
 import com.sun.mirror.util.SimpleDeclarationVisitor;
@@ -34,79 +35,96 @@ import java.util.Properties;
  * @version $Revision$
  */
 public class VelocityClassVisitor extends SimpleDeclarationVisitor {
-    private final AnnotationProcessorEnvironment env;
+	private final AnnotationProcessorEnvironment env;
 
-    private String templateName = "Action.vm";
-    private String packagePostfix = ".action";
-    private String classPostfix = "Action";
-    private String primaryKeyType = "Long";
+	private String templateName = "Action.vm";
+	private String packagePostfix = ".action";
+	private String classPostfix = "Action";
 
-    private String packageName;
-    private String className;
-    private String qualifiedName;
+	private String packageName;
+	private String className;
+	private String qualifiedName;
 
-    public VelocityClassVisitor(final AnnotationProcessorEnvironment env) {
-        this.env = env;
-    }
+	public VelocityClassVisitor(final AnnotationProcessorEnvironment env) {
+		this.env = env;
+	}
 
-    public void visitClassDeclaration(ClassDeclaration declaration) {
+	public void visitClassDeclaration(ClassDeclaration declaration) {
         if (matchesDeclaration(declaration)) {
             createClassProperties(declaration);
-            PrintWriter file = null;
             try {
                 Properties p = new Properties();
                 p.setProperty("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
                 Velocity.init(p);
 
                 VelocityContext context = createVelocityContext(declaration);
-                // VelocityEngine engine = new VelocityEngine();
-                file = env.getFiler().createSourceFile(qualifiedName);
-                // engine.evaluate(context, arg1, className, arg3)
-                Template template = Velocity.getTemplate(templateName);
-                template.merge(context, file);
-                /*
-                 * file.println("package " + packageName + ";");
-                 * file.println("public class " + className + " { }");
-                 */
-                file.close();
+                PrintWriter file = null;
+                try {
+	                file = env.getFiler().createSourceFile(qualifiedName);
+	                // engine.evaluate(context, arg1, className, arg3)
+	                Template template = Velocity.getTemplate(templateName);
+	                template.merge(context, file);
+	                file.close();
+                }
+                finally {
+                    if (file != null) {
+                        file.close();
+                    }
+                }
             }
             catch (Exception e) {
                 System.err.println(e);
                 e.printStackTrace();
             }
-            finally {
-                if (file != null) {
-                    file.close();
-                }
-            }
         }
     }
 
-    protected void createClassProperties(ClassDeclaration declaration) {
-        packageName = declaration.getPackage().getQualifiedName();
-        if (packageName.endsWith(".model")) {
-            packageName = packageName.substring(0, packageName.length() - ".model".length());
-        }
-        packageName += packagePostfix;
-        className = declaration.getSimpleName() + classPostfix;
-        qualifiedName = packageName + "." + className;
-    }
+	protected void createClassProperties(ClassDeclaration declaration) {
+		packageName = declaration.getPackage().getQualifiedName();
+		if (packageName.endsWith(".model")) {
+			packageName = packageName.substring(0, packageName.length()
+					- ".model".length());
+		}
+		packageName += packagePostfix;
+		className = declaration.getSimpleName() + classPostfix;
+		qualifiedName = packageName + "." + className;
+	}
 
-    protected VelocityContext createVelocityContext(ClassDeclaration declaration) {
-        VelocityContext answer = new VelocityContext();
-        answer.put("declaration", declaration);
-        answer.put("packageName", packageName);
-        answer.put("license", "/** TODO license goes here */");
-        answer.put("className", className);
-        answer.put("qualifiedName", qualifiedName);
+	protected VelocityContext createVelocityContext(ClassDeclaration declaration) {
+		VelocityContext answer = new VelocityContext();
+		answer.put("declaration", declaration);
+		answer.put("packageName", packageName);
+		answer.put("license", "/** TODO license goes here */");
+		answer.put("className", className);
+		answer.put("qualifiedName", qualifiedName);
+		/*
+		Class type = loadClass(declaration);
+		answer.put("info", new EntityInfo(type));
+		*/
+		return answer;
+	}
 
-        // TODO we need to figure out what the primary key type is by reflection
-        answer.put("primaryKeyType", primaryKeyType);
-        return answer;
-    }
+	protected Class loadClass(ClassDeclaration declaration) {
+		String name = declaration.getQualifiedName();
+		try {
+			return Thread.currentThread().getContextClassLoader().loadClass(
+					name);
+		} catch (ClassNotFoundException e) {
+			try {
+				return getClass().getClassLoader().loadClass(name);
+			} catch (ClassNotFoundException e1) {
+				try {
+					return Class.forName(name);
+				} catch (ClassNotFoundException e2) {
+					throw new RuntimeException("Could not load class: " + name,
+							e);
+				}
+			}
+		}
+	}
 
-    protected boolean matchesDeclaration(ClassDeclaration declaration) {
-        Entity annotation = declaration.getAnnotation(Entity.class);
-        return annotation != null;
-    }
+	protected boolean matchesDeclaration(ClassDeclaration declaration) {
+		Entity annotation = declaration.getAnnotation(Entity.class);
+		return annotation != null;
+	}
 }

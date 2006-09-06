@@ -37,16 +37,16 @@ public class JpaCrudActionSupportTest {
 
         UserAction action = new UserAction();
 
-        Class<Long> idClass = action.getIdClass();
+        Class idClass = action.getIdClass();
         Assert.assertEquals(Long.class, idClass);
 
         Class<User> entityClass = action.getEntityClass();
         Assert.assertEquals(User.class, entityClass);
         
-        String entityName = action.getEntityName();
+        String entityName = action.getEntityInfo().getEntityName();
         Assert.assertEquals("User", entityName);
 
-        String entityUri = action.getEntityUri();
+        String entityUri = action.getEntityInfo().getEntityUri();
         Assert.assertEquals("user", entityUri);
     }
 
@@ -67,7 +67,7 @@ public class JpaCrudActionSupportTest {
         
     }
 
-    public static class UserAction extends JpaCrudActionSupport<Long, User> {
+    public static class UserAction extends JpaCrudActionSupport<User> {
     }
     
 }

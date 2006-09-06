@@ -28,6 +28,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.TypeConverter;
 
+import com.opensymphony.able.entity.EntityInfo;
+
 import java.beans.Introspector;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -39,23 +41,22 @@ import java.util.List;
  * 
  * @version $Revision$
  */
-public abstract class JpaCrudActionSupport<K, E> extends JpaActionSupport {
+public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     private static final Log log = LogFactory.getLog(JpaCrudActionSupport.class);
     
-    private K id;
+    private Object id;
     private E entity;
-    private Class<K> idClass;
     private Class<E> entityClass;
-    private String entityName;
-    private String entityUri;
+	private EntityInfo entityInfo;
     private UriStrategy uriStrategy = new UriStrategy();
     private TypeConverter typeConverter = new BeanWrapperImpl();
+
 
     public JpaCrudActionSupport() {
         ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
         Type[] typeArguments = genericSuperclass.getActualTypeArguments();
-        this.idClass = (Class<K>) typeArguments[0];
-        this.entityClass = (Class<E>) typeArguments[1];
+        this.entityClass = (Class<E>) typeArguments[0];
+        this.entityInfo = new EntityInfo(entityClass);
     }
 
     // Actions
@@ -106,11 +107,11 @@ public abstract class JpaCrudActionSupport<K, E> extends JpaActionSupport {
         this.entity = entity;
     }
 
-    public K getId() {
+    public Object getId() {
         return id;
     }
 
-    public void setId(K id) {
+    public void setId(Object id) {
         this.id = id;
     }
 
@@ -118,36 +119,20 @@ public abstract class JpaCrudActionSupport<K, E> extends JpaActionSupport {
         return entityClass;
     }
 
-    public Class<K> getIdClass() {
-        return idClass;
-    }
-
-    /**
-     * Returns the simple name of the entity
-     */
-    public String getEntityName() {
-        if (entityName == null) {
-            entityName = createEntityName();
-        }
-        return entityName;
-    }
-
-    /**
-     * Returns the URI name for the entity
-     */
-    public String getEntityUri() {
-        if (entityUri == null) {
-            entityUri = createEntityUri();
-        }
-        return entityUri;
+    public Class getIdClass() {
+        return entityInfo.getIdClass();
     }
 
     @SuppressWarnings("unchecked")
     public List<E> getAllEntities() {
-        return query("from " + getEntityName());
+        return query("from " + entityInfo.getEntityName());
     }
 
-    // Implementation methods
+    public EntityInfo getEntityInfo() {
+		return entityInfo;
+	}
+
+	// Implementation methods
     // -------------------------------------------------------------------------
     @SuppressWarnings("unchecked")
     protected void preBind() {
@@ -156,8 +141,9 @@ public abstract class JpaCrudActionSupport<K, E> extends JpaActionSupport {
         if (idValue != null) {
             idValue = idValue.trim();
             if (idValue.length() > 0) {
-                log.info("Converting primary key: "+ idValue + " to type: " + idClass.getName());
-                K value = (K) typeConverter.convertIfNecessary(idValue, idClass);
+                Class idClass = entityInfo.getIdClass();
+				log.info("Converting primary key: "+ idValue + " to type: " + idClass .getName());
+                Object value = typeConverter.convertIfNecessary(idValue, idClass);
                 setId(value);
             }
         }
@@ -181,18 +167,4 @@ public abstract class JpaCrudActionSupport<K, E> extends JpaActionSupport {
             throw new RuntimeException("Failed to instantiate class: " + entityClass.getName() + ". Reason: " + e, e);
         }
     }
-
-    protected String createEntityName() {
-        String answer = getEntityClass().getName();
-        int idx = answer.lastIndexOf('.');
-        if (idx >= 0) {
-            answer = answer.substring(idx + 1);
-        }
-        return answer;
-    }
-
-    protected String createEntityUri() {
-        return Introspector.decapitalize(getEntityName());
-    }
-
 }
