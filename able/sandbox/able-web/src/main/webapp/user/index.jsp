@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/taglibs.jsp"%>
+<%@ include file="/WEB-INF/taglibs/header.jsp"%>
 <html>
 <body>
 
