@@ -39,7 +39,7 @@ public class VelocityClassVisitor extends SimpleDeclarationVisitor {
 
 	private String templateName = "Action.vm";
 	private String packagePostfix = ".action";
-	private String classPostfix = "Action";
+	private String classPostfix = "ActionBean";
 
 	private String packageName;
 	private String className;

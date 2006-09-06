@@ -28,7 +28,7 @@
         <td>${row.username}</td>
         <td>${row.name}</td>
         <td>${row.email}</td>
-        <td><stripes:link href="/User.action" event="preEdit">
+        <td><stripes:link href="/User.action" event="view">
                                 Edit
                                 <stripes:param name="id" value="${row.id}" />
         </stripes:link></td>
@@ -36,7 +36,7 @@
     </c:forEach>
   </table>
 
-  <div class="buttons"><stripes:submit name="preEdit" value="Bulk Edit" /></div>
+  <div class="buttons"><stripes:submit name="view" value="Bulk Edit" /></div>
 </stripes:form>
 </body>
 </html>

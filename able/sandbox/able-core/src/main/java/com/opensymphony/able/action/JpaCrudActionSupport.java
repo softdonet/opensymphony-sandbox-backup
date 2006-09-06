@@ -95,6 +95,7 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     // Properties
     // -------------------------------------------------------------------------
     public E getEntity() {
+        System.out.println("####ÊgetEntity called with id: " + id);
         if (entity == null) {
             if (id != null) {
                 entity = findByPrimaryKey();
@@ -107,6 +108,7 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     }
 
     public void setEntity(E entity) {
+        System.out.println("####ÊsetEntity called with entity: " + entity);
         this.entity = entity;
     }
 
@@ -148,6 +150,7 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
                 Class idClass = entityInfo.getIdClass();
                 log.info("Converting primary key: " + idValue + " to type: " + idClass.getName());
                 Object value = typeConverter.convertIfNecessary(idValue, idClass);
+                log.info("Created value: " + value + " of type: " + value.getClass());
                 setId(value);
             }
         }
