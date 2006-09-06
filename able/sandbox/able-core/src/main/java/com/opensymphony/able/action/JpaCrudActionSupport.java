@@ -95,7 +95,6 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     // Properties
     // -------------------------------------------------------------------------
     public E getEntity() {
-        System.out.println("####ÊgetEntity called with id: " + id);
         if (entity == null) {
             if (id != null) {
                 entity = findByPrimaryKey();
@@ -108,7 +107,6 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     }
 
     public void setEntity(E entity) {
-        System.out.println("####ÊsetEntity called with entity: " + entity);
         this.entity = entity;
     }
 
@@ -117,7 +115,13 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     }
 
     public void setId(Object id) {
-        this.id = id;
+        if (id != null) {
+            Class idClass = entityInfo.getIdClass();
+            this.id = typeConverter.convertIfNecessary(id, idClass);
+        }
+        else {
+            this.id = id;
+        }
     }
 
     public Class<E> getEntityClass() {
@@ -143,23 +147,14 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     protected void preBind() {
         // TODO lets bind the request parameter for the ID to the id attribute
         String idValue = uriStrategy.getEntityPrimaryKeyString(this);
-        if (idValue != null) {
-            idValue = idValue.trim();
-            System.out.println("Loading primary key: " + idValue);
-            if (idValue.length() > 0) {
-                Class idClass = entityInfo.getIdClass();
-                log.info("Converting primary key: " + idValue + " to type: " + idClass.getName());
-                Object value = typeConverter.convertIfNecessary(idValue, idClass);
-                log.info("Created value: " + value + " of type: " + value.getClass());
-                setId(value);
-            }
-        }
+        setId(idValue);
     }
 
     /**
      * Looks up the entity by primary key
      */
     protected E findByPrimaryKey() {
+        log.info("Loading primaryKey Value: " + id + " of type: " + id.getClass());
         return getJpaTemplate().find(entityClass, id);
     }
 
