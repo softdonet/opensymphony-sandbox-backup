@@ -143,6 +143,7 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
         String idValue = uriStrategy.getEntityPrimaryKeyString(this);
         if (idValue != null) {
             idValue = idValue.trim();
+            System.out.println("Loading primary key: " + idValue);
             if (idValue.length() > 0) {
                 Class idClass = entityInfo.getIdClass();
                 log.info("Converting primary key: " + idValue + " to type: " + idClass.getName());
