@@ -16,14 +16,13 @@
  */
 package com.opensymphony.able.jpa;
 
-import com.opensymphony.able.action.UserAction;
+import com.opensymphony.able.action.UserActionBean;
 import com.opensymphony.able.model.User;
 import com.opensymphony.able.service.LoadDatabaseService;
 
 import net.sourceforge.stripes.integration.spring.SpringHelper;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.jpa.JpaCallback;
 import org.springframework.orm.jpa.JpaTemplate;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -31,10 +30,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceException;
 
 import java.util.List;
 
@@ -68,7 +63,7 @@ public class DataLoadTest extends SpringTestSupport {
     }
 
     protected void assertDataPresent(ApplicationContext context) {
-        UserAction action = new UserAction();
+        UserActionBean action = new UserActionBean();
         SpringHelper.injectBeans(action, context);
 
         List<User> allEntities = action.getAllEntities();

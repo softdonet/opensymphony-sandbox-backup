@@ -1,8 +1,8 @@
 package net.sourceforge.stripes.examples.bugzooky.biz;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Represents a bug in the bug database.

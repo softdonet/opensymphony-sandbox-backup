@@ -1,11 +1,11 @@
 package net.sourceforge.stripes.examples.bugzooky.biz;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.List;
-import java.util.Collections;
-import java.util.ArrayList;
 
 /**
  * Maintains an in memory list of bugs in the system.

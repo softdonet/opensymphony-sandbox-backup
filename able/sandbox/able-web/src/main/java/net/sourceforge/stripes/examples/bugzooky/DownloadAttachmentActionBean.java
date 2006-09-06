@@ -6,7 +6,6 @@ import net.sourceforge.stripes.action.StreamingResolution;
 import net.sourceforge.stripes.examples.bugzooky.biz.Attachment;
 import net.sourceforge.stripes.examples.bugzooky.biz.Bug;
 import net.sourceforge.stripes.examples.bugzooky.biz.BugManager;
-import net.sourceforge.stripes.examples.bugzooky.BugzookyActionBean;
 
 import java.io.StringReader;
 

@@ -16,8 +16,7 @@
  */
 package com.opensymphony.able.jpa;
 
-import com.opensymphony.able.action.UserAction;
-import com.opensymphony.able.model.User;
+import com.opensymphony.able.action.UserActionBean;
 
 import net.sourceforge.stripes.integration.spring.SpringHelper;
 
@@ -50,7 +49,7 @@ public class JpaInjectionTest extends SpringTestSupport {
         String[] names = context.getBeanNamesForType(EntityManagerFactory.class);
         Assert.assertEquals(1, names.length, "number of names");
 
-        final UserAction target = new UserAction();
+        final UserActionBean target = new UserActionBean();
         SpringHelper.injectBeans(target, context);
 
         final JpaTemplate jpaTemplate = target.getJpaTemplate();
