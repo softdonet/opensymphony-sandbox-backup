@@ -93,7 +93,7 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     @DontValidate
     public Resolution cancel() {
         System.out.println("####Êcancel() entity!!! " + getEntity());
-        evictBoundObjects();
+        setRollbackOnly();
 
         // TODO
         // getContext().addMsg( Messages.cancelled( "Manufacturer" ) );

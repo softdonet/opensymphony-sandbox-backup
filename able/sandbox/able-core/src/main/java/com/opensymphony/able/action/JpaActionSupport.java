@@ -89,7 +89,10 @@ public abstract class JpaActionSupport implements ActionBean {
     // Implementation methods
     // -------------------------------------------------------------------------
 
-    protected void evictBoundObjects() {
+    /**
+     * Forces the current transaction to rollback which will cancel any updates made as part of a form submission.
+     */
+    protected void setRollbackOnly() {
         TransactionStatus status = TransactionServletFilter.getTransactionStatus(getContext().getRequest());
         if (status != null) {
             status.setRollbackOnly();
@@ -97,15 +100,6 @@ public abstract class JpaActionSupport implements ActionBean {
         else {
             log.error("No transaction in progress!");
         }
-        /*
-        EntityManager entityManager = getJpaTemplate().getEntityManager();
-        if (entityManager != null) {
-            entityManager.getTransaction().setRollbackOnly();
-        }
-        else {
-            log.error("No transaction in progress!");
-        }
-        */
     }
 
     /**
