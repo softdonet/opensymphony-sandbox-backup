@@ -32,6 +32,27 @@ public class User {
         this.creationDate = new Date();
     }
 
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        final User user = (User) o;
+
+        return id == user.id;
+    }
+
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
+    
+    
+    @Override
+    public String toString() {
+        return "User[id=" + id + ", username=" + username + ", name=" + name + "]";
+    }
+
     @Id
     @GeneratedValue
     public Long getId() {
@@ -90,18 +111,4 @@ public class User {
         this.updateDate = updateDate;
     }
 
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-
-        final User user = (User) o;
-
-        return id == user.id;
-    }
-
-    public int hashCode() {
-        return (int) (id ^ (id >>> 32));
-    }
 }

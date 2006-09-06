@@ -16,8 +16,13 @@
  */
 package com.opensymphony.able.action;
 
+import com.opensymphony.able.filter.TransactionServletFilter;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.orm.jpa.JpaCallback;
 import org.springframework.orm.jpa.JpaTemplate;
+import org.springframework.transaction.TransactionStatus;
 
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
@@ -37,10 +42,11 @@ import java.util.List;
  */
 public abstract class JpaActionSupport implements ActionBean {
 
+    private static final Log log = LogFactory.getLog(JpaActionSupport.class);
+    
     @PersistenceContext
     @SpringBean
     private JpaTemplate jpaTemplate;
-    //private EntityManager entityManager;
     private ActionBeanContext context;
 
     public ActionBeanContext getContext() {
@@ -52,7 +58,6 @@ public abstract class JpaActionSupport implements ActionBean {
         preBind();
     }
 
-    
     public JpaTemplate getJpaTemplate() {
         if (jpaTemplate == null) {
             throw new IllegalArgumentException("The JpaTemplate has not been Injected!");
@@ -60,26 +65,14 @@ public abstract class JpaActionSupport implements ActionBean {
         return jpaTemplate;
     }
 
-    /*
-    public EntityManager getEntityManager() {
-        getJpaTemplate().setExposeNativeEntityManager(true);
-        return getJpaTemplate().getEntityManager();
-    }
-
-    public EntityManager getEntityManager() {
-        if (entityManager == null) {
-            throw new IllegalArgumentException("The JPA EntityManager has not been Injected!");
-        }
-        return entityManager;
-    }
-    */
-
     public List query(final String queryText) {
         return (List) getJpaTemplate().execute(new JpaCallback() {
             public Object doInJpa(EntityManager entityManager) throws PersistenceException {
                 return entityManager.createQuery(queryText).getResultList();
-            }});
+            }
+        });
     }
+
     public List query(final String queryText, final Object... parameters) {
         return (List) getJpaTemplate().execute(new JpaCallback() {
             public Object doInJpa(EntityManager entityManager) throws PersistenceException {
@@ -89,21 +82,30 @@ public abstract class JpaActionSupport implements ActionBean {
                     query.setParameter(index++, object);
                 }
                 return query.getResultList();
-            }});
+            }
+        });
     }
-
 
     // Implementation methods
     // -------------------------------------------------------------------------
 
     protected void evictBoundObjects() {
+        TransactionStatus status = TransactionServletFilter.getTransactionStatus(getContext().getRequest());
+        if (status != null) {
+            status.setRollbackOnly();
+        }
+        else {
+            log.error("No transaction in progress!");
+        }
+        /*
         EntityManager entityManager = getJpaTemplate().getEntityManager();
         if (entityManager != null) {
             entityManager.getTransaction().setRollbackOnly();
         }
         else {
-            throw new RuntimeException("No transaction in progress!");
+            log.error("No transaction in progress!");
         }
+        */
     }
 
     /**
@@ -111,6 +113,5 @@ public abstract class JpaActionSupport implements ActionBean {
      * that their properties can be bound from request parameters
      */
     protected abstract void preBind();
-
 
 }

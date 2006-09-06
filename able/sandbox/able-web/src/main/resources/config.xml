@@ -3,22 +3,22 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
   default-autowire="byType">
 
- <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+ <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean" singleton="true">
     <!-- 
       <property name="persistenceUnitName" value="default" />
     -->
   </bean>
 
-  <bean id="jpaTemplate" class="org.springframework.orm.jpa.JpaTemplate">
+  <bean id="jpaTemplate" class="org.springframework.orm.jpa.JpaTemplate" singleton="false">
     <property name="entityManagerFactory" ref="entityManagerFactory" />
     <property name="exposeNativeEntityManager" value="true" />
   </bean>
 
-  <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+  <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" singleton="true">
     <property name="entityManagerFactory" ref="entityManagerFactory" />
   </bean>
 
-  <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+  <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate" singleton="false">
     <property name="transactionManager" ref="transactionManager" />
   </bean>
     
@@ -31,7 +31,7 @@
     </bean>
   -->
 
-  <bean id="loadDatabaseService" class="com.opensymphony.able.service.LoadDatabaseService" autowire="constructor"/>
+  <bean id="loadDatabaseService" class="com.opensymphony.able.service.LoadDatabaseService" autowire="constructor" singleton="true"/>
 
-  <bean id="mailService" class="com.opensymphony.able.mail.MockMailService" />
+  <bean id="mailService" class="com.opensymphony.able.mail.MockMailService" singleton="true"/>
 </beans>

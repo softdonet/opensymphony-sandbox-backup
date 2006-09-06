@@ -90,6 +90,23 @@ public class EntityInfo {
         return entityUri;
     }
 
+    public String getHomeUri() {
+        return "/" + getEntityUri() + "/index.jsp";
+    }
+    
+    public String getViewUri() {
+        return "/" + getEntityUri() + "/view.jsp";
+    }
+    
+    public String getEditUri() {
+        return "/" + getEntityUri() + "/edit.jsp?id=";
+    }
+    
+    public String getBulkEditUri() {
+        return "/" + getEntityUri() + "/editTable.jsp?id=";
+    }
+    
+
     protected String createEntityName() {
         String answer = getEntityClass().getName();
         int idx = answer.lastIndexOf('.');

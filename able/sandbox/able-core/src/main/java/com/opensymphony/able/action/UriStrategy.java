@@ -37,17 +37,5 @@ public class UriStrategy {
         */
         return request.getParameter("id");
     }
-    
-    public String getHomeUri(JpaCrudActionSupport action) {
-        return "/" + action.getEntityInfo().getEntityUri() + "/index.jsp";
-    }
-    
-    public String getViewUri(JpaCrudActionSupport action) {
-        return "/" + action.getEntityInfo().getEntityUri() + "/view.jsp";
-    }
-    
-    public String getEditUri(JpaCrudActionSupport action) {
-        return "/" + action.getEntityInfo().getEntityUri() + "/edit.jsp?id=" + action.getId();
-    }
-    
+
 }

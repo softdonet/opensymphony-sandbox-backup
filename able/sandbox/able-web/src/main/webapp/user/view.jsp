@@ -2,28 +2,30 @@
 <html>
 <body>
 
-<stripes:form action="/User.action">
+<stripes:useActionBean binding="/User.action" />
 
-  <stripes:errors />
+<c:set var="entity" value="${actionBean.entity}" />
 
-  <table class="display">
+<table class="display">
 
-    <tr>
-      <td>User name</td>
-      <td><stripes:text name="entity.username" /></td>
-    </tr>
-    <tr>
-      <td>Name</td>
-      <td><stripes:text name="entity.name" /></td>
-    </tr>
-    <tr>
-      <td>Email</td>
-      <td><stripes:text name="entity.email" /></td>
-    </tr>
-  </table>
+  <tr>
+    <td>User name</td>
+    <td>${entity.username}</td>
+  </tr>
+  <tr>
+    <td>Name</td>
+    <td>${entity.name}</td>
+  </tr>
+  <tr>
+    <td>Email</td>
+    <td>${entity.email}</td>
+  </tr>
+</table>
 
-  <div class="buttons"><stripes:submit name="save" value="Save" /> <stripes:submit name="cancel" value="Cancel" /></div>
-</stripes:form>
+<div class="buttons"><stripes:link href="/User.action" event="edit">
+                                Edit
+                                <stripes:param name="id" value="${entity.id}" />
+</stripes:link></div>
 
 </body>
 </html>

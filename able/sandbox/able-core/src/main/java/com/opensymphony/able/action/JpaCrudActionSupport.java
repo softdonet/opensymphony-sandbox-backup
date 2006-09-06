@@ -63,33 +63,42 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     @DontValidate
     @DefaultHandler
     public Resolution view() {
-        return new ForwardResolution(uriStrategy.getViewUri(this));
+        return new ForwardResolution(entityInfo.getViewUri());
+    }
+    
+    public Resolution edit() {
+        return new ForwardResolution(entityInfo.getEditUri());
+    }
+    
+    public Resolution bulkEdit() {
+        return new ForwardResolution(entityInfo.getBulkEditUri());
     }
 
     public Resolution save() {
-        if (getId() != null) {
+        System.out.println("####Êsaving() entity!!!" + getEntity());
+
+        Object idValue = entityInfo.getIdValue(getEntity());
+        if (idValue == null) {
             getJpaTemplate().persist(getEntity());
-            setId(entityInfo.getIdValue((getEntity())));
+            idValue = entityInfo.getIdValue(getEntity());
         }
 
         // TODO
         // getContext().addMsg( "saved " + getEntityName(); );
 
-        String uri = uriStrategy.getHomeUri(this);
-        if (id != null) {
-            uri = uriStrategy.getEditUri(this) + id;
-        }
+        String uri = entityInfo.getHomeUri();
         return new RedirectResolution(uri);
     }
 
     @DontValidate
     public Resolution cancel() {
+        System.out.println("####Êcancel() entity!!! " + getEntity());
         evictBoundObjects();
 
         // TODO
         // getContext().addMsg( Messages.cancelled( "Manufacturer" ) );
 
-        return new RedirectResolution(uriStrategy.getHomeUri(this));
+        return new RedirectResolution(entityInfo.getHomeUri());
     }
 
     // Properties
@@ -115,6 +124,9 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     }
 
     public void setId(Object id) {
+        if ("".equals(id)) {
+            id = null;
+        }
         if (id != null) {
             Class idClass = entityInfo.getIdClass();
             this.id = typeConverter.convertIfNecessary(id, idClass);

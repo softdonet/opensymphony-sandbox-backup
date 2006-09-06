@@ -4,6 +4,7 @@
 
 <stripes:form action="/User.action">
 
+<%--TODO next tag required? --%>
   <stripes:useActionBean binding="/User.action" var="actionBean" />
 
 
@@ -25,18 +26,23 @@
     <c:forEach items="${actionBean.allEntities}" var="row" varStatus="rowstat">
       <tr>
         <td>${row.id}</td>
-        <td>${row.username}</td>
+        <td>
+        <stripes:link href="/User.action" event="view">${row.username}
+        <stripes:param name="id" value="${row.id}" />
+        </stripes:link>
+        </td>
+        
         <td>${row.name}</td>
         <td>${row.email}</td>
-        <td><stripes:link href="/User.action" event="view">
+        <td><stripes:link href="/User.action" event="edit">
                                 Edit
-                                <stripes:param name="id" value="${row.id}" />
-        </stripes:link></td>
+                                <stripes:param name="id" value="${row.id}" /></stripes:link></td>
       </tr>
     </c:forEach>
   </table>
 
   <div class="buttons"><stripes:submit name="view" value="Bulk Edit" /></div>
 </stripes:form>
+
 </body>
 </html>
