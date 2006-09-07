@@ -1,13 +1,14 @@
 package com.opensymphony.able.mail;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.MessagingException;
-import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.Properties;
+
 import java.io.UnsupportedEncodingException;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:plightbo@gmail.com">Patrick Lightbody</a>

@@ -16,6 +16,8 @@
  */
 package com.opensymphony.able.action;
 
+import com.opensymphony.able.entity.EntityInfo;
+
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.DefaultHandler;
 import net.sourceforge.stripes.action.DontValidate;
@@ -28,9 +30,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.TypeConverter;
 
-import com.opensymphony.able.entity.EntityInfo;
-
-import java.beans.Introspector;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -83,6 +82,10 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
             idValue = entityInfo.getIdValue(getEntity());
         }
 
+        if (getContext().getValidationErrors().isEmpty()) {
+            shouldCommit();
+        }
+
         // TODO
         // getContext().addMsg( "saved " + getEntityName(); );
 
@@ -93,7 +96,7 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     @DontValidate
     public Resolution cancel() {
         System.out.println("####Êcancel() entity!!! " + getEntity());
-        setRollbackOnly();
+        shouldRollback();
 
         // TODO
         // getContext().addMsg( Messages.cancelled( "Manufacturer" ) );

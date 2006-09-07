@@ -16,7 +16,9 @@
  */
 package com.opensymphony.able.entity;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Entities {
 

@@ -41,7 +41,7 @@
     </c:forEach>
   </table>
 
-  <div class="buttons"><stripes:submit name="view" value="Bulk Edit" /></div>
+  <div class="buttons"><stripes:submit name="edit" value="New" /></div>
 </stripes:form>
 
 </body>

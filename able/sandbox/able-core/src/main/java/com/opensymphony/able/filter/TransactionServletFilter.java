@@ -16,6 +16,8 @@
  */
 package com.opensymphony.able.filter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -41,7 +43,9 @@ import java.io.IOException;
  */
 public class TransactionServletFilter implements Filter {
 
-    public static final String TRANSACTION_STATUS = TransactionServletFilter.class.getName() + ".status";
+    private static final Log log = LogFactory.getLog(TransactionServletFilter.class);
+
+    protected static final String TRANSACTION_OUTCOME = TransactionServletFilter.class.getName() + ".outcome";
     
     private TransactionTemplate transactionTemplate;
 
@@ -57,8 +61,13 @@ public class TransactionServletFilter implements Filter {
 
             public Object doInTransaction(TransactionStatus status) {
                 try {
-                    request.setAttribute(TRANSACTION_STATUS, status);
+                    TransactionOutcome outcome = new TransactionOutcome(status);
+                    request.setAttribute(TRANSACTION_OUTCOME, outcome);
                     filterChain.doFilter(request, response);
+                    
+                    if (outcome.isRollbackOnly()) {
+                        status.setRollbackOnly();
+                    }
                     return null;
                 }
                 catch (Exception e) {
@@ -78,8 +87,35 @@ public class TransactionServletFilter implements Filter {
         }
     }
 
-    public static TransactionStatus getTransactionStatus(final ServletRequest request) {
-        return (TransactionStatus) request.getAttribute(TRANSACTION_STATUS);
+    /**
+     * Marks that a transaction should be rolled back rather than commit
+     */
+    public static void shouldRollback(ServletRequest request) {
+        TransactionOutcome outcome = getTransactionOutcome(request);
+        if (outcome != null) {
+            outcome.shouldRollback();
+        }
+        else {
+            log.error("No transaction in progress!");
+        }
+    }
+    
+    /**
+     * Marks that a transaction should be committed. If this method is not
+     * called then the transaction will be rolled back to avoid accidental
+     * updates.
+     */
+    public static void shouldCommit(ServletRequest request) {
+        TransactionOutcome outcome = getTransactionOutcome(request);
+        if (outcome != null) {
+            outcome.shouldCommit();
+        }
+        else {
+            log.error("No transaction in progress!");
+        }
+    }
+    public static TransactionOutcome getTransactionOutcome(ServletRequest request) {
+        return (TransactionOutcome) request.getAttribute(TRANSACTION_OUTCOME);
     }
     
     public void destroy() {

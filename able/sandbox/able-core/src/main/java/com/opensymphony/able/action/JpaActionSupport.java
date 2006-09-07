@@ -18,15 +18,12 @@ package com.opensymphony.able.action;
 
 import com.opensymphony.able.filter.TransactionServletFilter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.orm.jpa.JpaCallback;
-import org.springframework.orm.jpa.JpaTemplate;
-import org.springframework.transaction.TransactionStatus;
-
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.integration.spring.SpringBean;
+
+import org.springframework.orm.jpa.JpaCallback;
+import org.springframework.orm.jpa.JpaTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -42,8 +39,6 @@ import java.util.List;
  */
 public abstract class JpaActionSupport implements ActionBean {
 
-    private static final Log log = LogFactory.getLog(JpaActionSupport.class);
-    
     @PersistenceContext
     @SpringBean
     private JpaTemplate jpaTemplate;
@@ -90,16 +85,19 @@ public abstract class JpaActionSupport implements ActionBean {
     // -------------------------------------------------------------------------
 
     /**
-     * Forces the current transaction to rollback which will cancel any updates made as part of a form submission.
+     * Forces the current transaction to rollback which will cancel any updates
+     * made as part of a form submission.
      */
-    protected void setRollbackOnly() {
-        TransactionStatus status = TransactionServletFilter.getTransactionStatus(getContext().getRequest());
-        if (status != null) {
-            status.setRollbackOnly();
-        }
-        else {
-            log.error("No transaction in progress!");
-        }
+    protected void shouldRollback() {
+        TransactionServletFilter.shouldRollback(getContext().getRequest());
+    }
+
+    /**
+     * Marks the transaction has being one that should commit (unless another
+     * object decides it should rollback)
+     */
+    protected void shouldCommit() {
+        TransactionServletFilter.shouldCommit(getContext().getRequest());
     }
 
     /**

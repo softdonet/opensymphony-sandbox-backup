@@ -16,10 +16,13 @@
  */
 package com.opensymphony.able.entity;
 
-import java.beans.*;
-import java.util.*;
-
 import org.springframework.beans.BeanUtils;
+
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class EntityInfo {
     private Class entityClass;

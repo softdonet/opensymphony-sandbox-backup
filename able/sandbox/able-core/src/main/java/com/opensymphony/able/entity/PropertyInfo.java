@@ -16,13 +16,12 @@
  */
 package com.opensymphony.able.entity;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Enumeration;
-
 import javax.persistence.Id;
 import javax.persistence.Transient;
+
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
 
 public class PropertyInfo {
 
@@ -36,7 +35,7 @@ public class PropertyInfo {
 		this.entity = entity;
 		this.descriptor = descriptor;
 		Method readMethod = descriptor.getReadMethod();
-		idProperty = readMethod != null && readMethod.getAnnotation(Id.class) != null;
+		idProperty = (readMethod != null) && (readMethod.getAnnotation(Id.class) != null);
 	}
 
 	public Enumeration<String> attributeNames() {
