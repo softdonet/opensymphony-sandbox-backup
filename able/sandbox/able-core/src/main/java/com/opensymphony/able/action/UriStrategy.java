@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class UriStrategy {
 
-    public String getEntityPrimaryKeyString(JpaCrudActionSupport action) {
+    public String[] getEntityPrimaryKeyValues(JpaCrudActionSupport action) {
         HttpServletRequest request = action.getContext().getRequest();
         /*
         String requestURI = request.getRequestURI();
@@ -35,7 +35,7 @@ public class UriStrategy {
             return requestURI.substring(idx + 1);
         }
         */
-        return request.getParameter("id");
+        return request.getParameterValues("id");
     }
 
 }

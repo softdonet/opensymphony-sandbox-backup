@@ -35,35 +35,44 @@ import javax.persistence.PersistenceException;
  */
 public class LoadDatabaseService implements InitializingBean {
 
-    private JpaTemplate jpaTemplate;
-    private final TransactionTemplate transactionTemplate;
+	private JpaTemplate jpaTemplate;
+	private final TransactionTemplate transactionTemplate;
 
-    public LoadDatabaseService(JpaTemplate jpaTemplate, TransactionTemplate transactionTemplate) {
-        this.jpaTemplate = jpaTemplate;
-        this.transactionTemplate = transactionTemplate;
-    }
+	public LoadDatabaseService(JpaTemplate jpaTemplate,
+			TransactionTemplate transactionTemplate) {
+		this.jpaTemplate = jpaTemplate;
+		this.transactionTemplate = transactionTemplate;
+	}
 
-    public void afterPropertiesSet() throws Exception {
-        transactionTemplate.execute(new TransactionCallback() {
-            public Object doInTransaction(TransactionStatus status) {
-                return jpaTemplate.execute(new JpaCallback() {
-                    public Object doInJpa(EntityManager entityManager) throws PersistenceException {
-                        return addSomeUsers(entityManager);
-                    }
-                });
-            }});
-    }
+	public void afterPropertiesSet() throws Exception {
+		transactionTemplate.execute(new TransactionCallback() {
+			public Object doInTransaction(TransactionStatus status) {
+				return jpaTemplate.execute(new JpaCallback() {
+					public Object doInJpa(EntityManager entityManager)
+							throws PersistenceException {
+						return addSomeUsers(entityManager);
+					}
+				});
+			}
+		});
+	}
 
-    protected Object addSomeUsers(EntityManager entityManager) {
-        User user = new User();
-        user.setName("James Strachan");
-        user.setUsername("jstrachan");
-        entityManager.persist(user);
+	protected Object addSomeUsers(EntityManager entityManager) {
+		User user = new User();
+		user.setName("Patrick Lightbody");
+		user.setUsername("plightbody");
+		entityManager.persist(user);
 
-        user = new User();
-        user.setName("Patrick Lightbody");
-        user.setUsername("plightbody");
-        entityManager.persist(user);
-        return null;
-    }
+		user = new User();
+		user.setName("Tim Fennell");
+		user.setUsername("tfennell");
+		entityManager.persist(user);
+
+		user = new User();
+		user.setName("James Strachan");
+		user.setUsername("jstrachan");
+		entityManager.persist(user);
+
+		return null;
+	}
 }

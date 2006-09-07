@@ -16,7 +16,10 @@
  */
 package com.opensymphony.able.action;
 
-import com.opensymphony.able.entity.EntityInfo;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.DefaultHandler;
@@ -30,9 +33,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.TypeConverter;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.List;
+import com.opensymphony.able.entity.EntityInfo;
 
 /**
  * Base class for any CRUD based JPA {@link ActionBean} to view or edit an
@@ -41,154 +42,175 @@ import java.util.List;
  * @version $Revision$
  */
 public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
-    private static final Log log = LogFactory.getLog(JpaCrudActionSupport.class);
+	private static final Log log = LogFactory
+			.getLog(JpaCrudActionSupport.class);
 
-    private Object id;
-    private E entity;
-    private Class<E> entityClass;
-    private EntityInfo entityInfo;
-    private UriStrategy uriStrategy = new UriStrategy();
-    private TypeConverter typeConverter = new BeanWrapperImpl();
+	private List idList = new ArrayList();
+	private List<E> entities;
+	private E entity;
+	private Class<E> entityClass;
+	private EntityInfo entityInfo;
+	private UriStrategy uriStrategy = new UriStrategy();
+	private TypeConverter typeConverter = new BeanWrapperImpl();
 
-    public JpaCrudActionSupport() {
-        ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
-        Type[] typeArguments = genericSuperclass.getActualTypeArguments();
-        this.entityClass = (Class<E>) typeArguments[0];
-        this.entityInfo = new EntityInfo(entityClass);
-    }
+	public JpaCrudActionSupport() {
+		ParameterizedType genericSuperclass = (ParameterizedType) getClass()
+				.getGenericSuperclass();
+		Type[] typeArguments = genericSuperclass.getActualTypeArguments();
+		this.entityClass = (Class<E>) typeArguments[0];
+		this.entityInfo = new EntityInfo(entityClass);
+	}
 
-    // Actions
-    // -------------------------------------------------------------------------
-    @DontValidate
-    @DefaultHandler
-    public Resolution view() {
-        return new ForwardResolution(entityInfo.getViewUri());
-    }
-    
-    public Resolution edit() {
-        return new ForwardResolution(entityInfo.getEditUri());
-    }
-    
-    public Resolution bulkEdit() {
-        return new ForwardResolution(entityInfo.getBulkEditUri());
-    }
+	// Actions
+	// -------------------------------------------------------------------------
+	@DontValidate
+	@DefaultHandler
+	public Resolution view() {
+		return new ForwardResolution(entityInfo.getViewUri());
+	}
 
-    @DontValidate
-    public Resolution delete() {
-        Object idValue = entityInfo.getIdValue(getEntity());
-        if (idValue != null) {
-            getJpaTemplate().remove(getEntity());
-            shouldCommit();
-        }
-        return new ForwardResolution(entityInfo.getHomeUri());
-    }
-    
-    public Resolution save() {
-        Object idValue = entityInfo.getIdValue(getEntity());
-        if (idValue == null) {
-            getJpaTemplate().persist(getEntity());
-            idValue = entityInfo.getIdValue(getEntity());
-        }
+	public Resolution edit() {
+		return new ForwardResolution(entityInfo.getEditUri());
+	}
 
-        if (getContext().getValidationErrors().isEmpty()) {
-            shouldCommit();
-        }
+	public Resolution bulkEdit() {
+		return new ForwardResolution(entityInfo.getBulkEditUri());
+	}
 
-        // TODO
-        // getContext().addMsg( "saved " + getEntityName(); );
+	@DontValidate
+	public Resolution delete() {
+		List<E> list = getEntities();
+		for (E e : list) {
+			Object idValue = entityInfo.getIdValue(e);
+			if (idValue != null) {
+				getJpaTemplate().remove(e);
+				shouldCommit();
+			}
+		}
+		return new ForwardResolution(entityInfo.getHomeUri());
+	}
 
-        String uri = entityInfo.getHomeUri();
-        return new RedirectResolution(uri);
-    }
+	public Resolution save() {
+		if (getContext().getValidationErrors().isEmpty()) {
+			List<E> list = getEntities();
+			for (E e : list) {
+				Object idValue = entityInfo.getIdValue(e);
+				if (idValue == null) {
+					getJpaTemplate().persist(e);
+					idValue = entityInfo.getIdValue(e);
+				}
+			}
+			shouldCommit();
+		}
 
-    @DontValidate
-    public Resolution cancel() {
-        shouldRollback();
+		// TODO
+		// getContext().addMsg( "saved " + getEntityName(); );
 
-        // TODO
-        // getContext().addMsg( Messages.cancelled( "Manufacturer" ) );
+		String uri = entityInfo.getHomeUri();
+		return new RedirectResolution(uri);
+	}
 
-        return new RedirectResolution(entityInfo.getHomeUri());
-    }
+	@DontValidate
+	public Resolution cancel() {
+		shouldRollback();
 
-    // Properties
-    // -------------------------------------------------------------------------
-    public E getEntity() {
-        if (entity == null) {
-            if (id != null) {
-                entity = findByPrimaryKey();
-            }
-            else {
-                entity = newInstance();
-            }
-        }
-        return entity;
-    }
+		// TODO
+		// getContext().addMsg( Messages.cancelled( "Manufacturer" ) );
 
-    public void setEntity(E entity) {
-        this.entity = entity;
-    }
+		return new RedirectResolution(entityInfo.getHomeUri());
+	}
 
-    public Object getId() {
-        return id;
-    }
+	// Properties
+	// -------------------------------------------------------------------------
+	public E getEntity() {
+		if (entity == null) {
+			List<E> list = getEntities();
+			if (list.isEmpty()) {
+				entity = newInstance();
+				list.add(entity);
+			} else {
+				// TODO if size > 1 should we warn?
+				entity = list.get(0);
+			}
+		}
+		return entity;
+	}
 
-    public void setId(Object id) {
-        if ("".equals(id)) {
-            id = null;
-        }
-        if (id != null) {
-            Class idClass = entityInfo.getIdClass();
-            this.id = typeConverter.convertIfNecessary(id, idClass);
-        }
-        else {
-            this.id = id;
-        }
-    }
+	public List<E> getEntities() {
+		if (entities == null) {
+			int size = idList.size();
+			entities = new ArrayList<E>(size);
 
-    public Class<E> getEntityClass() {
-        return entityClass;
-    }
+			// TODO we could do a more efficient query?
+			for (Object id : idList) {
+				E entity = findByPrimaryKey(id);
+				if (entity != null) {
+					entities.add(entity);
+				}
+			}
+		}
+		return entities;
+	}
 
-    public Class getIdClass() {
-        return entityInfo.getIdClass();
-    }
+	public Class<E> getEntityClass() {
+		return entityClass;
+	}
 
-    @SuppressWarnings("unchecked")
-    public List<E> getAllEntities() {
-        return query("from " + entityInfo.getEntityName());
-    }
+	public Class getIdClass() {
+		return entityInfo.getIdClass();
+	}
 
-    public EntityInfo getEntityInfo() {
-        return entityInfo;
-    }
+	@SuppressWarnings("unchecked")
+	public List<E> getAllEntities() {
+		return query("from " + entityInfo.getEntityName());
+	}
 
-    // Implementation methods
-    // -------------------------------------------------------------------------
-    @SuppressWarnings("unchecked")
-    protected void preBind() {
-        // TODO lets bind the request parameter for the ID to the id attribute
-        String idValue = uriStrategy.getEntityPrimaryKeyString(this);
-        setId(idValue);
-    }
+	public EntityInfo getEntityInfo() {
+		return entityInfo;
+	}
 
-    /**
-     * Looks up the entity by primary key
-     */
-    protected E findByPrimaryKey() {
-        log.info("Loading primaryKey Value: " + id + " of type: " + id.getClass());
-        return getJpaTemplate().find(entityClass, id);
-    }
+	// Implementation methods
+	// -------------------------------------------------------------------------
+	@SuppressWarnings("unchecked")
+	protected void preBind() {
+		String[] idValues = uriStrategy.getEntityPrimaryKeyValues(this);
+		idList.clear();
+		if (idValues != null) {
+			for (String value : idValues) {
+				Object id = convertToPrimaryKeyVale(value);
+				if (id != null) {
+					idList.add(id);
+				}
+			}
+		}
+	}
 
-    /**
-     * Creates a new instance of the entity class
-     */
-    protected E newInstance() {
-        try {
-            return entityClass.newInstance();
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Failed to instantiate class: " + entityClass.getName() + ". Reason: " + e, e);
-        }
-    }
+	protected Object convertToPrimaryKeyVale(String value) {
+		if (value != null && value.length() > 0) {
+			Class idClass = entityInfo.getIdClass();
+			return typeConverter.convertIfNecessary(value, idClass);
+		}
+		return null;
+	}
+
+	/**
+	 * Looks up the entity by primary key
+	 */
+	protected E findByPrimaryKey(Object id) {
+		log.info("Loading primaryKey Value: " + id + " of type: "
+				+ id.getClass());
+		return getJpaTemplate().find(entityClass, id);
+	}
+
+	/**
+	 * Creates a new instance of the entity class
+	 */
+	protected E newInstance() {
+		try {
+			return entityClass.newInstance();
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to instantiate class: "
+					+ entityClass.getName() + ". Reason: " + e, e);
+		}
+	}
 }
