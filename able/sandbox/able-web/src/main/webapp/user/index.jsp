@@ -4,7 +4,7 @@
 
 <stripes:form action="/User.action">
 
-<%--TODO next tag required? --%>
+<%--TODO - can we avoid this? --%>
   <stripes:useActionBean binding="/User.action" var="actionBean" />
 
 
@@ -36,6 +36,9 @@
         <td>${row.email}</td>
         <td><stripes:link href="/User.action" event="edit">
                                 Edit
+                                <stripes:param name="id" value="${row.id}" /></stripes:link>
+         <stripes:link href="/User.action" event="delete">
+                                Delete
                                 <stripes:param name="id" value="${row.id}" /></stripes:link></td>
       </tr>
     </c:forEach>

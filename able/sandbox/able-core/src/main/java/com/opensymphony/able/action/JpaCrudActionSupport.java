@@ -73,9 +73,17 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
         return new ForwardResolution(entityInfo.getBulkEditUri());
     }
 
+    @DontValidate
+    public Resolution delete() {
+        Object idValue = entityInfo.getIdValue(getEntity());
+        if (idValue != null) {
+            getJpaTemplate().remove(getEntity());
+            shouldCommit();
+        }
+        return new ForwardResolution(entityInfo.getHomeUri());
+    }
+    
     public Resolution save() {
-        System.out.println("####Êsaving() entity!!!" + getEntity());
-
         Object idValue = entityInfo.getIdValue(getEntity());
         if (idValue == null) {
             getJpaTemplate().persist(getEntity());
@@ -95,7 +103,6 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
 
     @DontValidate
     public Resolution cancel() {
-        System.out.println("####Êcancel() entity!!! " + getEntity());
         shouldRollback();
 
         // TODO
