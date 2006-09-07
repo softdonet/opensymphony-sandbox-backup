@@ -4,9 +4,9 @@
 
 <stripes:form action="/User.action">
 
-<%--TODO - can we avoid this? --%>
+<%--TODO - can we avoid this?
+ --%>
   <stripes:useActionBean binding="/User.action" var="actionBean" />
-
 
   <stripes:errors />
 
@@ -14,17 +14,16 @@
     <tr>
       <th></th>
       <th>ID</th>
-      <th>Opened On</th>
-      <th>Description</th>
-      <th>Component</th>
-      <th>Priority</th>
-      <th>Status</th>
-      <th>Owner</th>
+      <th>User Name</th>
+      <th>Name</th>
+      <th>Email</th>
       <th></th>
     </tr>
 
     <c:forEach items="${actionBean.allEntities}" var="row" varStatus="rowstat">
       <tr>
+        <td><stripes:checkbox name="id" value="${row.id}"
+                              onclick="handleCheckboxRangeSelection(this, event);"/></td>
         <td>${row.id}</td>
         <td>
         <stripes:link href="/User.action" event="view">${row.username}
@@ -44,7 +43,11 @@
     </c:forEach>
   </table>
 
-  <div class="buttons"><stripes:submit name="edit" value="New" /></div>
+  <div class="buttons">
+  <stripes:submit name="edit" value="New" />
+  <stripes:submit name="bulkEdit" value="Bulk Edit" />
+  <stripes:submit name="delete" value="Delete" />
+  </div>
 </stripes:form>
 
 </body>

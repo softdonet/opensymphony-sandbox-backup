@@ -47,11 +47,13 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
 
 	private List idList = new ArrayList();
 	private List<E> entities;
+	private List<E> bulkEditEntities;
 	private E entity;
 	private Class<E> entityClass;
 	private EntityInfo entityInfo;
 	private UriStrategy uriStrategy = new UriStrategy();
 	private TypeConverter typeConverter = new BeanWrapperImpl();
+	private int bulkEditCount = 5;
 
 	public JpaCrudActionSupport() {
 		ParameterizedType genericSuperclass = (ParameterizedType) getClass()
@@ -92,13 +94,12 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
 
 	public Resolution save() {
 		if (getContext().getValidationErrors().isEmpty()) {
-			List<E> list = getEntities();
-			for (E e : list) {
-				Object idValue = entityInfo.getIdValue(e);
-				if (idValue == null) {
-					getJpaTemplate().persist(e);
-					idValue = entityInfo.getIdValue(e);
+			if (bulkEditEntities != null) {
+				for (E e : bulkEditEntities) {
+					save(e);
 				}
+			} else {
+				save(getEntity());
 			}
 			shouldCommit();
 		}
@@ -108,6 +109,14 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
 
 		String uri = entityInfo.getHomeUri();
 		return new RedirectResolution(uri);
+	}
+
+	protected void save(E e) {
+		Object idValue = entityInfo.getIdValue(e);
+		if (idValue == null) {
+			getJpaTemplate().persist(e);
+			idValue = entityInfo.getIdValue(e);
+		}
 	}
 
 	@DontValidate
@@ -152,6 +161,25 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
 		return entities;
 	}
 
+	public List<E> getBulkEditEntities() {
+		if (bulkEditEntities == null) {
+			List<E> list = getEntities();
+			int size = list.size();
+			if (size == bulkEditCount) {
+				bulkEditEntities = list;
+			} else if (size > bulkEditCount) {
+				bulkEditEntities = list.subList(0, bulkEditCount - 1);
+			} else {
+				bulkEditEntities = new ArrayList<E>(bulkEditCount);
+				bulkEditEntities.addAll(list);
+				while (bulkEditEntities.size() < bulkEditCount) {
+					bulkEditEntities.add(newInstance());
+				}
+			}
+		}
+		return bulkEditEntities;
+	}
+
 	public Class<E> getEntityClass() {
 		return entityClass;
 	}
@@ -167,6 +195,14 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
 
 	public EntityInfo getEntityInfo() {
 		return entityInfo;
+	}
+
+	public int getBulkEditCount() {
+		return bulkEditCount;
+	}
+
+	public void setBulkEditCount(int bulkEditCount) {
+		this.bulkEditCount = bulkEditCount;
 	}
 
 	// Implementation methods
