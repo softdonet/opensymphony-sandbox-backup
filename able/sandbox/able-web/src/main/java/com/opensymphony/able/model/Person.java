@@ -1,10 +1,15 @@
-package net.sourceforge.stripes.examples.bugzooky.biz;
+package com.opensymphony.able.model;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * Represents a person to whom bugs can be assigned.
  *
  * @author Tim Fennell
  */
+@Entity
 public class Person {
     private Integer id;
     private String username;
@@ -26,6 +31,8 @@ public class Person {
     }
 
     /** Gets the ID of the person. */
+    @Id
+    @GeneratedValue
     public Integer getId() { return id; }
 
     /** Sets the ID of the person. */

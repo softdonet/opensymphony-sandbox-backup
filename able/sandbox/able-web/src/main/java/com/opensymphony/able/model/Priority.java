@@ -1,4 +1,4 @@
-package net.sourceforge.stripes.examples.bugzooky.biz;
+package com.opensymphony.able.model;
 
 /**
  * Enum that represents the Priority of a bug in the Bugzooky example app.

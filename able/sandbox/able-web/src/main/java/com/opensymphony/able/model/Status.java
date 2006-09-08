@@ -1,4 +1,4 @@
-package net.sourceforge.stripes.examples.bugzooky.biz;
+package com.opensymphony.able.model;
 
 /**
  * Represents the possible statuses of a bug in the Bugzooky example application.

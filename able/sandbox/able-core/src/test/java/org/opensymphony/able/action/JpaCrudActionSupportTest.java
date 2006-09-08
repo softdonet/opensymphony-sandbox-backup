@@ -16,8 +16,7 @@
  */
 package org.opensymphony.able.action;
 
-import com.opensymphony.able.action.JpaCrudActionSupport;
-
+import org.opensymphony.able.example.model.Type;
 import org.opensymphony.able.example.model.User;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.MutablePropertyValues;
@@ -25,6 +24,8 @@ import org.springframework.beans.TypeConverter;
 import org.springframework.validation.DataBinder;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import com.opensymphony.able.action.JpaCrudActionSupport;
 
 /**
  * 
@@ -48,6 +49,23 @@ public class JpaCrudActionSupportTest {
 
         String entityUri = action.getEntityInfo().getEntityUri();
         Assert.assertEquals("user", entityUri);
+        
+        Object values = action.getAllValues().get("type");
+        System.out.println("Values: " + values);
+        
+        Assert.assertTrue(values instanceof Object[], "values is an array");
+        Object[] valueArray = (Object[]) values;
+        
+        for (Object object : valueArray) {
+			System.out.println("Found type value: " + object);
+		}
+        
+        Assert.assertEquals(3, valueArray.length);
+        System.out.println("found values: " + values);
+        
+        Assert.assertEquals(Type.Customer, valueArray[0]);
+        Assert.assertEquals(Type.Manager, valueArray[1]);
+        Assert.assertEquals(Type.Admin, valueArray[2]);
     }
 
     @Test
@@ -64,7 +82,6 @@ public class JpaCrudActionSupportTest {
         TypeConverter typeConverter = new BeanWrapperImpl();
         Object value = typeConverter.convertIfNecessary("1234567890", Long.class);
         Assert.assertEquals(new Long(1234567890), value);
-        
     }
 
     public static class UserAction extends JpaCrudActionSupport<User> {

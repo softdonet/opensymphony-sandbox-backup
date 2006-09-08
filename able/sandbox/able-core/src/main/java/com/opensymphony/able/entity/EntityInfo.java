@@ -20,9 +20,9 @@ import org.springframework.beans.BeanUtils;
 
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+
+import javax.persistence.Entity;
 
 public class EntityInfo {
     private Class entityClass;
@@ -30,6 +30,7 @@ public class EntityInfo {
     private String entityUri;
     private String actionUri;
     private List<PropertyInfo> properties = new ArrayList<PropertyInfo>();
+    private Map<String,PropertyInfo> propertyMap = new HashMap<String, PropertyInfo>();
     private PropertyInfo idProperty;
 
     public EntityInfo(Class entityClass) {
@@ -109,7 +110,19 @@ public class EntityInfo {
         return "/" + getEntityUri() + "/editTable.jsp?id=";
     }
     
+	public PropertyInfo getProperty(String name) {
+		return propertyMap.get(name);
+	}
 
+	public String getFindAllQuery() {
+		return "from " + getEntityName();
+	}
+
+	@SuppressWarnings("unchecked")
+	public boolean isPersistent() {
+		return entityClass.getAnnotation(Entity.class) != null;
+	}
+	
     protected String createEntityName() {
         String answer = getEntityClass().getName();
         int idx = answer.lastIndexOf('.');
@@ -140,6 +153,7 @@ public class EntityInfo {
 
             PropertyInfo propertyInfo = new PropertyInfo(this, descriptor);
             properties.add(propertyInfo);
+            propertyMap.put(name, propertyInfo);
             if (propertyInfo.isIdProperty()) {
                 if (idProperty != null) {
                     throw new IllegalStateException("Duplicate @Id properties defined for: " + idProperty + " and " + propertyInfo);
@@ -148,5 +162,6 @@ public class EntityInfo {
             }
         }
     }
+
 
 }

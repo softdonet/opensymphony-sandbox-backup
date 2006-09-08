@@ -1,4 +1,8 @@
-package net.sourceforge.stripes.examples.bugzooky.biz;
+package com.opensymphony.able.model;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * Class that represents a compopnent of a software system against which bugs can be
@@ -6,6 +10,7 @@ package net.sourceforge.stripes.examples.bugzooky.biz;
  *
  * @author Tim Fennell
  */
+@Entity
 public class Component {
     private Integer id;
     private String name;
@@ -19,6 +24,8 @@ public class Component {
     }
 
     /** Gets the ID of the Component. */
+    @Id
+    @GeneratedValue
     public Integer getId() { return id; }
 
     /** Sets the ID of the Component. */

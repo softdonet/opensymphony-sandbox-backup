@@ -18,8 +18,13 @@ package com.opensymphony.able.action;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.DefaultHandler;
@@ -34,6 +39,8 @@ import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.TypeConverter;
 
 import com.opensymphony.able.entity.EntityInfo;
+import com.opensymphony.able.entity.PropertyInfo;
+import com.opensymphony.able.util.EnumHelper;
 
 /**
  * Base class for any CRUD based JPA {@link ActionBean} to view or edit an
@@ -190,7 +197,7 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
 
 	@SuppressWarnings("unchecked")
 	public List<E> getAllEntities() {
-		return query("from " + entityInfo.getEntityName());
+		return query(getAllElementsQuery());
 	}
 
 	public EntityInfo getEntityInfo() {
@@ -203,6 +210,22 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
 
 	public void setBulkEditCount(int bulkEditCount) {
 		this.bulkEditCount = bulkEditCount;
+	}
+
+	public Map<String,Object> getAllValues() {
+		return new AbstractMap<String,Object>() {
+			
+			@Override
+			public Object get(Object propertyName) {
+				return getAllValuesForProperty((String) propertyName);
+			}
+			
+			@Override
+			public Set<java.util.Map.Entry<String, Object>> entrySet() {
+				// TODO Auto-generated method stub
+				return Collections.EMPTY_SET;
+			}
+		};
 	}
 
 	// Implementation methods
@@ -248,5 +271,35 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
 			throw new RuntimeException("Failed to instantiate class: "
 					+ entityClass.getName() + ". Reason: " + e, e);
 		}
+	}
+
+	
+	protected Object getAllValuesForProperty(String propertyName) {
+		PropertyInfo property = entityInfo.getProperty(propertyName);
+		if (property == null) {
+			throw new IllegalArgumentException("Entity " + entityInfo.getEntityName() + " does not have a property called: " + propertyName);
+		}
+		EntityInfo propertyTypeInfo = property.getPropertyEntityInfo();
+		if (propertyTypeInfo.isPersistent()) {
+			return getJpaTemplate().find(propertyTypeInfo.getFindAllQuery());
+		}
+		else {
+			Class propertyType = propertyTypeInfo.getEntityClass();
+			if (Enum.class.isAssignableFrom(propertyType)) {
+				try {
+					return Arrays.asList(EnumHelper.getEnumValues(propertyType));
+				} catch (Exception e) {
+					log.error("Attempting to find all enum types of : " + propertyType + ". Caught: " + e, e);
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Allows the query to be overloaded for returning all of the items
+	 */
+	protected String getAllElementsQuery() {
+		return entityInfo.getFindAllQuery();
 	}
 }

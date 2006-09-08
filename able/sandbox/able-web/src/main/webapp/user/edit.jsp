@@ -23,7 +23,10 @@
     </tr>
   </table>
 
-  <div class="buttons"><stripes:submit name="save" value="Save" /> <stripes:submit name="cancel" value="Cancel" /></div>
+  <div class="buttons">
+  <stripes:submit name="save" value="Save" /> 
+  <stripes:submit name="cancel" value="Cancel" />
+  </div>
 </stripes:form>
 
 </body>

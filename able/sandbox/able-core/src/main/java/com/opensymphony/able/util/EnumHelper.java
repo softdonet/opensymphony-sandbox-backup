@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,38 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.opensymphony.able.entity;
+package com.opensymphony.able.util;
 
-import org.opensymphony.able.example.model.User;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import com.opensymphony.able.entity.EntityInfo;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
+ * A helper class for working with enums
  * 
- * @version $Revision: 11 $
+ * version $Revision: 1 $
  */
-public class EntityInfoTest {
+public class EnumHelper {
+    private static final Class[] NO_PARAMETER_TYPES = {};
+    private static final Object[] NO_PARAMETER_VALUES = {};
 
-    @Test
-    public void testReflection() throws Exception {
-
-        EntityInfo info = new EntityInfo(User.class);
-
-        Class entityClass = info.getEntityClass();
-        Assert.assertEquals(User.class, entityClass);
-        
-        String entityName = info.getEntityName();
-        Assert.assertEquals("User", entityName);
-
-        String entityUri = info.getEntityUri();
-        Assert.assertEquals("user", entityUri);
-
-        Class idClass = info.getIdClass();
-        Assert.assertEquals(Long.class, idClass);
-
-        
+    public static Object[] getEnumValues(Class enumType) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Method method = enumType.getMethod("values", NO_PARAMETER_TYPES);
+        return (Object[]) method.invoke(null, NO_PARAMETER_VALUES);
     }
-    
 }

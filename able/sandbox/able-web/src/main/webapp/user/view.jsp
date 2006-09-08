@@ -27,8 +27,8 @@
 
 <div class="buttons">
   <stripes:submit name="edit" value="Edit" />
-<stripes:submit name="cancel" value="Back" />
-  </div>
+  <stripes:submit name="cancel" value="Back" />
+</div>
 
 </stripes:form>
 </body>

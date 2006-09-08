@@ -8,6 +8,7 @@
 
 <ul>
   <li><stripes:link href="/user/index.jsp">User List</stripes:link></li>
+  <li><stripes:link href="/bug/index.jsp">Bug List</stripes:link></li>
 </ul>
 </div>
 

@@ -21,13 +21,16 @@ import javax.persistence.Transient;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Enumeration;
 
 public class PropertyInfo {
 
 	private static final Object[] EMPTY_ARGS = {};
-    
-    private final EntityInfo entity;
+
+	private final EntityInfo entity;
 	private final PropertyDescriptor descriptor;
 	private boolean idProperty;
 
@@ -35,7 +38,8 @@ public class PropertyInfo {
 		this.entity = entity;
 		this.descriptor = descriptor;
 		Method readMethod = descriptor.getReadMethod();
-		idProperty = (readMethod != null) && (readMethod.getAnnotation(Id.class) != null);
+		idProperty = (readMethod != null)
+				&& (readMethod.getAnnotation(Id.class) != null);
 	}
 
 	public Enumeration<String> attributeNames() {
@@ -92,12 +96,36 @@ public class PropertyInfo {
 		return idProperty;
 	}
 
-    public Object getValue(Object entity) {
-        try {
-            return descriptor.getReadMethod().invoke(entity, EMPTY_ARGS);
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Failed to extract property: " + getName() + " from: " + entity + ". Reason: " + e, e);
-        }
-    }
+	public Object getValue(Object entity) {
+		try {
+			return descriptor.getReadMethod().invoke(entity, EMPTY_ARGS);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to extract property: "
+					+ getName() + " from: " + entity + ". Reason: " + e, e);
+		}
+	}
+
+	/**
+	 * Returns the component type of the property - e.g. ignoring the
+	 * cardinality (array or List).
+	 */
+	public Class getPropertyComponentType() {
+		Class<?> propertyType = descriptor.getPropertyType();
+
+		if (propertyType.isArray()) {
+			return propertyType.getComponentType();
+		}
+		if (propertyType.isAssignableFrom(Collection.class)) {
+			ParameterizedType genericSuperclass = (ParameterizedType) propertyType
+					.getGenericSuperclass();
+			Type[] typeArguments = genericSuperclass.getActualTypeArguments();
+			return (Class) typeArguments[0];
+		}
+		return propertyType;
+	}
+
+	public EntityInfo getPropertyEntityInfo() {
+		// TODO - use registry....
+		return new EntityInfo(getPropertyComponentType());
+	}
 }

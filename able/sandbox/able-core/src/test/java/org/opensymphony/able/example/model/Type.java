@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,38 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.opensymphony.able.entity;
-
-import org.opensymphony.able.example.model.User;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import com.opensymphony.able.entity.EntityInfo;
+package org.opensymphony.able.example.model;
 
 /**
- * 
- * @version $Revision: 11 $
+ *
+ * version $Revision: 1 $
  */
-public class EntityInfoTest {
-
-    @Test
-    public void testReflection() throws Exception {
-
-        EntityInfo info = new EntityInfo(User.class);
-
-        Class entityClass = info.getEntityClass();
-        Assert.assertEquals(User.class, entityClass);
-        
-        String entityName = info.getEntityName();
-        Assert.assertEquals("User", entityName);
-
-        String entityUri = info.getEntityUri();
-        Assert.assertEquals("user", entityUri);
-
-        Class idClass = info.getIdClass();
-        Assert.assertEquals(Long.class, idClass);
-
-        
-    }
-    
+public enum Type {
+	Customer, Manager, Admin
 }

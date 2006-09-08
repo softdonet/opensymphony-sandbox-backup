@@ -1,14 +1,21 @@
-package net.sourceforge.stripes.examples.bugzooky.biz;
+package com.opensymphony.able.model;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * Represents a bug in the bug database.
  *
  * @author Tim Fennell
  */
+@Entity
 public class Bug {
     private Integer id;
     private Date openDate;
@@ -22,6 +29,8 @@ public class Bug {
     private Float percentComplete;
     private List<Attachment> attachments;
 
+    @Id
+    @GeneratedValue
     public Integer getId() {
         return id;
     }
@@ -54,6 +63,7 @@ public class Bug {
         this.longDescription = longDescription;
     }
 
+    @ManyToOne
     public Component getComponent() {
         return component;
     }
@@ -78,6 +88,7 @@ public class Bug {
         this.status = status;
     }
 
+    @ManyToOne
     public Person getOwner() {
         return owner;
     }
@@ -102,6 +113,7 @@ public class Bug {
         this.percentComplete = percentComplete;
     }
 
+    @OneToMany
     public List<Attachment> getAttachments() {
         return attachments;
     }
