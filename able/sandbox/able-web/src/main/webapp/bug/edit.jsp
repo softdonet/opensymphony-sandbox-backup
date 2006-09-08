@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/taglibs/header.jsp"%>
+<%@ taglib prefix="bug" tagdir="/WEB-INF/tags/entity/bug" %>
 <html>
 <body>
 
@@ -17,9 +18,7 @@
                 <tr>
                     <th><stripes:label for="entity.priority">Priority</stripes:label>:</th>
                     <td>
-                        <stripes:select name="entity.priority" value="Medium">
-                            <stripes:options-collection collection="${actionBean.allValues.priority}"/>
-                        </stripes:select>
+                      <bug:fieldEditPriority/>
                     </td>
                 </tr>
                 <tr>

@@ -17,11 +17,14 @@
 package com.opensymphony.able.jpa;
 
 import com.opensymphony.able.action.UserActionBean;
+import com.opensymphony.able.jaxb.JaxbTemplate;
 import com.opensymphony.able.model.User;
 import com.opensymphony.able.service.LoadDatabaseService;
 
 import net.sourceforge.stripes.integration.spring.SpringHelper;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.jpa.JpaTemplate;
 import org.springframework.transaction.TransactionStatus;
@@ -31,6 +34,7 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.io.*;
 import java.util.List;
 
 /**
@@ -38,38 +42,67 @@ import java.util.List;
  * @version $Revision$
  */
 public class DataLoadTest extends SpringTestSupport {
-    @DataProvider(name = "springUriWithEntityManager")
-    public String[][] getSpringFiles() {
-        return new String[][] { { "spring.xml" } };
-    };
+	private static final Log log = LogFactory.getLog(DataLoadTest.class);
 
-    @Test(dataProvider = "springUriWithEntityManager")
-    public void testLoadOfSomeData(String classpathUri) throws Exception {
-        final ApplicationContext context = loadContext(classpathUri);
+	@DataProvider(name = "springUriWithEntityManager")
+	public String[][] getSpringFiles() {
+		return new String[][] { { "spring.xml" } };
+	};
 
-        JpaTemplate jpaTemplate = (JpaTemplate) getMandatoryBean(context, "jpaTemplate");
-        TransactionTemplate txnTemplate = (TransactionTemplate) getMandatoryBean(context, "transactionTemplate");
-        
-        LoadDatabaseService loadService = new LoadDatabaseService(jpaTemplate, txnTemplate);
-        loadService.afterPropertiesSet();
-        
-        txnTemplate.execute(new TransactionCallback() {
-            public Object doInTransaction(TransactionStatus status) {
-                assertDataPresent(context);
-                return null;
-            }
-        });
+	@Test(dataProvider = "springUriWithEntityManager")
+	public void testLoadOfSomeData(String classpathUri) throws Exception {
+		final ApplicationContext context = loadContext(classpathUri);
 
-    }
+		JpaTemplate jpaTemplate = (JpaTemplate) getMandatoryBean(context,
+				"jpaTemplate");
+		TransactionTemplate txnTemplate = (TransactionTemplate) getMandatoryBean(
+				context, "transactionTemplate");
 
-    protected void assertDataPresent(ApplicationContext context) {
-        UserActionBean action = new UserActionBean();
-        SpringHelper.injectBeans(action, context);
+		LoadDatabaseService loadService = new LoadDatabaseService(jpaTemplate,
+				txnTemplate);
+		loadService.afterPropertiesSet();
 
-        List<User> allEntities = action.getAllEntities();
-        System.out.println("Found users: " + allEntities);
+		Exception e = (Exception) txnTemplate.execute(new TransactionCallback() {
+			public Object doInTransaction(TransactionStatus status) {
+				return assertDataPresent(context);
+			}
+		});
+		if (e != null) {
+			Assert.fail("Failed to popupate: " + e, e);
+		}
+	}
 
-        Assert.assertTrue(allEntities.size() > 1, "Should have some users in the database now!");
-    }
+	protected Object assertDataPresent(ApplicationContext context) {
+		UserActionBean action = new UserActionBean();
+		SpringHelper.injectBeans(action, context);
+
+		List<User> allEntities = action.getAllEntities();
+		System.out.println("Found users: " + allEntities);
+
+		Assert.assertTrue(allEntities.size() > 1,
+				"Should have some users in the database now!");
+
+		JaxbTemplate template = new JaxbTemplate(User.class);
+		File dir = new File("target/data");
+		dir.mkdirs();
+		FileOutputStream out = null;
+		try {
+			File file = new File(dir, "users.xml");
+			System.out.println("Writing file: " + file);
+			log.info("file: " + file);
+			out = new FileOutputStream(file);
+			template.write(out, allEntities);
+			return null;
+		} catch (Exception e) {
+			log.error(e);
+			return e;
+		} finally {
+			try {
+				out.close();
+			} catch (Exception e) {
+				log.error("Failed to close file: " + e, e);
+			}
+		}
+	}
 
 }

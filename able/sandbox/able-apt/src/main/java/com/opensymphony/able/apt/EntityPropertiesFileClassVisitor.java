@@ -16,23 +16,24 @@
  */
 package com.opensymphony.able.apt;
 
-import com.opensymphony.able.entity.*;
-import com.sun.mirror.apt.AnnotationProcessorEnvironment;
-import com.sun.mirror.apt.Filer.Location;
-import com.sun.mirror.declaration.ClassDeclaration;
-import com.sun.mirror.util.SimpleDeclarationVisitor;
-
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
-
-import javax.persistence.Entity;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.Map.Entry;
+
+import javax.persistence.Entity;
+
+import com.sun.mirror.apt.AnnotationProcessorEnvironment;
+import com.sun.mirror.apt.Filer.Location;
+import com.sun.mirror.declaration.ClassDeclaration;
+import com.sun.mirror.util.SimpleDeclarationVisitor;
 
 /**
  * 
@@ -42,6 +43,7 @@ public class EntityPropertiesFileClassVisitor extends SimpleDeclarationVisitor {
 	private final AnnotationProcessorEnvironment env;
 
 	private Properties entities = new Properties();
+	private Map<String, Collection<String>> packageToEntityMap = new HashMap();
 
 	public EntityPropertiesFileClassVisitor(
 			final AnnotationProcessorEnvironment env) {
@@ -50,8 +52,15 @@ public class EntityPropertiesFileClassVisitor extends SimpleDeclarationVisitor {
 
 	public void visitClassDeclaration(ClassDeclaration declaration) {
 		if (matchesDeclaration(declaration)) {
-			entities.setProperty(declaration.getQualifiedName(), declaration
-					.getSimpleName());
+			String simpleName = declaration.getSimpleName();
+			entities.setProperty(declaration.getQualifiedName(), simpleName);
+			String packageName = declaration.getPackage().getQualifiedName();
+			Collection<String> collection = packageToEntityMap.get(packageName);
+			if (collection == null) {
+				collection = new ArrayList<String>();
+				packageToEntityMap.put(packageName, collection);
+			}
+			collection.add(simpleName);
 		}
 	}
 
@@ -61,9 +70,14 @@ public class EntityPropertiesFileClassVisitor extends SimpleDeclarationVisitor {
 	}
 
 	public void writeFile(AbleAnnotationProcessor processor) {
+		writeEntityPropertiesFile(processor);
+		writeJaxbFile(processor);
+	}
+
+	public void writeEntityPropertiesFile(AbleAnnotationProcessor processor) {
 		OutputStream out = null;
 		try {
-			out = env.getFiler().createBinaryFile(Location.SOURCE_TREE, "",
+			out = env.getFiler().createBinaryFile(Location.CLASS_TREE, "",
 					new File("META-INF/services/able/entities.properties"));
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to create file: " + e, e);
@@ -80,6 +94,38 @@ public class EntityPropertiesFileClassVisitor extends SimpleDeclarationVisitor {
 				} catch (IOException e) {
 					// ignore
 				}
+			}
+		}
+	}
+
+	public void writeJaxbFile(AbleAnnotationProcessor processor) {
+		Set<Entry<String, Collection<String>>> entrySet = packageToEntityMap
+				.entrySet();
+		for (Entry<String, Collection<String>> entry : entrySet) {
+			writeJaxbFile(processor, entry.getKey(), entry.getValue());
+		}
+
+	}
+
+	public void writeJaxbFile(AbleAnnotationProcessor processor,
+			String packageName, Collection<String> names) {
+		PrintWriter out = null;
+		try {
+			String name = packageName + "/jaxb.index";
+			System.out.println("Creating source file: " + name);
+			out = env.getFiler().createTextFile(Location.CLASS_TREE, "",
+					new File(packageName.replace('.', '/') + "/jaxb.index"),
+					"UTF8");
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to create file: " + e, e);
+		}
+		try {
+			for (String name : names) {
+				out.println(name);
+			}
+		} finally {
+			if (out != null) {
+				out.close();
 			}
 		}
 	}

@@ -40,6 +40,8 @@ import org.springframework.beans.TypeConverter;
 
 import com.opensymphony.able.entity.EntityInfo;
 import com.opensymphony.able.entity.PropertyInfo;
+import com.opensymphony.able.jaxb.JaxbResolution;
+import com.opensymphony.able.jaxb.JaxbTemplate;
 import com.opensymphony.able.util.EnumHelper;
 
 /**
@@ -118,14 +120,6 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
 		return new RedirectResolution(uri);
 	}
 
-	protected void save(E e) {
-		Object idValue = entityInfo.getIdValue(e);
-		if (idValue == null) {
-			getJpaTemplate().persist(e);
-			idValue = entityInfo.getIdValue(e);
-		}
-	}
-
 	@DontValidate
 	public Resolution cancel() {
 		shouldRollback();
@@ -134,6 +128,10 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
 		// getContext().addMsg( Messages.cancelled( "Manufacturer" ) );
 
 		return new RedirectResolution(entityInfo.getHomeUri());
+	}
+	
+	public Resolution xmlView() {
+		return new JaxbResolution(new JaxbTemplate(entityClass), getEntities());
 	}
 
 	// Properties
@@ -230,6 +228,14 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
 
 	// Implementation methods
 	// -------------------------------------------------------------------------
+	protected void save(E e) {
+		Object idValue = entityInfo.getIdValue(e);
+		if (idValue == null) {
+			getJpaTemplate().persist(e);
+			idValue = entityInfo.getIdValue(e);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected void preBind() {
 		String[] idValues = uriStrategy.getEntityPrimaryKeyValues(this);

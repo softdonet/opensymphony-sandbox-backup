@@ -16,6 +16,8 @@
  */
 package org.opensymphony.able.action;
 
+import java.util.List;
+
 import org.opensymphony.able.example.model.Type;
 import org.opensymphony.able.example.model.User;
 import org.springframework.beans.BeanWrapperImpl;
@@ -53,19 +55,19 @@ public class JpaCrudActionSupportTest {
         Object values = action.getAllValues().get("type");
         System.out.println("Values: " + values);
         
-        Assert.assertTrue(values instanceof Object[], "values is an array");
-        Object[] valueArray = (Object[]) values;
+        Assert.assertTrue(values instanceof List, "values is an array");
+        List valueArray = (List) values;
         
         for (Object object : valueArray) {
 			System.out.println("Found type value: " + object);
 		}
         
-        Assert.assertEquals(3, valueArray.length);
+        Assert.assertEquals(3, valueArray.size());
         System.out.println("found values: " + values);
         
-        Assert.assertEquals(Type.Customer, valueArray[0]);
-        Assert.assertEquals(Type.Manager, valueArray[1]);
-        Assert.assertEquals(Type.Admin, valueArray[2]);
+        Assert.assertEquals(Type.Customer, valueArray.get(0));
+        Assert.assertEquals(Type.Manager, valueArray.get(1));
+        Assert.assertEquals(Type.Admin, valueArray.get(2));
     }
 
     @Test
