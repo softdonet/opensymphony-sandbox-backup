@@ -67,6 +67,14 @@ public class ScaffoldingGenerator {
             generate(entry.getKey(), entry.getValue());
         }
     }
+    
+    public void generate(String alias) throws Exception {
+        EntityInfo entity = Entities.getInstance().getEntity(alias);
+        if (entity == null) {
+            throw new IllegalArgumentException("Could not find entity with alias '" + alias + "'");
+        }
+        generate(alias, entity);
+    }
 
     public void generate(String alias, EntityInfo entity) throws Exception {
         if (!initialised) {
@@ -128,7 +136,6 @@ public class ScaffoldingGenerator {
             Template template = Velocity.getTemplate(script);
             File file = new File(dir, outputName);
             getLog().info("Generating file: " + file);
-            System.out.println("Creating file: " + file);
             out = new FileWriter(file);
             template.merge(context, out);
         }

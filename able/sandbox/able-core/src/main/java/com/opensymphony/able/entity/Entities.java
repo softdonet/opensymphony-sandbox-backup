@@ -21,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,17 +68,18 @@ public class Entities {
 
     protected void populateEntityMap(Map<String, EntityInfo> map) {
         String file = "META-INF/services/able/entities.properties";
-        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(file);
-        if (in == null) {
-            in = getClass().getClassLoader().getResourceAsStream(file);
-            if (in == null) {
+        URL url = Thread.currentThread().getContextClassLoader().getResource(file);
+        if (url == null) {
+            url = getClass().getClassLoader().getResource(file);
+            if (url == null) {
                 log.warn("No file: " + file + " found on the classpath so cannot discover entities");
                 return;
             }
         }
         Properties properties = new Properties();
         try {
-            properties.load(in);
+            log.info("Loading entities from: " + url);
+            properties.load(url.openStream());
             
             System.out.println("Loaded: " + properties);
             
