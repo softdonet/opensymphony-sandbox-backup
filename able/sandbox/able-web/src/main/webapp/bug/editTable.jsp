@@ -21,10 +21,11 @@
      <th></th>
     </tr>
 
+   <stripes:hidden name="id"/>
+           
     <c:forEach items="${actionBean.bulkEditEntities}" var="row" varStatus="rowstat">
       <tr>
         <td>${row.id}
-          <stripes:hidden name="bulkEditEntities[${rowstat.index}].id"/>
         </td>
                     <td>
                         <stripes:select name="bulkEditEntities[${rowstat.index}].priority" value="Medium">

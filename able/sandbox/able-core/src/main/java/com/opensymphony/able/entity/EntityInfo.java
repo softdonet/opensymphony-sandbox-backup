@@ -17,6 +17,8 @@
 package com.opensymphony.able.entity;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.TypeConverter;
 
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -32,6 +34,7 @@ public class EntityInfo {
     private List<PropertyInfo> properties = new ArrayList<PropertyInfo>();
     private Map<String,PropertyInfo> propertyMap = new HashMap<String, PropertyInfo>();
     private PropertyInfo idProperty;
+    private TypeConverter typeConverter = new BeanWrapperImpl();
 
     public EntityInfo(Class entityClass) {
         this.entityClass = entityClass;
@@ -163,5 +166,12 @@ public class EntityInfo {
         }
     }
 
+    public Object convertToPrimaryKeyValkue(String value) {
+        if (value != null && value.length() > 0) {
+            Class idClass = getIdClass();
+            return typeConverter.convertIfNecessary(value, idClass);
+        }
+        return null;
+    }
 
 }

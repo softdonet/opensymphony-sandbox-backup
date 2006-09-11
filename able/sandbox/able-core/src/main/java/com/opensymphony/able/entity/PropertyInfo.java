@@ -84,7 +84,7 @@ public class PropertyInfo {
 		return false;
 	}
 
-	public PropertyDescriptor getDescriptor() {
+    public PropertyDescriptor getDescriptor() {
 		return descriptor;
 	}
 
@@ -104,6 +104,21 @@ public class PropertyInfo {
 					+ getName() + " from: " + entity + ". Reason: " + e, e);
 		}
 	}
+    
+    public Object setValue(Object entity, Object value) {
+        try {
+            return descriptor.getWriteMethod().invoke(entity, new Object[] { value });
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to update property: "
+                    + getName() + " on entity: " + entity + ". Reason: " + e, e);
+        }
+    }
+
+
+    public boolean isCollection() {
+        Class<?> propertyType = descriptor.getPropertyType();
+        return propertyType.isArray() || propertyType.isAssignableFrom(Collection.class);
+    }
 
 	/**
 	 * Returns the component type of the property - e.g. ignoring the
