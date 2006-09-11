@@ -1,0 +1,1 @@
+<stripes:text name="entity.${propertyInfo.name}" formatPattern="medium" readonly="true" />

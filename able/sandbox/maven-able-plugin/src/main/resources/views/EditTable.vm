@@ -1,0 +1,33 @@
+<%@ include file="/WEB-INF/header.jsp"%>
+<%@ taglib prefix="${entityInfo.entityUri}" tagdir="/WEB-INF/tags/entity/${entityInfo.entityUri}"%>
+<html>
+<body>
+
+<stripes:form action="${entityInfo.actionUri}">
+  <stripes:hidden name="id" />
+  <stripes:errors />
+
+  <%--TODO - can we avoid this? --%>
+  <stripes:useActionBean binding="${entityInfo.actionUri}" var="actionBean" />
+
+  <table class="display">
+    <tr>
+           <th>ID</th>
+#foreach( $property in $entityInfo.properties )
+           <th>${property.displayName}</th>
+#end
+     <th></th>
+    </tr>
+    <c:forEach items="${actionBean.bulkEditEntities}" var="row" varStatus="rowstat">
+      <tr>
+        <td>${row.id}
+        </td>
+#foreach( $property in $entityInfo.properties )
+      <td><${entityInfo.entityUri}:${property.name}EditField name="bulkEditEntities[${rowstat.index}].${property.name}"/></td>
+#end
+      </tr>
+    </c:forEach>
+  </table>
+
+  <div class="buttons"><stripes:submit name="save" value="Save" /> <stripes:submit name="cancel" value="Cancel" /></div>
+</stripes:form>

@@ -1,0 +1,26 @@
+<%@ include file="/WEB-INF/header.jsp"%>
+<%@ taglib prefix="${entityInfo.entityUri}" tagdir="/WEB-INF/tags/entity/${entityInfo.entityUri}"%>
+<html>
+<body>
+
+<stripes:form action="${entityInfo.actionUri}">
+  <stripes:hidden name="id" />
+
+  <stripes:errors />
+
+  <table class="display">
+
+#foreach( $property in $entityInfo.properties )
+    <tr>
+      <th><stripes:label for="entity.${property.name}">${property.displayName}</stripes:label>:</th>
+      <td><${entityInfo.entityUri}:${property.name}EditField name="entity.${property.name}"/></td>
+    </tr>
+#end
+
+  </table>
+
+  <div class="buttons"><stripes:submit name="save" value="Save" /> <stripes:submit name="cancel" value="Cancel" /></div>
+</stripes:form>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<%@ include file="/WEB-INF/header.jsp"%>
+<html>
+<body>
+
+<stripes:form action="${entityInfo.actionUri}">
+
+<stripes:useActionBean binding="${entityInfo.actionUri}" var="actionBean"/>
+
+  <stripes:errors />
+
+  <table class="display">
+    <tr>
+      <th></th>
+#foreach( $property in $entityInfo.properties )
+      <th>$property.name</th>
+#end
+      <th></th>
+    </tr>
+
+    <c:forEach items="${actionBean.allEntities}" var="row" varStatus="rowstat">
+      <tr>
+#foreach( $property in $entityInfo.properties )
+        <td>$row.${property.name}</td>
+<%--         
+        <td><${entityInfo.entityUri}:${property.name}ViewField name="entity.${property.name}"/></td>
+--%>
+#end
+        
+        <td><stripes:link href="${entityInfo.actionUri}" event="edit">
+                                Edit
+                                <stripes:param name="id" value="${row.id}" />
+        </stripes:link> <stripes:link href="/Bug.action" event="delete">
+                                Delete
+                                <stripes:param name="id" value="${row.id}" />
+        </stripes:link></td>
+        
+      </tr>
+    </c:forEach>
+  </table>
+
+  <div class="buttons"><stripes:submit name="edit" value="New" /> <stripes:submit name="bulkEdit" value="Bulk Edit" /> <stripes:submit
+    name="delete" value="Delete" /></div>
+</stripes:form>
+</body>
+</html>

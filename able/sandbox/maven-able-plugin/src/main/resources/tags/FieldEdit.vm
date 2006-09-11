@@ -1,0 +1,4 @@
+<%@ attribute name="name" type="java.lang.String" required="true"  %>
+<stripes:select name="${name}" value="Medium">
+    <stripes:options-collection collection="$actionBean.allValues.${propertyInfo.name}"/>
+</stripes:select>

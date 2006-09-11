@@ -20,7 +20,12 @@ import org.opensymphony.able.example.model.User;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Map;
+
+import com.opensymphony.able.entity.Entities;
 import com.opensymphony.able.entity.EntityInfo;
+
+import static org.testng.Assert.*;
 
 /**
  * 
@@ -29,23 +34,34 @@ import com.opensymphony.able.entity.EntityInfo;
 public class EntityInfoTest {
 
     @Test
+    public void testAutoDiscoveredEntity() throws Exception {
+        Map<String, EntityInfo> map = Entities.getInstance().getEntityMap();
+        assertEquals(1, map.size(), "Should have one item: " + map);
+
+        EntityInfo info = Entities.getInstance().getEntity("User");
+        assertNotNull(info);
+        
+        testUserEntityInfo(info);
+    }
+    
+    @Test
     public void testReflection() throws Exception {
-
         EntityInfo info = new EntityInfo(User.class);
+        testUserEntityInfo(info);
+    }
 
+    protected void testUserEntityInfo(EntityInfo info) {
         Class entityClass = info.getEntityClass();
-        Assert.assertEquals(User.class, entityClass);
+        assertEquals(User.class, entityClass);
         
         String entityName = info.getEntityName();
-        Assert.assertEquals("User", entityName);
+        assertEquals("User", entityName);
 
         String entityUri = info.getEntityUri();
-        Assert.assertEquals("user", entityUri);
+        assertEquals("user", entityUri);
 
         Class idClass = info.getIdClass();
-        Assert.assertEquals(Long.class, idClass);
-
-        
+        assertEquals(Long.class, idClass);
     }
     
 }

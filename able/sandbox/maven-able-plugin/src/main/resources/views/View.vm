@@ -1,0 +1,28 @@
+<%@ include file="/WEB-INF/header.jsp"%>
+<html>
+<body>
+
+<stripes:form action="${entityInfo.actionUri}">
+<stripes:hidden name="id"/>
+
+  <stripes:errors />
+
+  <table class="display">
+
+#foreach( $property in $entityInfo.properties )
+    <tr>
+      <th><stripes:label for="entity.${property.name}">${property.displayName}</stripes:label></th>
+      <td><${entityInfo.entityUri}:${property.name}ViewField name="entity.${property.name}"/></td>
+    </tr>
+#end
+
+  </table>
+
+<div class="buttons">
+  <stripes:submit name="edit" value="Edit" />
+  <stripes:submit name="cancel" value="Back" />
+</div>
+</stripes:form>
+
+</body>
+</html>
