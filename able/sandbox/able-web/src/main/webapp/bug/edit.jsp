@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/taglibs/header.jsp"%>
+<%@ include file="/WEB-INF/header.jsp"%>
 <%@ taglib prefix="bug" tagdir="/WEB-INF/tags/entity/bug" %>
 <html>
 <body>

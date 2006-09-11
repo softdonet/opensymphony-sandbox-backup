@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/taglibs/header.jsp"%>
+<%@ include file="/WEB-INF/header.jsp"%>
 <html>
 <body>
 
@@ -9,6 +9,7 @@
 
 
   <stripes:errors />
+  <stripes:hidden name="id"/>
 
   <table class="display">
     <tr>
@@ -21,8 +22,6 @@
      <th></th>
     </tr>
 
-   <stripes:hidden name="id"/>
-           
     <c:forEach items="${actionBean.bulkEditEntities}" var="row" varStatus="rowstat">
       <tr>
         <td>${row.id}

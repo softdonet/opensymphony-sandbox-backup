@@ -336,11 +336,9 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
      */
     @SuppressWarnings("unchecked")
     protected void bindProperty(E entity, PropertyInfo property, EntityInfo propertyType, int index, String value) {
-        System.out.println("Attempting to bind property: " + property.getName() + " for value: " + value);
         Object pk = propertyType.convertToPrimaryKeyValkue(value);
         Object relatedEntity = getJpaTemplate().find(propertyType.getEntityClass(), pk);
         
-        System.out.println("Found entity: "+ relatedEntity);
         property.setValue(entity, relatedEntity);
     }
 }
