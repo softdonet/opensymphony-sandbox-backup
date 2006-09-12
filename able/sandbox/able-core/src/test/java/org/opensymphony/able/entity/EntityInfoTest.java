@@ -17,14 +17,15 @@
 package org.opensymphony.able.entity;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
 import com.opensymphony.able.entity.Entities;
 import com.opensymphony.able.entity.EntityInfo;
 import com.opensymphony.able.entity.PropertyInfo;
 import com.opensymphony.able.view.EditTable;
 import com.opensymphony.able.view.ViewField;
-import com.opensymphony.able.view.ViewForm;
 import com.opensymphony.able.view.ViewTable;
 
 import org.opensymphony.able.example.model.Address;
@@ -61,6 +62,11 @@ public class EntityInfoTest {
         Class idClass = info.getIdClass();
         assertEquals(Long.class, idClass);
 
+        assertEquals(info.getHomeUri(), "/views/entity/user/index.jsp");
+        assertEquals(info.getActionUri(), "/User.action");
+        assertEquals(info.getViewUri(), "/views/entity/user/view.jsp?id=");
+        assertEquals(info.getEditUri(), "/views/entity/user/edit.jsp?id=");
+        
         PropertyInfo property = info.getProperty("creationDate");
         assertNotNull(property);
         System.out.println("displayName: " + property.getDisplayName());
@@ -87,6 +93,19 @@ public class EntityInfoTest {
         assertEquals(property.getPropertyComponentType(), Project.class);
     }
 
+    @Test
+    public void testOrderOfPropertiesIsInFieldDeclarationOrder() throws Exception {
+        EntityInfo info = Entities.getInstance().getEntity(Project.class.getName());
+        assertNotNull(info);
+
+        List<PropertyInfo> properties = info.getProperties();
+        assertProperty("id", properties, 0);
+        assertProperty("name", properties, 1);
+        assertProperty("description", properties, 2);
+        assertProperty("category", properties, 3);
+        assertEquals(properties.size(), 4);
+    }
+    
     @Test
     public void testDefaultSortOrder() throws Exception {
         EntityInfo info = new EntityInfo(User.class);

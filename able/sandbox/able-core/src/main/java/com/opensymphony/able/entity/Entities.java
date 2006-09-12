@@ -61,7 +61,25 @@ public class Entities {
     }
 
     public EntityInfo getEntity(String name) {
-        getEntities();
+        EntityInfo answer = getEntityByName(name);
+        if (answer == null) {
+            return getEntityByClass(name);
+        }
+        return answer;
+    }
+
+    public EntityInfo getEntityByClass(String name) {
+        Collection<EntityInfo> entities = getEntities();
+        for (EntityInfo info : entities) {
+            if (info.getEntityClass().getName().equals(name)) {
+                return info;
+            }
+        }
+        // lets try load the entity dynamically
+        return addEntity(name);
+    }
+    
+    public EntityInfo getEntityByName(String name) {
         return getEntityMap().get(name);
     }
 
@@ -69,9 +87,18 @@ public class Entities {
         return getEntityMap().values();
     }
 
-    public void addEntity(String shortName, String className) {
+    public EntityInfo addEntity(String className) {
         Class type = loadClass(className);
-        entityMap.put(shortName, new EntityInfo(type));
+        EntityInfo entityInfo = new EntityInfo(type);
+        entityMap.put(entityInfo.getEntityName(), entityInfo);
+        return entityInfo;
+    }
+    
+    public EntityInfo addEntity(String shortName, String className) {
+        Class type = loadClass(className);
+        EntityInfo entityInfo = new EntityInfo(type);
+        entityMap.put(shortName, entityInfo);
+        return entityInfo;
     }
 
     protected void populateEntityMap(Map<String, EntityInfo> map) {

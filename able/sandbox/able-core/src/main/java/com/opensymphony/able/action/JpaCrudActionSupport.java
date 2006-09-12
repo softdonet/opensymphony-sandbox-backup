@@ -96,6 +96,7 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
             }
         }
         return new ForwardResolution(entityInfo.getHomeUri());
+        //return new RedirectResolution(entityInfo.getHomeUri());
     }
 
     public Resolution save() {
@@ -115,7 +116,8 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
         // getContext().addMsg( "saved " + getEntityName(); );
 
         String uri = entityInfo.getHomeUri();
-        return new RedirectResolution(uri);
+        return new ForwardResolution(uri);
+        //return new RedirectResolution(uri);
     }
 
     @DontValidate
@@ -125,7 +127,8 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
         // TODO
         // getContext().addMsg( Messages.cancelled( "Manufacturer" ) );
 
-        return new RedirectResolution(entityInfo.getHomeUri());
+        //return new RedirectResolution(entityInfo.getHomeUri());
+        return new ForwardResolution(entityInfo.getHomeUri());
     }
 
     public Resolution xmlView() {

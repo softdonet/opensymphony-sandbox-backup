@@ -31,7 +31,17 @@ import javax.persistence.Entity;
 
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class EntityInfo {
     private Class entityClass;
@@ -39,7 +49,6 @@ public class EntityInfo {
     private String entityUri;
     private String actionUri;
     private Map<String, PropertyInfo> propertyMap = new HashMap<String, PropertyInfo>();
-    private List<PropertyInfo> unsortedProperties = new ArrayList<PropertyInfo>();
     private List<PropertyInfo> properties;
     private List<PropertyInfo> viewTableProperties;
     private List<PropertyInfo> editTableProperties;
@@ -50,7 +59,7 @@ public class EntityInfo {
     private TypeConverter typeConverter = new BeanWrapperImpl();
     private String[] defaultViewFieldPropertyNames = { "name", "shortDescription", "description", "code" };
     private String uriPrefix = "/views/entity/";
-    
+
     public EntityInfo(Class entityClass) {
         this.entityClass = entityClass;
         introspect(entityClass);
@@ -118,7 +127,7 @@ public class EntityInfo {
     }
 
     public String getViewUri() {
-        return uriPrefix + getEntityUri() + "/view.jsp";
+        return uriPrefix + getEntityUri() + "/view.jsp?id=";
     }
 
     public String getEditUri() {
@@ -205,7 +214,6 @@ public class EntityInfo {
             }
 
             PropertyInfo propertyInfo = new PropertyInfo(this, descriptor);
-            unsortedProperties.add(propertyInfo);
             propertyMap.put(name, propertyInfo);
             if (propertyInfo.isIdProperty()) {
                 if (idProperty != null) {
@@ -234,8 +242,8 @@ public class EntityInfo {
             includes = annotation.includes();
             excludes = annotation.excludes();
         }
-
-        properties = createOrderedList(unsortedProperties, sortOrder, includes, excludes);
+        List<PropertyInfo> defaultPropertyListOrder = createDefaultOrderList();
+        properties = createOrderedList(defaultPropertyListOrder, sortOrder, includes, excludes);
     }
 
     protected void configureViewTable() {
@@ -255,7 +263,7 @@ public class EntityInfo {
     protected void configureEditTable() {
         String[] sortOrder = null;
         String[] includes = null;
-        String[] excludes = null;
+        String[] excludes = getDefaultEditExcludes();
         EditTable annotation = (EditTable) entityClass.getAnnotation(EditTable.class);
         if (annotation != null) {
             sortOrder = annotation.sortOrder();
@@ -283,7 +291,7 @@ public class EntityInfo {
     protected void configureEditForm() {
         String[] sortOrder = null;
         String[] includes = null;
-        String[] excludes = null;
+        String[] excludes = getDefaultEditExcludes();
         EditForm annotation = (EditForm) entityClass.getAnnotation(EditForm.class);
         if (annotation != null) {
             sortOrder = annotation.sortOrder();
@@ -292,6 +300,14 @@ public class EntityInfo {
         }
 
         editFormProperties = createOrderedList(viewFormProperties, sortOrder, includes, excludes);
+    }
+
+    protected String[] getDefaultEditExcludes() {
+        String[] excludes = null;
+        if (idProperty != null) {
+            excludes = new String[] { idProperty.getName() };
+        }
+        return excludes;
     }
 
     protected void configureViewField() {
@@ -373,6 +389,40 @@ public class EntityInfo {
             }
         }
         return answer;
+    }
+
+    /**
+     * Creates the default sorted order of the properties. Lets default to the
+     * order in which the fields are defined as thats better than just sorting
+     * them in alphabetical order which is the default introspection order. Note
+     * this will not work for properties which do not have a matching field; but
+     * then folks can use the {@link ViewDefaults} annotation to fix those
+     * cases.
+     * 
+     * @return
+     */
+    protected List<PropertyInfo> createDefaultOrderList() {
+        List<PropertyInfo> answer = new ArrayList<PropertyInfo>();
+        SortedMap<String, PropertyInfo> map = new TreeMap<String, PropertyInfo>(propertyMap);
+        appendDefaultPropertyList(entityClass, answer, map);
+
+        // now lets add the remaining values
+        answer.addAll(map.values());
+        return answer;
+    }
+
+    protected void appendDefaultPropertyList(Class type, List<PropertyInfo> list, Map<String, PropertyInfo> map) {
+        Class superclass = type.getSuperclass();
+        if (superclass != null && !superclass.equals(Object.class)) {
+            appendDefaultPropertyList(superclass, list, map);
+        }
+        Field[] fields = type.getDeclaredFields();
+        for (Field field : fields) {
+            PropertyInfo property = map.remove(field.getName());
+            if (property != null) {
+                list.add(property);
+            }
+        }
     }
 
     protected boolean empty(String[] names) {
