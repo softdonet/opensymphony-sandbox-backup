@@ -1,15 +1,18 @@
 package com.opensymphony.able.model;
 
+import com.opensymphony.able.view.ViewField;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
  * Represents a person to whom bugs can be assigned.
- *
+ * 
  * @author Tim Fennell
  */
 @Entity
+@ViewField(includes = { "firstName", "lastName" })
 public class Person {
     private Integer id;
     private String username;
@@ -19,7 +22,8 @@ public class Person {
     private String password;
 
     /** Default constructor. */
-    public Person() { }
+    public Person() {
+    }
 
     /** Constructs a well formed person. */
     public Person(String username, String password, String first, String last, String email) {
@@ -33,34 +37,54 @@ public class Person {
     /** Gets the ID of the person. */
     @Id
     @GeneratedValue
-    public Integer getId() { return id; }
+    public Integer getId() {
+        return id;
+    }
 
     /** Sets the ID of the person. */
-    public void setId(Integer id) { this.id = id; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     /** Gets the username of the person. */
-    public String getUsername() { return username; }
+    public String getUsername() {
+        return username;
+    }
 
     /** Sets the username of the user. */
-    public void setUsername(String username) { this.username = username; }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     /** Gets the first name of the person. */
-    public String getFirstName() { return firstName;  }
+    public String getFirstName() {
+        return firstName;
+    }
 
     /** Sets the first name of the user. */
-    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
     /** Gets the last name of the person. */
-    public String getLastName() { return lastName; }
+    public String getLastName() {
+        return lastName;
+    }
 
     /** Sets the last name of the user. */
-    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     /** Gets the person's email address. */
-    public String getEmail() { return email; }
+    public String getEmail() {
+        return email;
+    }
 
     /** Sets the person's email address. */
-    public void setEmail(String email) { this.email = email; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     /** Gets the person's unencrypted password. */
     public String getPassword() {

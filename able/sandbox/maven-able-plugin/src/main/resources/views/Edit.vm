@@ -11,12 +11,16 @@
   <table class="display">
 
 #foreach( $property in $entityInfo.editFormProperties )
+#set( $name = "entity.${property.name}")
+#if( $property.persistent ) 
+ #set( $name = "${name}.id" )
+#end
     <tr>
-      <th><stripes:label for="entity.${property.name}">${property.displayName}</stripes:label>:</th>
- #if( $property.writeable )
-      <td><${entityInfo.entityUri}:${property.name}EditField name="entity.${property.name}"/></td>
+      <th><stripes:label for="$name">${property.displayName}</stripes:label>:</th>
+ #if( $property.writable )
+      <td><${entityInfo.entityUri}:${property.name}EditField name="$name"/></td>
  #else
-      <td><${entityInfo.entityUri}:${property.name}ViewField name="entity.${property.name}"/></td>
+      <td><${entityInfo.entityUri}:${property.name}ViewField entity="${actionBean.entity}"/></td>
  #end
     </tr>
 #end

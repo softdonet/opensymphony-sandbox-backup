@@ -64,7 +64,7 @@ public class PropertyInfo {
     protected String createDisplayName() {
         String name = descriptor.getDisplayName();
         if (name.equals(getName())) {
-            // TODO lets see if we have an annotation
+            // lets see if we have an annotation
             Label label = descriptor.getReadMethod().getAnnotation(Label.class);
             if (label != null) {
                 return label.value();
@@ -138,11 +138,19 @@ public class PropertyInfo {
         }
     }
 
+    public boolean isEnum() {
+        return Enum.class.isAssignableFrom(getPropertyType());
+    }
+    
     public boolean isCollection() {
         Class<?> propertyType = descriptor.getPropertyType();
-        return propertyType.isArray() || propertyType.isAssignableFrom(Collection.class);
+        return propertyType.isArray() || Collection.class.isAssignableFrom(propertyType);
     }
 
+    public boolean isPersistent() {
+        return getPropertyEntityInfo().isPersistent();
+    }
+    
     /**
      * Returns the component type of the property - e.g. ignoring the
      * cardinality (array or List).
@@ -153,10 +161,17 @@ public class PropertyInfo {
         if (propertyType.isArray()) {
             return propertyType.getComponentType();
         }
-        if (propertyType.isAssignableFrom(Collection.class)) {
-            ParameterizedType genericSuperclass = (ParameterizedType) propertyType.getGenericSuperclass();
-            Type[] typeArguments = genericSuperclass.getActualTypeArguments();
-            return (Class) typeArguments[0];
+        if (Collection.class.isAssignableFrom(propertyType)) {
+            if (descriptor.getReadMethod() != null) {
+                ParameterizedType genericSuperclass = (ParameterizedType) descriptor.getReadMethod().getGenericReturnType();
+                Type[] typeArguments = genericSuperclass.getActualTypeArguments();
+                return (Class) typeArguments[0];
+            }
+            else {
+                // no idea what the type is
+                // TODO do we have an annotation?
+                return Object.class;
+            }
         }
         return propertyType;
     }

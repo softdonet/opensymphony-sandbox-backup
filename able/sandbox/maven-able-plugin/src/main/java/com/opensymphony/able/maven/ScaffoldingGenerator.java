@@ -20,6 +20,7 @@ import com.opensymphony.able.entity.Entities;
 import com.opensymphony.able.entity.EntityInfo;
 import com.opensymphony.able.entity.PropertyInfo;
 
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.velocity.Template;
@@ -68,7 +69,7 @@ public class ScaffoldingGenerator {
             generate(entry.getKey(), entry.getValue());
         }
     }
-    
+
     public void generate(String alias) throws Exception {
         EntityInfo entity = Entities.getInstance().getEntity(alias);
         if (entity == null) {
@@ -84,8 +85,7 @@ public class ScaffoldingGenerator {
             Velocity.init(p);
             initialised = true;
         }
-        VelocityContext context = createVelocityContext(alias, entity);
-        generateFiles(entity, context);
+        generateFiles(entity);
     }
 
     // Properties
@@ -111,52 +111,66 @@ public class ScaffoldingGenerator {
 
     // Implementation methods
     // -------------------------------------------------------------------------
-    protected void generateFiles(EntityInfo entity, VelocityContext context) throws Exception {
+    protected void generateFiles(EntityInfo entity) throws MojoExecutionException {
         File views = new File(outputDirectory, "views/entity");
-        File tags = new File(outputDirectory, "tags/entity");
+        File tags = new File(outputDirectory, "WEB-INF/tags/entity");
         File dir = new File(views, entity.getEntityUri());
         dir.mkdirs();
 
-        generateFile(dir, "index.jsp", "views/Index.vm", context);
-        generateFile(dir, "edit.jsp", "views/Edit.vm", context);
-        generateFile(dir, "view.jsp", "views/View.vm", context);
-        generateFile(dir, "editTable.jsp", "views/EditTable.vm", context);
+        generateFile(dir, "index.jsp", "views/Index.vm", createVelocityContext(entity));
+        generateFile(dir, "edit.jsp", "views/Edit.vm", createVelocityContext(entity));
+        generateFile(dir, "view.jsp", "views/View.vm", createVelocityContext(entity));
+        generateFile(dir, "editTable.jsp", "views/EditTable.vm", createVelocityContext(entity));
 
         dir = new File(tags, entity.getEntityUri());
         dir.mkdirs();
 
+        generateFile(dir, "viewField.tag", "tags/EntityViewField.vm",  createVelocityContext(entity));
+
         List<PropertyInfo> properties = entity.getProperties();
         for (PropertyInfo propertyInfo : properties) {
-            context.put("propertyInfo", propertyInfo);
-
-            generateFile(dir, propertyInfo.getName() + "EditField.tag", "tags/FieldEdit.vm", context);
-            generateFile(dir, propertyInfo.getName() + "ViewField.tag", "tags/FieldView.vm", context);
+            generateFile(dir, propertyInfo.getName() + "EditField.tag", "tags/FieldEdit.vm", createVelocityContext(entity, propertyInfo));
+            generateFile(dir, propertyInfo.getName() + "ViewField.tag", "tags/FieldView.vm", createVelocityContext(entity, propertyInfo));
         }
     }
 
-    protected void generateFile(File dir, String outputName, String script, VelocityContext context) throws Exception {
+    protected void generateFile(File dir, String outputName, String script, VelocityContext context) throws MojoExecutionException {
         Writer out = null;
+        File file = new File(dir, outputName);
         try {
             Template template = Velocity.getTemplate(script);
-            File file = new File(dir, outputName);
             getLog().info("Generating file: " + file);
             out = new FileWriter(file);
             template.merge(context, out);
         }
+        catch (Exception e) {
+            throw new MojoExecutionException("Failed in script: " + script + " when generating scaffolding: " + file + ". Reason: " + e, e);
+        }
         finally {
             if (out != null) {
-                out.close();
+                try {
+                    out.close();
+                }
+                catch (IOException e) {
+                    log.warn("Caught exception while closing file: " + e, e);
+                }
             }
         }
     }
 
-    protected VelocityContext createVelocityContext(String alias, EntityInfo entity) {
+    protected VelocityContext createVelocityContext(EntityInfo entity) {
         VelocityContext answer = new VelocityContext();
-        answer.put("entityName", alias);
+        answer.put("entityName", entity.getEntityName());
         answer.put("entityInfo", entity);
         answer.put("entityClass", entity.getEntityClass());
         answer.put("entityUri", entity.getEntityUri());
         answer.put("license", "/** TODO license goes here */");
+        return answer;
+    }
+
+    protected VelocityContext createVelocityContext(EntityInfo entity, PropertyInfo propertyInfo) {
+        VelocityContext answer = createVelocityContext(entity);
+        answer.put("propertyInfo", propertyInfo);
         return answer;
     }
 

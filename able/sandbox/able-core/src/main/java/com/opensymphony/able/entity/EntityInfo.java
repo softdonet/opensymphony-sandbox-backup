@@ -19,6 +19,7 @@ package com.opensymphony.able.entity;
 import com.opensymphony.able.view.EditForm;
 import com.opensymphony.able.view.EditTable;
 import com.opensymphony.able.view.ViewDefaults;
+import com.opensymphony.able.view.ViewField;
 import com.opensymphony.able.view.ViewForm;
 import com.opensymphony.able.view.ViewTable;
 
@@ -30,11 +31,7 @@ import javax.persistence.Entity;
 
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EntityInfo {
     private Class entityClass;
@@ -48,9 +45,12 @@ public class EntityInfo {
     private List<PropertyInfo> editTableProperties;
     private List<PropertyInfo> viewFormProperties;
     private List<PropertyInfo> editFormProperties;
+    private List<PropertyInfo> viewFieldProperties;
     private PropertyInfo idProperty;
     private TypeConverter typeConverter = new BeanWrapperImpl();
-
+    private String[] defaultViewFieldPropertyNames = { "name", "shortDescription", "description", "code" };
+    private String uriPrefix = "/views/entity/";
+    
     public EntityInfo(Class entityClass) {
         this.entityClass = entityClass;
         introspect(entityClass);
@@ -114,19 +114,19 @@ public class EntityInfo {
     }
 
     public String getHomeUri() {
-        return "/" + getEntityUri() + "/index.jsp";
+        return uriPrefix + getEntityUri() + "/index.jsp";
     }
 
     public String getViewUri() {
-        return "/" + getEntityUri() + "/view.jsp";
+        return uriPrefix + getEntityUri() + "/view.jsp";
     }
 
     public String getEditUri() {
-        return "/" + getEntityUri() + "/edit.jsp?id=";
+        return uriPrefix + getEntityUri() + "/edit.jsp?id=";
     }
 
     public String getBulkEditUri() {
-        return "/" + getEntityUri() + "/editTable.jsp?id=";
+        return uriPrefix + getEntityUri() + "/editTable.jsp?id=";
     }
 
     public PropertyInfo getProperty(String name) {
@@ -160,6 +160,10 @@ public class EntityInfo {
 
     public List<PropertyInfo> getEditFormProperties() {
         return Collections.unmodifiableList(editFormProperties);
+    }
+
+    public List<PropertyInfo> getViewFieldProperties() {
+        return Collections.unmodifiableList(viewFieldProperties);
     }
 
     public Object convertToPrimaryKeyValkue(String value) {
@@ -217,6 +221,7 @@ public class EntityInfo {
         configureEditTable();
         configureViewForm();
         configureEditForm();
+        configureViewField();
     }
 
     protected void configureViewDefaults() {
@@ -287,6 +292,47 @@ public class EntityInfo {
         }
 
         editFormProperties = createOrderedList(viewFormProperties, sortOrder, includes, excludes);
+    }
+
+    protected void configureViewField() {
+        String[] sortOrder = null;
+        String[] includes = null;
+        String[] excludes = null;
+        ViewField annotation = (ViewField) entityClass.getAnnotation(ViewField.class);
+        if (annotation != null) {
+            sortOrder = annotation.sortOrder();
+            includes = annotation.includes();
+            excludes = annotation.excludes();
+            viewFieldProperties = createOrderedList(properties, sortOrder, includes, excludes);
+        }
+        else {
+            viewFieldProperties = findDefaultViewFields(properties);
+        }
+    }
+
+    protected List<PropertyInfo> findDefaultViewFields(List<PropertyInfo> visibleProperties) {
+        List<PropertyInfo> answer = new ArrayList<PropertyInfo>();
+        Set<String> set = new HashSet<String>(Arrays.asList(defaultViewFieldPropertyNames));
+        for (PropertyInfo info : visibleProperties) {
+            if (set.contains(info.getName())) {
+                answer.add(info);
+                break;
+            }
+        }
+        if (answer.isEmpty()) {
+            // lets find the first property which is a string
+            for (PropertyInfo info : visibleProperties) {
+                if (info.getPropertyType().equals(String.class)) {
+                    answer.add(info);
+                    break;
+                }
+            }
+        }
+        if (answer.isEmpty() && visibleProperties.size() > 0) {
+            // lets just use the first
+            answer.add(visibleProperties.get(0));
+        }
+        return answer;
     }
 
     protected List<PropertyInfo> createOrderedList(List<PropertyInfo> properties, String[] sortOrder, String[] includes, String[] excludes) {

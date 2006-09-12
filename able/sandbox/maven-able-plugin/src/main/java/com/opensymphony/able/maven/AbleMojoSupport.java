@@ -38,10 +38,9 @@ public abstract class AbleMojoSupport extends AbstractMojo {
 	/**
 	 * The path where the generated artifacts will be placed.
 	 * 
-	 * @parameter expression="${basedir}/target/generated-sources"
+	 * @parameter expression="${basedir}/src/main/webapp"
 	 */
 	private File outputDirectory;
-    private ScaffoldingGenerator generator;
 
     /**
      * Project classpath.
@@ -52,6 +51,8 @@ public abstract class AbleMojoSupport extends AbstractMojo {
      */
     private List classpathElements;
     
+    private ScaffoldingGenerator generator;
+    
 	/**
 	 * This method will run the mojo
 	 */
@@ -61,6 +62,9 @@ public abstract class AbleMojoSupport extends AbstractMojo {
             ClassLoader newLoader = createClassLoader(oldClassLoader);
             Thread.currentThread().setContextClassLoader(newLoader);
             generate(getScaffoldingGenerator());
+        }
+        catch (MojoExecutionException e) {
+            throw e;
         }
         catch (Exception e) {
             throw new MojoExecutionException("Failed to generate scaffolding: " + e, e);

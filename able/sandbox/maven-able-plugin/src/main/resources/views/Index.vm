@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/header.jsp"%>
+<%@ taglib prefix="${entityInfo.entityUri}" tagdir="/WEB-INF/tags/entity/${entityInfo.entityUri}"%>
 <html>
 <body>
 
@@ -19,17 +20,16 @@
 
     <c:forEach items="${actionBean.allEntities}" var="row" varStatus="rowstat">
       <tr>
+#set( $rowPrefix = '${row.')      
+        <td><stripes:checkbox name="id" value="$rowPrefix$entityInfo.idProperty.name}" onclick="handleCheckboxRangeSelection(this, event);" /></td>
 #foreach( $property in $entityInfo.viewTableProperties )
-        <td>$row.${property.name}</td>
-<%--         
-        <td><${entityInfo.entityUri}:${property.name}ViewField name="entity.${property.name}"/></td>
---%>
+        <td><${entityInfo.entityUri}:${property.name}ViewField entity="${row}"/></td>
 #end
         
         <td><stripes:link href="${entityInfo.actionUri}" event="edit">
                                 Edit
                                 <stripes:param name="id" value="${row.id}" />
-        </stripes:link> <stripes:link href="/Bug.action" event="delete">
+        </stripes:link> <stripes:link href="${entityInfo.actionUri}" event="delete">
                                 Delete
                                 <stripes:param name="id" value="${row.id}" />
         </stripes:link></td>

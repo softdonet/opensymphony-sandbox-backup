@@ -20,10 +20,14 @@
     <c:forEach items="${actionBean.bulkEditEntities}" var="row" varStatus="rowstat">
       <tr>
 #foreach( $property in $entityInfo.editTableProperties )
- #if( $property.writeable )
-      <td><${entityInfo.entityUri}:${property.name}EditField name="bulkEditEntities[${rowstat.index}].${property.name}"/></td>
+#set( $name = "${property.name}")
+#if( $property.persistent ) 
+ #set( $name = "${name}.id" )
+#end
+ #if( $property.writable )
+      <td><${entityInfo.entityUri}:${property.name}EditField name="bulkEditEntities[${rowstat.index}].$name"/></td>
  #else
-      <td><${entityInfo.entityUri}:${property.name}ViewField name="bulkEditEntities[${rowstat.index}].${property.name}"/></td>
+      <td><${entityInfo.entityUri}:${property.name}ViewField entity="${row}"/></td>
  #end
 #end
       </tr>

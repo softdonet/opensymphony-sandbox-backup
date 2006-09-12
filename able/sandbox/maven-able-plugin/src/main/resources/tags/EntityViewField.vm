@@ -1,0 +1,13 @@
+<%@ attribute name="entity" type="${entityInfo.entityClass.name}" required="true"  %>
+#set( $entityPrefix = '${entity.')
+#set( $entityId = "$entityPrefix${entityInfo.idProperty.name}}")
+##
+## TODO when we have the RESTian URIs, use this
+##
+##<a href="<%= request.getContextPath() %>/entity/${entityInfo.entityUri}/${entityId}" title="${entityInfo.entityName} with ID: ${entityId}">
+##
+<a href="<%= request.getContextPath() %>/views/entity/${entityInfo.entityUri}/view.jsp?id=${entityId}" title="${entityInfo.entityName} with ID: ${entityId}">
+#foreach( $property in $entityInfo.viewFieldProperties )
+$entityPrefix${property.name}}
+#end
+</a>

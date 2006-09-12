@@ -1,1 +1,10 @@
-<stripes:text name="entity.${propertyInfo.name}" formatPattern="medium" readonly="true" />
+<%@ attribute name="entity" type="${entityInfo.entityClass.name}" required="true"  %>
+#set( $foo = '${entity.' )
+#if( $propertyInfo.propertyEntityInfo.persistent )
+#set( $propertyUri = $propertyInfo.propertyEntityInfo.entityUri )
+<%@ taglib prefix="$propertyUri" tagdir="/WEB-INF/tags/entity/$propertyUri"%>
+  <$propertyUri:viewField entity="$foo${propertyInfo.name}}"/>
+#else
+$foo${propertyInfo.name}}
+#end
+## <input type="text" value="$foo${propertyInfo.name}}" readonly="true"/>

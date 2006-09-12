@@ -1,10 +1,13 @@
 <%@ include file="/WEB-INF/header.jsp"%>
+<%@ taglib prefix="${entityInfo.entityUri}" tagdir="/WEB-INF/tags/entity/${entityInfo.entityUri}"%>
 <html>
 <body>
 
 <stripes:form action="${entityInfo.actionUri}">
-<stripes:hidden name="id"/>
 
+<stripes:useActionBean binding="${entityInfo.actionUri}" var="actionBean"/>
+
+  <stripes:hidden name="id"/>
   <stripes:errors />
 
   <table class="display">
@@ -12,7 +15,7 @@
 #foreach( $property in $entityInfo.viewFormProperties )
     <tr>
       <th><stripes:label for="entity.${property.name}">${property.displayName}</stripes:label></th>
-      <td><${entityInfo.entityUri}:${property.name}ViewField name="entity.${property.name}"/></td>
+      <td><${entityInfo.entityUri}:${property.name}ViewField entity="${actionBean.entity}"/></td>
     </tr>
 #end
 

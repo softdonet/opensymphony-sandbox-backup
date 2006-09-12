@@ -1,4 +1,16 @@
 <%@ attribute name="name" type="java.lang.String" required="true"  %>
-<stripes:select name="${name}" value="Medium">
-    <stripes:options-collection collection="$actionBean.allValues.${propertyInfo.name}"/>
-</stripes:select>
+<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
+#if( $propertyInfo.collection || $propertyInfo.enum || $propertyInfo.persistent )
+#set( $prefix = '${actionBean.allValues.')
+ #if( $propertyInfo.enum )
+  <stripes:select name="${name}" value="Medium">
+    <stripes:options-collection collection="$prefix${propertyInfo.name}}"/>
+  </stripes:select>
+ #else   
+  <stripes:select name="${name}" value="Medium">
+    <stripes:options-collection collection="$prefix${propertyInfo.name}}" label="${propertyInfo.propertyEntityInfo.viewFieldProperties.get(0).name}" value="id"/>
+  </stripes:select>
+ #end
+#else
+  <stripes:text name="${name}" formatPattern="medium" />
+#end

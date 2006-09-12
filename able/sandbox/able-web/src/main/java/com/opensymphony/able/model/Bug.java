@@ -1,5 +1,6 @@
 package com.opensymphony.able.model;
 
+import com.opensymphony.able.view.EditForm;
 import com.opensymphony.able.view.Label;
 import com.opensymphony.able.view.ViewDefaults;
 import com.opensymphony.able.view.ViewTable;
@@ -22,6 +23,7 @@ import javax.persistence.OneToMany;
 @Entity
 @ViewDefaults(sortOrder = { "id", "openDate", "shortDescription", "longDescription", "component", "priority", "status", "owner" })
 @ViewTable(excludes = { "longDescription", "attachments" })
+@EditForm(excludes = { "attachments", "dueDate", "percentComplete" })
 public class Bug {
     private Integer id;
     private Date openDate;
@@ -54,6 +56,7 @@ public class Bug {
         this.openDate = openDate;
     }
 
+    @Label("Description")
     public String getShortDescription() {
         return shortDescription;
     }

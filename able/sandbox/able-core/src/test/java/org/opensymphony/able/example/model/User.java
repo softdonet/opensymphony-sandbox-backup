@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Nicholas Hill <a
@@ -25,6 +26,8 @@ public class User {
     private Date creationDate;
     private Date updateDate;
     private Type type;
+    private List<Project> projects;
+    private Address[] addresses;
 
     public User() {
     }
@@ -35,6 +38,21 @@ public class User {
         this.name = name;
         this.passwordHash = passwordHash;
         this.creationDate = new Date();
+    }
+
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        final User user = (User) o;
+
+        return id == user.id;
+    }
+
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
     }
 
     @Id
@@ -103,18 +121,20 @@ public class User {
         this.type = type;
     }
 
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-
-        final User user = (User) o;
-
-        return id == user.id;
+    public Address[] getAddresses() {
+        return addresses;
     }
 
-    public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+    public void setAddresses(Address[] addresses) {
+        this.addresses = addresses;
     }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
 }
