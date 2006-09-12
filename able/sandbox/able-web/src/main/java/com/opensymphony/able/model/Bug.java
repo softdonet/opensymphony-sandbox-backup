@@ -1,5 +1,9 @@
 package com.opensymphony.able.model;
 
+import com.opensymphony.able.view.Label;
+import com.opensymphony.able.view.ViewDefaults;
+import com.opensymphony.able.view.ViewTable;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,10 +16,12 @@ import javax.persistence.OneToMany;
 
 /**
  * Represents a bug in the bug database.
- *
+ * 
  * @author Tim Fennell
  */
 @Entity
+@ViewDefaults(sortOrder = { "id", "openDate", "shortDescription", "longDescription", "component", "priority", "status", "owner" })
+@ViewTable(excludes = { "longDescription", "attachments" })
 public class Bug {
     private Integer id;
     private Date openDate;
@@ -31,6 +37,7 @@ public class Bug {
 
     @Id
     @GeneratedValue
+    @Label("ID")
     public Integer getId() {
         return id;
     }

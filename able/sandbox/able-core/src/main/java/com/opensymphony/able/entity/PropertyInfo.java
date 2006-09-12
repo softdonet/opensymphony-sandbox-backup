@@ -16,6 +16,9 @@
  */
 package com.opensymphony.able.entity;
 
+import com.opensymphony.able.util.StringHelper;
+import com.opensymphony.able.view.Label;
+
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
@@ -28,119 +31,138 @@ import java.util.Enumeration;
 
 public class PropertyInfo {
 
-	private static final Object[] EMPTY_ARGS = {};
+    private static final Object[] EMPTY_ARGS = {};
 
-	private final EntityInfo entity;
-	private final PropertyDescriptor descriptor;
-	private boolean idProperty;
+    private final EntityInfo entity;
+    private final PropertyDescriptor descriptor;
+    private boolean idProperty;
+    private String displayName;
 
-	public PropertyInfo(EntityInfo entity, PropertyDescriptor descriptor) {
-		this.entity = entity;
-		this.descriptor = descriptor;
-		Method readMethod = descriptor.getReadMethod();
-		idProperty = (readMethod != null)
-				&& (readMethod.getAnnotation(Id.class) != null);
-	}
+    public PropertyInfo(EntityInfo entity, PropertyDescriptor descriptor) {
+        this.entity = entity;
+        this.descriptor = descriptor;
+        Method readMethod = descriptor.getReadMethod();
+        idProperty = (readMethod != null) && (readMethod.getAnnotation(Id.class) != null);
+    }
 
-	public Enumeration<String> attributeNames() {
-		return descriptor.attributeNames();
-	}
+    @Override
+    public String toString() {
+        return "PropertyInfo[name=" + getName() + "]";
+    }
 
-	public String getDisplayName() {
-		return descriptor.getDisplayName();
-	}
+    public Enumeration<String> attributeNames() {
+        return descriptor.attributeNames();
+    }
 
-	public String getName() {
-		return descriptor.getName();
-	}
+    public String getDisplayName() {
+        if (displayName == null) {
+            displayName = createDisplayName();
+        }
+        return displayName;
+    }
 
-	public Class<?> getPropertyType() {
-		return descriptor.getPropertyType();
-	}
+    protected String createDisplayName() {
+        String name = descriptor.getDisplayName();
+        if (name.equals(getName())) {
+            // TODO lets see if we have an annotation
+            Label label = descriptor.getReadMethod().getAnnotation(Label.class);
+            if (label != null) {
+                return label.value();
+            }
+            return StringHelper.splitCamelCase(name);
+        }
+        return name;
+    }
 
-	public String getShortDescription() {
-		return descriptor.getShortDescription();
-	}
+    public String getName() {
+        return descriptor.getName();
+    }
 
-	public boolean isReadable() {
-		return descriptor.getReadMethod() != null;
-	}
+    public Class<?> getPropertyType() {
+        return descriptor.getPropertyType();
+    }
 
-	/**
-	 * Returns true if the property value is writable
-	 */
-	public boolean isWritable() {
-		return descriptor.getWriteMethod() != null;
-	}
+    public String getShortDescription() {
+        return descriptor.getShortDescription();
+    }
 
-	public boolean isFormProperty() {
-		if (isWritable() && isReadable()) {
-			if (descriptor.getReadMethod().getAnnotation(Transient.class) != null) {
-				return false;
-			}
-			// TODO use an annotation to exclude from forms?
-			return true;
-		}
-		return false;
-	}
+    public boolean isReadable() {
+        return descriptor.getReadMethod() != null;
+    }
+
+    /**
+     * Returns true if the property value is writable
+     */
+    public boolean isWritable() {
+        return descriptor.getWriteMethod() != null && !isIdProperty();
+    }
+
+    public boolean isFormProperty() {
+        if (isWritable() && isReadable()) {
+            if (descriptor.getReadMethod().getAnnotation(Transient.class) != null) {
+                return false;
+            }
+            // TODO use an annotation to exclude from forms?
+            return true;
+        }
+        return false;
+    }
 
     public PropertyDescriptor getDescriptor() {
-		return descriptor;
-	}
+        return descriptor;
+    }
 
-	public EntityInfo getEntity() {
-		return entity;
-	}
+    public EntityInfo getEntity() {
+        return entity;
+    }
 
-	public boolean isIdProperty() {
-		return idProperty;
-	}
+    public boolean isIdProperty() {
+        return idProperty;
+    }
 
-	public Object getValue(Object entity) {
-		try {
-			return descriptor.getReadMethod().invoke(entity, EMPTY_ARGS);
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to extract property: "
-					+ getName() + " from: " + entity + ". Reason: " + e, e);
-		}
-	}
-    
-    public Object setValue(Object entity, Object value) {
+    public Object getValue(Object entity) {
         try {
-            return descriptor.getWriteMethod().invoke(entity, new Object[] { value });
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to update property: "
-                    + getName() + " on entity: " + entity + ". Reason: " + e, e);
+            return descriptor.getReadMethod().invoke(entity, EMPTY_ARGS);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to extract property: " + getName() + " from: " + entity + ". Reason: " + e, e);
         }
     }
 
+    public Object setValue(Object entity, Object value) {
+        try {
+            return descriptor.getWriteMethod().invoke(entity, new Object[] { value });
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to update property: " + getName() + " on entity: " + entity + ". Reason: " + e, e);
+        }
+    }
 
     public boolean isCollection() {
         Class<?> propertyType = descriptor.getPropertyType();
         return propertyType.isArray() || propertyType.isAssignableFrom(Collection.class);
     }
 
-	/**
-	 * Returns the component type of the property - e.g. ignoring the
-	 * cardinality (array or List).
-	 */
-	public Class getPropertyComponentType() {
-		Class<?> propertyType = descriptor.getPropertyType();
+    /**
+     * Returns the component type of the property - e.g. ignoring the
+     * cardinality (array or List).
+     */
+    public Class getPropertyComponentType() {
+        Class<?> propertyType = descriptor.getPropertyType();
 
-		if (propertyType.isArray()) {
-			return propertyType.getComponentType();
-		}
-		if (propertyType.isAssignableFrom(Collection.class)) {
-			ParameterizedType genericSuperclass = (ParameterizedType) propertyType
-					.getGenericSuperclass();
-			Type[] typeArguments = genericSuperclass.getActualTypeArguments();
-			return (Class) typeArguments[0];
-		}
-		return propertyType;
-	}
+        if (propertyType.isArray()) {
+            return propertyType.getComponentType();
+        }
+        if (propertyType.isAssignableFrom(Collection.class)) {
+            ParameterizedType genericSuperclass = (ParameterizedType) propertyType.getGenericSuperclass();
+            Type[] typeArguments = genericSuperclass.getActualTypeArguments();
+            return (Class) typeArguments[0];
+        }
+        return propertyType;
+    }
 
-	public EntityInfo getPropertyEntityInfo() {
-		// TODO - use registry....
-		return new EntityInfo(getPropertyComponentType());
-	}
+    public EntityInfo getPropertyEntityInfo() {
+        // TODO - use registry....
+        return new EntityInfo(getPropertyComponentType());
+    }
 }

@@ -10,10 +10,14 @@
 
   <table class="display">
 
-#foreach( $property in $entityInfo.properties )
+#foreach( $property in $entityInfo.editFormProperties )
     <tr>
       <th><stripes:label for="entity.${property.name}">${property.displayName}</stripes:label>:</th>
+ #if( $property.writeable )
       <td><${entityInfo.entityUri}:${property.name}EditField name="entity.${property.name}"/></td>
+ #else
+      <td><${entityInfo.entityUri}:${property.name}ViewField name="entity.${property.name}"/></td>
+ #end
     </tr>
 #end
 

@@ -21,6 +21,7 @@ import com.opensymphony.able.entity.EntityInfo;
 import com.opensymphony.able.entity.PropertyInfo;
 
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -98,6 +99,9 @@ public class ScaffoldingGenerator {
     }
 
     public Log getLog() {
+        if (log == null) {
+            log = new SystemStreamLog();
+        }
         return log;
     }
 

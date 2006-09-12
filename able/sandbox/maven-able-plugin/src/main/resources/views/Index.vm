@@ -11,15 +11,15 @@
   <table class="display">
     <tr>
       <th></th>
-#foreach( $property in $entityInfo.properties )
-      <th>$property.name</th>
+#foreach( $property in $entityInfo.viewTableProperties )
+      <th>$property.displayName</th>
 #end
       <th></th>
     </tr>
 
     <c:forEach items="${actionBean.allEntities}" var="row" varStatus="rowstat">
       <tr>
-#foreach( $property in $entityInfo.properties )
+#foreach( $property in $entityInfo.viewTableProperties )
         <td>$row.${property.name}</td>
 <%--         
         <td><${entityInfo.entityUri}:${property.name}ViewField name="entity.${property.name}"/></td>

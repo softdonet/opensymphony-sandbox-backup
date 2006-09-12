@@ -9,7 +9,7 @@
 
   <table class="display">
 
-#foreach( $property in $entityInfo.properties )
+#foreach( $property in $entityInfo.viewFormProperties )
     <tr>
       <th><stripes:label for="entity.${property.name}">${property.displayName}</stripes:label></th>
       <td><${entityInfo.entityUri}:${property.name}ViewField name="entity.${property.name}"/></td>
