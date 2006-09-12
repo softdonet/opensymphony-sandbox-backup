@@ -42,6 +42,7 @@
     </profiles>
   -->  <build>
     <defaultGoal>install</defaultGoal>
+    <!-- 
     <resources>
       <resource>
         <directory>src/main/resources</directory>
@@ -50,7 +51,8 @@
         <directory>src/main/webapp</directory>
       </resource>
     </resources>
-
+   -->
+ 
     <pluginManagement>      <plugins>        <plugin>          <groupId>org.apache.maven.plugins</groupId>          <artifactId>maven-apt-plugin</artifactId>
           <version>2.0</version>
           <executions>            <execution>              <goals>                <goal>execute</goal>              </goals>            </execution>          </executions>        </plugin>      </plugins>    </pluginManagement>    <plugins>      <plugin>        <groupId>org.apache.maven.plugins</groupId>        <artifactId>maven-compiler-plugin</artifactId>        <configuration>          <source>1.5</source>          <target>1.5</target>        </configuration>      </plugin>      <plugin>        <groupId>org.apache.maven.plugins</groupId>        <artifactId>maven-apt-plugin</artifactId>        <configuration>          <nocompile>false</nocompile>          <verbose>false</verbose>          <A>debug, loglevel=3</A>          <target>1.5</target>        </configuration>      </plugin>

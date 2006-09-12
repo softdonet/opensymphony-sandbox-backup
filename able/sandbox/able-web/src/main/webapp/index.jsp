@@ -1,14 +1,17 @@
 <%@ include file="/WEB-INF/header.jsp"%>
 <html>
 <head>
-<title>Able Examples</title>
+<title>Able Example</title>
 </head>
 <body>
-<h1>Able Examples</h1>
+<h1>Able Example</h1>
+
+<jsp:useBean id="helper" class="com.opensymphony.able.entity.Entities" scope="page" />
 
 <ul>
-  <li><stripes:link href="/views/entity/user/index.jsp">User List</stripes:link></li>
-  <li><stripes:link href="/views/entity/bug/index.jsp">Bug List</stripes:link></li>
+  <c:forEach var="entity" items="${helper.entities}">
+    <li><stripes:link href="/views/entity/${entity.entityName}/index.jsp">${entity.entityName} List</stripes:link></li>
+  </c:forEach>
 </ul>
 </div>
 

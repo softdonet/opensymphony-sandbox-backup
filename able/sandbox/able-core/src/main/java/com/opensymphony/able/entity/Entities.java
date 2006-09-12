@@ -22,11 +22,14 @@ import org.apache.commons.logging.LogFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -43,7 +46,7 @@ public class Entities {
     private static final Log log = LogFactory.getLog(Entities.class);
     private static final Entities instance = new Entities();
 
-    private Map<String, EntityInfo> entityMap;
+    private SortedMap<String, EntityInfo> entityMap;
 
     public static Entities getInstance() {
         return instance;
@@ -51,14 +54,19 @@ public class Entities {
 
     public synchronized Map<String, EntityInfo> getEntityMap() {
         if (entityMap == null) {
-            entityMap = new ConcurrentHashMap<String, EntityInfo>();
+            entityMap = new TreeMap<String, EntityInfo>();
             populateEntityMap(entityMap);
         }
         return Collections.unmodifiableMap(entityMap);
     }
 
     public EntityInfo getEntity(String name) {
+        getEntities();
         return getEntityMap().get(name);
+    }
+
+    public Collection<EntityInfo> getEntities() {
+        return getEntityMap().values();
     }
 
     public void addEntity(String shortName, String className) {
