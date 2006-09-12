@@ -15,7 +15,7 @@
 
 <ul>
   <c:forEach var="entity" items="${helper.entities}">
-    <li><stripes:link href="/views/entity/${entity.entityName}/index.jsp">${entity.entityName} List</stripes:link></li>
+    <li><stripes:link href="/views/entity/${entity.entityUri}/index.jsp">${entity.entityName} List</stripes:link></li>
   </c:forEach>
 </ul>
 </div>
