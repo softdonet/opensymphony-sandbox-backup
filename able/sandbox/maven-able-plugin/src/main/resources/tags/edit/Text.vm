@@ -1,0 +1,3 @@
+<%@ attribute name="name" type="java.lang.String" required="true"  %>
+<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
+  <stripes:text name="${name}"/>

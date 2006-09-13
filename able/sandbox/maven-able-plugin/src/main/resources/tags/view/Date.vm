@@ -1,0 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+#set( $foo = '${entity.' )
+  <fmt:formatDate value="$foo${propertyInfo.name}}" dateStyle="medium" />
+  

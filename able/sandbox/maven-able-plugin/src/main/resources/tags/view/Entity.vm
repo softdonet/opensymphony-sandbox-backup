@@ -1,0 +1,4 @@
+#set( $foo = '${entity.' )
+#set( $propertyUri = $propertyInfo.propertyEntityInfo.entityUri )
+<%@ taglib prefix="$propertyUri" tagdir="/WEB-INF/tags/entity/$propertyUri"%>
+  <$propertyUri:viewField entity="$foo${propertyInfo.name}}"/>

@@ -1,0 +1,4 @@
+<%@ attribute name="name" type="java.lang.String" required="true"  %>
+<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
+#set( $inputAnnotation = $propertyInfo.input )
+  <stripes:textarea name="${name}" formatPattern="medium" />

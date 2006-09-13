@@ -1,6 +1,6 @@
 package com.opensymphony.able.model;
 
-import com.opensymphony.able.view.EditForm;
+import com.opensymphony.able.view.*;
 import com.opensymphony.able.view.Label;
 import com.opensymphony.able.view.ViewTable;
 
@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Entity
 @ViewTable(excludes = { "longDescription", "attachments" })
-@EditForm(excludes = { "id", "attachments", "dueDate", "percentComplete" })
+@EditForm(excludes = { "id", "attachments" })
 public class Bug {
     private Integer id;
     private Date openDate;
@@ -63,6 +63,7 @@ public class Bug {
         this.shortDescription = shortDescription;
     }
 
+    @Input(type=InputType.TextArea)
     public String getLongDescription() {
         return longDescription;
     }
@@ -88,6 +89,7 @@ public class Bug {
         this.priority = priority;
     }
 
+    @Input(type=InputType.Radio)
     public Status getStatus() {
         return status;
     }

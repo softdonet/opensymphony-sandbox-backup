@@ -1,28 +1,13 @@
-<%@ attribute name="name" type="java.lang.String" required="true"  %>
-<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
-#if( $propertyInfo.collection || $propertyInfo.enum || $propertyInfo.persistent )
-#set( $prefix = '${actionBean.allValues.')
- #if( $propertyInfo.enum )
-  <stripes:select name="${name}" value="Medium">
-    <stripes:options-collection collection="$prefix${propertyInfo.name}}"/>
-  </stripes:select>
- #else   
-  <stripes:select name="${name}" value="Medium">
-    <stripes:options-collection collection="$prefix${propertyInfo.name}}" label="${propertyInfo.propertyEntityInfo.viewFieldProperties.get(0).name}" value="id"/>
-  </stripes:select>
- #end
+#set( $customControl = $propertyInfo.input.customControl() )
+#set( $inputTemplate = $propertyInfo.input.type().name() )
+#if ( $customControl && $customControl != "" )
+#parse( "tags/edit/${customControl}.vm" )
+#elseif ( $inputTemplate && $inputTemplate != "" )
+#parse( "tags/edit/${inputTemplate}.vm" )
+#elseif( $propertyInfo.collection || $propertyInfo.persistent || $propertyInfo.enum )
+#parse( "tags/edit/Combo.vm" )
 #elseif( $propertyInfo.date ) 
-  <stripes:text name="${name}" formatPattern="medium" id="${name}"/>
-  <img src="<%= request.getContextPath() %>/js/jscalendar/img.gif" id="${name}.button"/>
-  <script type="text/javascript">
-    Calendar.setup({
-        inputField     :    "${name}",        <%-- input field id --%>
-        ifFormat       :    "%d-%b-%Y",       <%-- format of the input field --%>
-        button         :    "${name}.button", <%-- trigger for the calendar (button ID) --%>
-        align          :    "Tl",             <%-- alignment (defaults to "Bl") --%>
-        singleClick    :    true
-    });
-  </script>
+#parse( "tags/edit/Date.vm" )
 #else
-  <stripes:text name="${name}" formatPattern="medium" />
+#parse( "tags/edit/Text.vm" )
 #end

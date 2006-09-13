@@ -1,10 +1,14 @@
 <%@ attribute name="entity" type="${entityInfo.entityClass.name}" required="true"  %>
-#set( $foo = '${entity.' )
-#if( $propertyInfo.propertyEntityInfo.persistent )
-#set( $propertyUri = $propertyInfo.propertyEntityInfo.entityUri )
-<%@ taglib prefix="$propertyUri" tagdir="/WEB-INF/tags/entity/$propertyUri"%>
-  <$propertyUri:viewField entity="$foo${propertyInfo.name}}"/>
+#if( $propertyInfo.collection )
+#parse( "tags/view/Collection.vm" )
+#elseif( $propertyInfo.propertyEntityInfo.persistent )
+#parse( "tags/view/Entity.vm" )
+#elseif( $propertyInfo.date )
+#parse( "tags/view/Date.vm" )
+#elseif( $propertyInfo.number )
+#parse( "tags/view/Number.vm" )
 #else
+#set( $foo = '${entity.' )
 $foo${propertyInfo.name}}
 #end
 ## <input type="text" value="$foo${propertyInfo.name}}" readonly="true"/>

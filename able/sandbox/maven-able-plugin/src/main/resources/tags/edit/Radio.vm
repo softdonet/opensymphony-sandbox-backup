@@ -1,0 +1,20 @@
+<%@ attribute name="name" type="java.lang.String" required="true"  %>
+<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
+#set( $inputAnnotation = $propertyInfo.input )
+#set( $prefix = '${actionBean.allValues.')
+#if ( $propertyInfo.enum )
+#set( $enumNamePrefix = '${stripes:enumName(' )
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+  <c:forEach var="${propertyInfo.name}" items="$prefix${propertyInfo.name}}">
+    <stripes:radio id="${name}.$enumNamePrefix${propertyInfo.name})}" name="${name}" value="$enumNamePrefix${propertyInfo.name})}"
+      checked="New" />
+    <stripes:label for="${name}.$enumNamePrefix${propertyInfo.name})}">$enumNamePrefix${propertyInfo.name})}</stripes:label>
+  </c:forEach>
+#else
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+  <c:forEach var="${propertyInfo.name}" items="$prefix${propertyInfo.name}}">
+    <stripes:radio id="${name}.$enumNamePrefix${propertyInfo.name})}" name="${name}" value="${propertyInfo.name}.id"
+      checked="New" />
+    <stripes:label for="${name}.$enumNamePrefix${propertyInfo.name})}">${propertyInfo.name}.name</stripes:label>
+  </c:forEach>
+#end

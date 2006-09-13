@@ -25,6 +25,8 @@ import com.opensymphony.able.entity.Entities;
 import com.opensymphony.able.entity.EntityInfo;
 import com.opensymphony.able.entity.PropertyInfo;
 import com.opensymphony.able.view.EditTable;
+import com.opensymphony.able.view.Input;
+import com.opensymphony.able.view.InputType;
 import com.opensymphony.able.view.ViewField;
 import com.opensymphony.able.view.ViewTable;
 
@@ -77,6 +79,8 @@ public class EntityInfoTest {
         property = info.getProperty("username");
         assertNotNull(property);
         assertEquals(property.getDisplayName(), "User account name");
+        Input input = property.getInput();
+        assertNotNull(input);
 
         List<PropertyInfo> viewFieldProperties = info.getViewFieldProperties();
         assertEquals(viewFieldProperties.size(), 1, "view field properties: " + viewFieldProperties);

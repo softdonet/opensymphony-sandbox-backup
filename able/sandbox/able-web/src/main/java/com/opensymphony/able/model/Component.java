@@ -3,42 +3,62 @@ package com.opensymphony.able.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
- * Class that represents a compopnent of a software system against which bugs can be
- * filed.
- *
+ * Class that represents a compopnent of a software system against which bugs
+ * can be filed.
+ * 
  * @author Tim Fennell
  */
 @Entity
 public class Component {
-    private Integer id;
-    private String name;
+	private Integer id;
+	private String name;
+	private Person lead;
 
-    /** Default constructor. */
-    public Component() { }
+	/** Default constructor. */
+	public Component() {
+	}
 
-    /** Constructs a new component with the supplied name. */
-    public Component(String name) {
-        this.name = name;
-    }
+	/** Constructs a new component with the supplied name. */
+	public Component(String name) {
+		this.name = name;
+	}
 
-    /** Gets the ID of the Component. */
-    @Id
-    @GeneratedValue
-    public Integer getId() { return id; }
+	/** Perform equality checks based on identity. */
+	public boolean equals(Object obj) {
+		return (obj instanceof Component) && this.id == ((Component) obj).id;
+	}
 
-    /** Sets the ID of the Component. */
-    public void setId(Integer id) { this.id = id; }
+	/** Gets the ID of the Component. */
+	@Id
+	@GeneratedValue
+	public Integer getId() {
+		return id;
+	}
 
-    /** Gets the name of the Component - may be null if one is not set. */
-    public String getName() { return name; }
+	/** Sets the ID of the Component. */
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    /** Sets the name of the Component. */
-    public void setName(String name) { this.name = name; }
+	/** Gets the name of the Component - may be null if one is not set. */
+	public String getName() {
+		return name;
+	}
 
-    /** Perform equality checks based on identity. */
-    public boolean equals(Object obj) {
-        return (obj instanceof Component) && this.id == ((Component) obj).id;
-    }
+	/** Sets the name of the Component. */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@ManyToOne
+	public Person getLead() {
+		return lead;
+	}
+
+	public void setLead(Person lead) {
+		this.lead = lead;
+	}
 }

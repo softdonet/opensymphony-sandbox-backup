@@ -1,0 +1,8 @@
+<%@ attribute name="name" type="java.lang.String" required="true"  %>
+<%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
+#set( $inputAnnotation = $propertyInfo.input )
+#set( $prefix = '${actionBean.allValues.')
+  <stripes:select name="${name}" value="Medium">
+    <stripes:options-collection collection="$prefix${propertyInfo.name}}" #if( !$propertyInfo.enum ) label="${propertyInfo.propertyEntityInfo.viewFieldProperties.get(0).name}" value="id"#end/>
+  </stripes:select>
+ 
