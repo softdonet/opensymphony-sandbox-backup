@@ -9,7 +9,8 @@
 
   <stripes:errors />
 
-  <table class="display">
+  <table id="entities" class="display sortable autostripe">
+   <thead>
     <tr>
       <th></th>
 #foreach( $property in $entityInfo.viewTableProperties )
@@ -17,7 +18,8 @@
 #end
       <th></th>
     </tr>
-
+    </thead>
+    <tbody>
     <c:forEach items="${actionBean.allEntities}" var="row" varStatus="rowstat">
       <tr>
 #set( $rowPrefix = '${row.')      
@@ -36,6 +38,7 @@
         
       </tr>
     </c:forEach>
+    </tbody>
   </table>
 
   <div class="buttons"><stripes:submit name="edit" value="New" /> <stripes:submit name="bulkEdit" value="Bulk Edit" /> <stripes:submit

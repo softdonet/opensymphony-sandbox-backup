@@ -11,6 +11,18 @@
     <stripes:options-collection collection="$prefix${propertyInfo.name}}" label="${propertyInfo.propertyEntityInfo.viewFieldProperties.get(0).name}" value="id"/>
   </stripes:select>
  #end
+#elseif( $propertyInfo.date ) 
+  <stripes:text name="${name}" formatPattern="medium" id="${name}"/>
+  <img src="<%= request.getContextPath() %>/js/jscalendar/img.gif" id="${name}.button"/>
+  <script type="text/javascript">
+    Calendar.setup({
+        inputField     :    "${name}",        <%-- input field id --%>
+        ifFormat       :    "%d-%b-%Y",       <%-- format of the input field --%>
+        button         :    "${name}.button", <%-- trigger for the calendar (button ID) --%>
+        align          :    "Tl",             <%-- alignment (defaults to "Bl") --%>
+        singleClick    :    true
+    });
+  </script>
 #else
   <stripes:text name="${name}" formatPattern="medium" />
 #end

@@ -27,6 +27,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Enumeration;
 
 public class PropertyInfo {
@@ -108,6 +109,13 @@ public class PropertyInfo {
         return false;
     }
 
+    /**
+     * Returns true if this property is a date entry field (so that a date picker or calendar control should be used)
+     */
+    public boolean isDate() {
+    	return Date.class.isAssignableFrom(getPropertyType());
+    }
+    
     public PropertyDescriptor getDescriptor() {
         return descriptor;
     }
