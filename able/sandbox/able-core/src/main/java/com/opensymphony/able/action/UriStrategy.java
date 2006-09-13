@@ -24,7 +24,21 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class UriStrategy {
 
-    public String[] getEntityPrimaryKeyValues(JpaCrudActionSupport action) {
+	public String[] getEntityPrimaryKeyValues(JpaCrudActionSupport action) {
+		HttpServletRequest request = action.getContext().getRequest();
+		/*
+        String requestURI = request.getRequestURI();
+        
+        // lets assume the last part of the URI is the primary key as a String value
+        int idx = requestURI.lastIndexOf('/');
+        if (idx >= 0) {
+            return requestURI.substring(idx + 1);
+        }
+		 */
+		return request.getParameterValues("id");
+	}
+	
+    public String[] getEntityPrimaryKeyValues(JpaEntityCollectionActionSupport action) {
         HttpServletRequest request = action.getContext().getRequest();
         /*
         String requestURI = request.getRequestURI();

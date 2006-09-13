@@ -1,0 +1,24 @@
+$license
+
+package $packageName;
+
+import $entityInfo.entityClass.name;
+import $propertyTypeQualifiedName;
+
+import com.opensymphony.able.action.JpaEntityCollectionActionSupport;
+
+import java.util.List;
+
+/**
+ * ActionBean for managing the embedded collection ${propertyName} on the entity {@link $entityInfo.entityName}
+ */
+public class $controllerClassName extends JpaEntityCollectionActionSupport<$entityInfo.entityName, $propertyTypeSimpleName> {
+
+	public $controllerClassName() {
+		super("$propertyName");
+	}
+	
+	protected List<$propertyTypeSimpleName> getOwnerCollection($entityInfo.entityName owningEntity) {
+		return owningEntity.${propertyInfo.descriptor.readMethod.name}();
+	}
+}

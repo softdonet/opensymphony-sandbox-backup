@@ -1,0 +1,26 @@
+<%@ include file="/WEB-INF/header.jsp"%>
+<html>
+<body>
+
+<stripes:form action="${actionUri}">
+
+<stripes:useActionBean binding="${actionUri}" var="actionBean"/>
+
+  <stripes:hidden name="id" />
+  <stripes:errors />
+
+#set( $prefix = '${row.selected ?')
+  <c:forEach var="row" items="${actionBean.options}">
+    <input type="checkbox" value="${row.value}" $prefix 'checked' : ''} ${row.selected}> ${row.name}</option> <br>
+  </c:forEach>
+<%--
+  <select multiple name="entity.id">
+  <c:forEach var="row" items="${actionBean.options}">
+    <option $prefix 'selected' : ''} value="${row.value}">${row.name}</option>
+  </c:forEach>
+  </select>
+--%>
+  <div class="buttons"><stripes:submit name="save" value="Save" /> <stripes:submit name="cancel" value="Cancel" /></div>
+</stripes:form>
+</body>
+</html>

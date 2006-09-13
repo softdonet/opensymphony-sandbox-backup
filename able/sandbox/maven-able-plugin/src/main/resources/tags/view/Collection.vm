@@ -1,5 +1,5 @@
 #set( $foo = '${entity.' )
-#set( $propertyUri = $propertyInfo.propertyEntityInfo.entityUri )
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="collection" value="$foo${propertyInfo.name}}"/>
 [<%= com.opensymphony.able.util.CollectionUtil.size(request.getAttribute("collection")) %>]
+<a href="<%= request.getContextPath() %>/views/entity/${entityInfo.entityUri}/${propertyInfo.name}/edit.jsp?id=${entity.id}">Edit</a>

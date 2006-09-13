@@ -19,6 +19,7 @@ package com.opensymphony.able.maven;
 import com.opensymphony.able.entity.Entities;
 import com.opensymphony.able.entity.EntityInfo;
 import com.opensymphony.able.entity.PropertyInfo;
+import com.opensymphony.able.util.StringHelper;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -40,138 +41,178 @@ import java.util.Map.Entry;
  * @version $Revision$
  */
 public class ScaffoldingGenerator {
-    private Entities entities = Entities.getInstance();
+	private Entities entities = Entities.getInstance();
 
-    private File outputDirectory = new File("target/scaffolding");
+	private File outputDirectory = new File("target/scaffolding");
+	private File javaOutputDirectory = new File("target/main/generated");
 
-    private boolean initialised;
+	private boolean initialised;
 
-    private Log log;
+	private Log log;
 
-    public static void main(String[] args) {
-        ScaffoldingGenerator generator = new ScaffoldingGenerator();
-        try {
-            generator.generateAll();
-        }
-        catch (Exception e) {
-            System.out.println("Caught: " + e);
-            e.printStackTrace();
-        }
-    }
+	public static void main(String[] args) {
+		ScaffoldingGenerator generator = new ScaffoldingGenerator();
+		try {
+			generator.generateAll();
+		} catch (Exception e) {
+			System.out.println("Caught: " + e);
+			e.printStackTrace();
+		}
+	}
 
-    public void generateAll() throws Exception {
-        Set<Entry<String, EntityInfo>> entrySet = entities.getEntityMap().entrySet();
-        if (entrySet.isEmpty()) {
-            getLog().warn("No entities found!");
-            return;
-        }
-        for (Entry<String, EntityInfo> entry : entrySet) {
-            generate(entry.getKey(), entry.getValue());
-        }
-    }
+	public void generateAll() throws Exception {
+		Set<Entry<String, EntityInfo>> entrySet = entities.getEntityMap().entrySet();
+		if (entrySet.isEmpty()) {
+			getLog().warn("No entities found!");
+			return;
+		}
+		for (Entry<String, EntityInfo> entry : entrySet) {
+			generate(entry.getKey(), entry.getValue());
+		}
+	}
 
-    public void generate(String alias) throws Exception {
-        EntityInfo entity = Entities.getInstance().getEntity(alias);
-        if (entity == null) {
-            throw new IllegalArgumentException("Could not find entity with alias '" + alias + "'");
-        }
-        generate(alias, entity);
-    }
+	public void generate(String alias) throws Exception {
+		EntityInfo entity = Entities.getInstance().getEntity(alias);
+		if (entity == null) {
+			throw new IllegalArgumentException("Could not find entity with alias '" + alias + "'");
+		}
+		generate(alias, entity);
+	}
 
-    public void generate(String alias, EntityInfo entity) throws Exception {
-        if (!initialised) {
-            Properties p = new Properties();
-            p.setProperty("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-            Velocity.init(p);
-            initialised = true;
-        }
-        generateFiles(entity);
-    }
+	public void generate(String alias, EntityInfo entity) throws Exception {
+		if (!initialised) {
+			Properties p = new Properties();
+			p.setProperty("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+			Velocity.init(p);
+			initialised = true;
+		}
+		generateFiles(entity);
+	}
 
-    // Properties
-    // -------------------------------------------------------------------------
-    public File getOutputDirectory() {
-        return outputDirectory;
-    }
+	// Properties
+	// -------------------------------------------------------------------------
+	public File getOutputDirectory() {
+		return outputDirectory;
+	}
 
-    public void setOutputDirectory(File outputDirectory) {
-        this.outputDirectory = outputDirectory;
-    }
+	public void setOutputDirectory(File outputDirectory) {
+		this.outputDirectory = outputDirectory;
+	}
 
-    public Log getLog() {
-        if (log == null) {
-            log = new SystemStreamLog();
-        }
-        return log;
-    }
+	public Log getLog() {
+		if (log == null) {
+			log = new SystemStreamLog();
+		}
+		return log;
+	}
 
-    public void setLog(Log log) {
-        this.log = log;
-    }
+	public void setLog(Log log) {
+		this.log = log;
+	}
 
-    // Implementation methods
-    // -------------------------------------------------------------------------
-    protected void generateFiles(EntityInfo entity) throws MojoExecutionException {
-        File views = new File(outputDirectory, "views/entity");
-        File tags = new File(outputDirectory, "WEB-INF/tags/entity");
-        File dir = new File(views, entity.getEntityUri());
-        dir.mkdirs();
+	// Implementation methods
+	// -------------------------------------------------------------------------
+	protected void generateFiles(EntityInfo entity) throws MojoExecutionException {
+		String packageName = entity.getEntityClass().getPackage().getName();
+		if (packageName.endsWith(".model")) {
+			packageName = packageName.substring(0, packageName.length() - ".model".length());
+		}
+		packageName += ".action";
 
-        generateFile(dir, "index.jsp", "views/Index.vm", createVelocityContext(entity));
-        generateFile(dir, "edit.jsp", "views/Edit.vm", createVelocityContext(entity));
-        generateFile(dir, "view.jsp", "views/View.vm", createVelocityContext(entity));
-        generateFile(dir, "editTable.jsp", "views/EditTable.vm", createVelocityContext(entity));
+		File packageDir = new File(javaOutputDirectory.getAbsolutePath() + "/" + packageName.replace('.', '/'));
+		packageDir.mkdirs();
 
-        dir = new File(tags, entity.getEntityUri());
-        dir.mkdirs();
+		File views = new File(outputDirectory, "views/entity");
+		File tags = new File(outputDirectory, "WEB-INF/tags/entity");
+		File dir = new File(views, entity.getEntityUri());
+		dir.mkdirs();
 
-        generateFile(dir, "viewField.tag", "tags/EntityViewField.vm",  createVelocityContext(entity));
+		generateCollectionControllers(packageDir, entity, packageName, dir);
 
-        List<PropertyInfo> properties = entity.getProperties();
-        for (PropertyInfo propertyInfo : properties) {
-            generateFile(dir, propertyInfo.getName() + "EditField.tag", "tags/FieldEdit.vm", createVelocityContext(entity, propertyInfo));
-            generateFile(dir, propertyInfo.getName() + "ViewField.tag", "tags/FieldView.vm", createVelocityContext(entity, propertyInfo));
-        }
-    }
+		generateFile(dir, "index.jsp", "views/Index.vm", createVelocityContext(entity));
+		generateFile(dir, "edit.jsp", "views/Edit.vm", createVelocityContext(entity));
+		generateFile(dir, "view.jsp", "views/View.vm", createVelocityContext(entity));
+		generateFile(dir, "editTable.jsp", "views/EditTable.vm", createVelocityContext(entity));
 
-    protected void generateFile(File dir, String outputName, String script, VelocityContext context) throws MojoExecutionException {
-        Writer out = null;
-        File file = new File(dir, outputName);
-        try {
-            Template template = Velocity.getTemplate(script);
-            getLog().info("Generating file: " + file);
-            out = new FileWriter(file);
-            template.merge(context, out);
-        }
-        catch (Exception e) {
-            throw new MojoExecutionException("Failed in script: " + script + " when generating scaffolding: " + file + ". Reason: " + e, e);
-        }
-        finally {
-            if (out != null) {
-                try {
-                    out.close();
-                }
-                catch (IOException e) {
-                    log.warn("Caught exception while closing file: " + e, e);
-                }
-            }
-        }
-    }
+		dir = new File(tags, entity.getEntityUri());
+		dir.mkdirs();
 
-    protected VelocityContext createVelocityContext(EntityInfo entity) {
-        VelocityContext answer = new VelocityContext();
-        answer.put("entityName", entity.getEntityName());
-        answer.put("entityInfo", entity);
-        answer.put("entityClass", entity.getEntityClass());
-        answer.put("entityUri", entity.getEntityUri());
-        answer.put("license", "/** TODO license goes here */");
-        return answer;
-    }
+		generateFile(dir, "viewField.tag", "tags/EntityViewField.vm", createVelocityContext(entity));
 
-    protected VelocityContext createVelocityContext(EntityInfo entity, PropertyInfo propertyInfo) {
-        VelocityContext answer = createVelocityContext(entity);
-        answer.put("propertyInfo", propertyInfo);
-        return answer;
-    }
+		List<PropertyInfo> properties = entity.getProperties();
+		for (PropertyInfo propertyInfo : properties) {
+			generateFile(dir, propertyInfo.getName() + "EditField.tag", "tags/FieldEdit.vm", createVelocityContext(entity,
+					propertyInfo));
+			generateFile(dir, propertyInfo.getName() + "ViewField.tag", "tags/FieldView.vm", createVelocityContext(entity,
+					propertyInfo));
+		}
+	}
+
+	protected void generateCollectionControllers(File packageDir, EntityInfo entity, String packageName, File viewDir)
+			throws MojoExecutionException {
+		List<PropertyInfo> properties = entity.getProperties();
+		for (PropertyInfo info : properties) {
+			if (info.isCollection() && info.isPersistent()) {
+				String actionName = entity.getEntityName() + StringHelper.capitalize(info.getName());
+				String actionUri = "/" + actionName + ".action";
+				String controllerClassName = actionName + "ActionBean";
+				VelocityContext context = createVelocityContext(entity);
+				context.put("packageName", packageName);
+				context.put("controllerClassName", controllerClassName);
+				context.put("actionUri", actionUri);
+				context.put("propertyInfo", info);
+				context.put("propertyName", info.getName());
+				context.put("propertyTypeSimpleName", info.getPropertyEntityInfo().getEntityName());
+				context.put("propertyTypeQualifiedName", info.getPropertyComponentType().getName());
+				
+				generateFile(packageDir, controllerClassName + ".java", "controller/EmbeddedCollectionActionBean.vm", context);
+
+				// now lets create the views for this embedded collection
+				File dir = new File(viewDir, info.getName());
+				dir.mkdir();
+
+				generateFile(dir, "edit.jsp", "views/EmbeddedCollection.vm", context);
+			}
+		}
+	}
+
+	protected void generateFile(File dir, String outputName, String script, VelocityContext context)
+			throws MojoExecutionException {
+		Writer out = null;
+		File file = new File(dir, outputName);
+		try {
+			Template template = Velocity.getTemplate(script);
+			getLog().info("Generating file: " + file);
+			out = new FileWriter(file);
+			template.merge(context, out);
+		} catch (Exception e) {
+			throw new MojoExecutionException("Failed in script: " + script + " when generating scaffolding: " + file
+					+ ". Reason: " + e, e);
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					log.warn("Caught exception while closing file: " + e, e);
+				}
+			}
+		}
+	}
+
+	protected VelocityContext createVelocityContext(EntityInfo entity) {
+		VelocityContext answer = new VelocityContext();
+		answer.put("entityName", entity.getEntityName());
+		answer.put("entityInfo", entity);
+		answer.put("entityClass", entity.getEntityClass());
+		answer.put("entityUri", entity.getEntityUri());
+		answer.put("license", "/** TODO license goes here */");
+		return answer;
+	}
+
+	protected VelocityContext createVelocityContext(EntityInfo entity, PropertyInfo propertyInfo) {
+		VelocityContext answer = createVelocityContext(entity);
+		answer.put("propertyInfo", propertyInfo);
+		return answer;
+	}
 
 }

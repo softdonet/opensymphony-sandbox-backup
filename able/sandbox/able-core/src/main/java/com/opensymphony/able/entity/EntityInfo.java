@@ -137,6 +137,11 @@ public class EntityInfo {
     public String getBulkEditUri() {
         return uriPrefix + getEntityUri() + "/editTable.jsp?id=";
     }
+    
+	public String getHomeUriForCollection(String propertyName) {
+        return uriPrefix + getEntityUri() + "/property/" + "/edit.jsp?id=";
+	}
+
 
     public PropertyInfo getProperty(String name) {
         return propertyMap.get(name);

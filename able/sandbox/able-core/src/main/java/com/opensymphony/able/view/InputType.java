@@ -23,10 +23,12 @@ package com.opensymphony.able.view;
  */
 public enum InputType {
 
-	// TODO use HTML 4 names for these
-	
 	Text,
 	TextArea,
-	Combo,
-	Radio
+	Password,
+	Checkbox,
+	Radio,
+	Combo
+	
+	// TODO rename Combo to MENU/SELECT to match HTML4?
 }
