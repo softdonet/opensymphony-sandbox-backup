@@ -1,12 +1,13 @@
 package com.opensymphony.able.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.validator.NotNull;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple collection of people
@@ -37,7 +38,8 @@ public class Team {
 		this.id = id;
 	}
 
-	public String getName() {
+    @NotNull
+    public String getName() {
 		return name;
 	}
 

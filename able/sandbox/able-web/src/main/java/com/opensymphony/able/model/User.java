@@ -1,9 +1,11 @@
 package com.opensymphony.able.model;
 
+import org.hibernate.validator.Email;
+import org.hibernate.validator.NotNull;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
 import java.util.Date;
 
 /**
@@ -63,6 +65,7 @@ public class User {
         this.id = id;
     }
 
+    @NotNull
     public String getUsername() {
         return username;
     }
@@ -71,6 +74,7 @@ public class User {
         this.username = username;
     }
 
+    @Email
     public String getEmail() {
         return email;
     }
