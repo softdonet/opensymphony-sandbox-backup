@@ -21,9 +21,7 @@ import com.opensymphony.able.jaxb.Envelope;
 import com.opensymphony.able.jaxb.JaxbTemplate;
 import com.opensymphony.able.model.User;
 import com.opensymphony.able.service.LoadDatabaseService;
-
 import net.sourceforge.stripes.integration.spring.SpringHelper;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
@@ -35,7 +33,8 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 /**

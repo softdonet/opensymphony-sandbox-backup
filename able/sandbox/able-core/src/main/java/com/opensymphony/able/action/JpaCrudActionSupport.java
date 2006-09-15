@@ -21,19 +21,18 @@ import com.opensymphony.able.entity.PropertyInfo;
 import com.opensymphony.able.jaxb.JaxbResolution;
 import com.opensymphony.able.jaxb.JaxbTemplate;
 import com.opensymphony.able.util.EnumHelper;
-
+import com.opensymphony.able.validation.hibernate.HibernateValidator;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.DefaultHandler;
 import net.sourceforge.stripes.action.DontValidate;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.orm.jpa.JpaTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.AbstractMap;
@@ -50,7 +49,7 @@ import java.util.Set;
  * 
  * @version $Revision$
  */
-public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
+public abstract class JpaCrudActionSupport<E> extends JpaActionSupport implements CrudActionBean {
     private static final Log log = LogFactory.getLog(JpaCrudActionSupport.class);
 
     private List idList = new ArrayList();
@@ -61,8 +60,18 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     private EntityInfo entityInfo;
     private UriStrategy uriStrategy = new UriStrategy();
     private int bulkEditCount = 5;
+    private Validator validator = new HibernateValidator();
 
     public JpaCrudActionSupport() {
+        init();
+    }
+
+    protected JpaCrudActionSupport(JpaTemplate jpaTemplate) {
+        super(jpaTemplate);
+        init();
+    }
+
+    private void init() {
         ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
         Type[] typeArguments = genericSuperclass.getActualTypeArguments();
         this.entityClass = (Class<E>) typeArguments[0];
@@ -99,6 +108,7 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     }
 
     public Resolution save() {
+        validate();
         if (getContext().getValidationErrors().isEmpty()) {
             if (bulkEditEntities != null) {
                 for (E e : bulkEditEntities) {
@@ -109,12 +119,9 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
                 save(getEntity());
             }
             shouldCommit();
+            return new RedirectResolution(entityInfo.getHomeUri());
         }
-
-        // TODO
-        // getContext().addMsg( "saved " + getEntityName(); );
-
-        return new RedirectResolution(entityInfo.getHomeUri());
+        return getContext().getSourcePageResolution();
     }
 
     @DontValidate
@@ -252,6 +259,18 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
         }
     }
 
+    protected void validate() {
+        if (bulkEditEntities != null) {
+            int i = 0;
+            for (E e : bulkEditEntities) {
+                validator.validate(getContext(), "entity[" + i++ + "]", e);
+            }
+        }
+        else {
+            validator.validate(getContext(), "entity.", getEntity());
+        }
+    }
+
     /**
      * Looks up the entity by primary key
      */
@@ -331,13 +350,14 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport {
     }
 
     /**
-     * Binds the related entity to the entity using a string primary key parameter
+     * Binds the related entity to the entity using a string primary key
+     * parameter
      */
     @SuppressWarnings("unchecked")
     protected void bindProperty(E entity, PropertyInfo property, EntityInfo propertyType, int index, String value) {
         Object pk = propertyType.convertToPrimaryKeyValkue(value);
         Object relatedEntity = getJpaTemplate().find(propertyType.getEntityClass(), pk);
-        
+
         property.setValue(entity, relatedEntity);
     }
 }

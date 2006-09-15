@@ -17,11 +17,9 @@
 package com.opensymphony.able.action;
 
 import com.opensymphony.able.filter.TransactionServletFilter;
-
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.integration.spring.SpringBean;
-
 import org.springframework.orm.jpa.JpaCallback;
 import org.springframework.orm.jpa.JpaTemplate;
 
@@ -29,7 +27,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-
 import java.util.List;
 
 /**
@@ -43,6 +40,14 @@ public abstract class JpaActionSupport implements ActionBean {
     @SpringBean
     private JpaTemplate jpaTemplate;
     private ActionBeanContext context;
+
+
+    protected JpaActionSupport() {
+    }
+
+    protected JpaActionSupport(JpaTemplate jpaTemplate) {
+        this.jpaTemplate = jpaTemplate;
+    }
 
     public ActionBeanContext getContext() {
         return context;

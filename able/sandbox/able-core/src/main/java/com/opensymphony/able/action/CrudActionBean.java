@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,12 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.opensymphony.able.example.model;
+package com.opensymphony.able.action;
+
+import net.sourceforge.stripes.action.ActionBean;
 
 /**
- *
- * version $Revision: 1 $
+ * Represents the interface of an {@link ActionBean} which operates on a particular entity type
+ * 
+ * @version $Revision$
  */
-public enum Type {
-	Customer, Manager, Admin
+public interface CrudActionBean extends ActionBean {
+
+    public Class getEntityClass();
+    
 }

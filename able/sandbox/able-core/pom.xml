@@ -56,6 +56,21 @@
       <artifactId>persistence-api</artifactId>
       <version>1.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-annotations</artifactId>
+      <version>3.2.0.cr1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.persistence</groupId>
+          <artifactId>ejb</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.transaction</groupId>
+          <artifactId>jta</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
     <dependency>
       <groupId>com.sun.xml.bind</groupId>

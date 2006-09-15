@@ -14,15 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.opensymphony.able.example.model;
+package com.opensymphony.able.action;
 
-import javax.persistence.Entity;
+import net.sourceforge.stripes.action.ActionBeanContext;
 
 /**
- *
+ * A plugin validator for the CRUD entities
+ * 
  * @version $Revision$
  */
-@Entity
-public class Address {
+public interface Validator {
 
+    /**
+     * Calls the validation on the given entity with the given prefix name
+     */
+    public void validate(ActionBeanContext actionBeanContext, String propertyPrefix, Object entity);
 }

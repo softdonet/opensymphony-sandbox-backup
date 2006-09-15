@@ -14,34 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.opensymphony.able.util;
+package com.opensymphony.able.validation.hibernate;
 
-import com.opensymphony.able.util.StringHelper;
+import org.hibernate.validator.ClassValidator;
 
-import org.testng.annotations.Test;
-
-import static org.testng.Assert.*;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
- *
+ * A simple cache of {@link ClassValidator} instances
+ * 
  * @version $Revision$
  */
-public class StringHelperTest {
-    
-    @Test
-    public void testCapitalize() throws Exception {
-        assertEquals(StringHelper.capitalize("fooBar"), "FooBar");
-        assertEquals(StringHelper.capitalize("FooBar"), "FooBar");
-    }
-    
-    @Test
-    public void testDapitalize() throws Exception {
-        assertEquals(StringHelper.decapitalize("fooBar"), "fooBar");
-        assertEquals(StringHelper.decapitalize("FooBar"), "fooBar");
-    }
+public class ClassValidatorCache {
 
-    @Test
-    public void testSplitCamelCase() throws Exception {
-        assertEquals(StringHelper.splitCamelCase("fooBarWhatnot"), "Foo Bar Whatnot");
+    private static final ClassValidatorCache singleton = new ClassValidatorCache();
+
+    private Map<Class, ClassValidator> map = new WeakHashMap<Class, ClassValidator>();
+    
+    public static ClassValidatorCache getInstance() {
+        return singleton;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public synchronized ClassValidator getValidator(Class type) {
+        ClassValidator answer = map.get(type);
+        if (answer == null) {
+            answer = new ClassValidator(type);
+            map.put(type, answer);
+        }
+        return answer;
     }
 }

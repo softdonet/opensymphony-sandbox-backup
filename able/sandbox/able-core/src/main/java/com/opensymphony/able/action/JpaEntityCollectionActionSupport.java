@@ -16,24 +16,26 @@
  */
 package com.opensymphony.able.action;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.*;
-
+import com.opensymphony.able.entity.EntityInfo;
+import com.opensymphony.able.entity.Option;
+import com.opensymphony.able.jaxb.JaxbResolution;
+import com.opensymphony.able.jaxb.JaxbTemplate;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.DefaultHandler;
 import net.sourceforge.stripes.action.DontValidate;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.opensymphony.able.entity.EntityInfo;
-import com.opensymphony.able.entity.Option;
-import com.opensymphony.able.jaxb.JaxbResolution;
-import com.opensymphony.able.jaxb.JaxbTemplate;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A base {@link ActionBean} class for viewing and editing an embedded
@@ -41,7 +43,7 @@ import com.opensymphony.able.jaxb.JaxbTemplate;
  * 
  * @version $Revision: 46 $
  */
-public abstract class JpaEntityCollectionActionSupport<O, E> extends JpaActionSupport {
+public abstract class JpaEntityCollectionActionSupport<O, E> extends JpaActionSupport implements CrudActionBean {
 	private static final Log log = LogFactory.getLog(JpaEntityCollectionActionSupport.class);
 
 	private String propertyName;
