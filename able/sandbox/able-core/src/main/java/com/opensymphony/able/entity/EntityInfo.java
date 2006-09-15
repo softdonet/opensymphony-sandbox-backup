@@ -67,7 +67,7 @@ public class EntityInfo {
 
     @Override
     public String toString() {
-        return "EntityInfo[name=" + entityName + "; class=" + entityClass + "]";
+        return "EntityInfo[name=" + getEntityName() + "; class=" + entityClass + "]";
     }
 
     public Class getEntityClass() {
@@ -139,7 +139,7 @@ public class EntityInfo {
     }
     
 	public String getHomeUriForCollection(String propertyName) {
-        return uriPrefix + getEntityUri() + "/property/" + "/edit.jsp?id=";
+        return uriPrefix + getEntityUri() + "/" + propertyName + "/edit.jsp?oid=";
 	}
 
 
@@ -176,8 +176,18 @@ public class EntityInfo {
         return Collections.unmodifiableList(editFormProperties);
     }
 
+    /**
+     * Returns the list of properties to display in a field view or pick list, combo box, radio selection etc
+     */
     public List<PropertyInfo> getViewFieldProperties() {
-        return Collections.unmodifiableList(viewFieldProperties);
+    	return Collections.unmodifiableList(viewFieldProperties);
+    }
+
+    /**
+     * Returns the first name property used to present the entity in a pick list, combo box, radio selection etc
+     */
+    public PropertyInfo getNameProperty() {
+        return viewFieldProperties.get(0);
     }
 
     public Object convertToPrimaryKeyValkue(String value) {

@@ -13,13 +13,16 @@
   <table class="display">
     <tr>
 #foreach( $property in $entityInfo.editTableProperties )
+#if( !$property.collection )
       <th>${property.displayName}</th>
+#end
 #end
      <th></th>
     </tr>
     <c:forEach items="${actionBean.bulkEditEntities}" var="row" varStatus="rowstat">
       <tr>
 #foreach( $property in $entityInfo.editTableProperties )
+#if( !$property.collection )
 #set( $name = "${property.name}")
 #if( $property.persistent ) 
  #set( $name = "${name}.id" )
@@ -29,6 +32,7 @@
  #else
       <td><${entityInfo.entityUri}:${property.name}ViewField entity="${row}"/></td>
  #end
+#end
 #end
       </tr>
     </c:forEach>

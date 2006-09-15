@@ -7,6 +7,7 @@ import com.opensymphony.able.view.ViewField;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
@@ -24,14 +25,14 @@ public class Person {
 	private String email;
 	private String password;
 	private List<Component> leads;
+	private Team team;
 
 	/** Default constructor. */
 	public Person() {
 	}
 
 	/** Constructs a well formed person. */
-	public Person(String username, String password, String first, String last,
-			String email) {
+	public Person(String username, String password, String first, String last, String email) {
 		this.username = username;
 		this.password = password;
 		this.firstName = first;
@@ -106,7 +107,7 @@ public class Person {
 		this.password = password;
 	}
 
-	@OneToMany
+	@OneToMany()
 	public List<Component> getLeads() {
 		return leads;
 	}
@@ -114,4 +115,14 @@ public class Person {
 	public void setLeads(List<Component> leads) {
 		this.leads = leads;
 	}
+
+	@ManyToOne
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
 }

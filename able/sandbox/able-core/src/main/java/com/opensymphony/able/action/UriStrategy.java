@@ -38,6 +38,15 @@ public class UriStrategy {
 		return request.getParameterValues("id");
 	}
 	
+	public String getOwnerPrimaryKeyValue(JpaEntityCollectionActionSupport action) {
+		HttpServletRequest request = action.getContext().getRequest();
+		
+		// TODO should be using REST URI mappings
+		
+		return request.getParameter("oid");
+	}
+	
+	
     public String[] getEntityPrimaryKeyValues(JpaEntityCollectionActionSupport action) {
         HttpServletRequest request = action.getContext().getRequest();
         /*
@@ -49,7 +58,7 @@ public class UriStrategy {
             return requestURI.substring(idx + 1);
         }
         */
-        return request.getParameterValues("id");
+        return request.getParameterValues("eid");
     }
 
 }

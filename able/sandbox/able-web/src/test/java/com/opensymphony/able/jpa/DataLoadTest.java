@@ -17,6 +17,7 @@
 package com.opensymphony.able.jpa;
 
 import com.opensymphony.able.action.UserActionBean;
+import com.opensymphony.able.jaxb.Envelope;
 import com.opensymphony.able.jaxb.JaxbTemplate;
 import com.opensymphony.able.model.User;
 import com.opensymphony.able.service.LoadDatabaseService;
@@ -53,13 +54,10 @@ public class DataLoadTest extends SpringTestSupport {
 	public void testLoadOfSomeData(String classpathUri) throws Exception {
 		final ApplicationContext context = loadContext(classpathUri);
 
-		JpaTemplate jpaTemplate = (JpaTemplate) getMandatoryBean(context,
-				"jpaTemplate");
-		TransactionTemplate txnTemplate = (TransactionTemplate) getMandatoryBean(
-				context, "transactionTemplate");
+		JpaTemplate jpaTemplate = (JpaTemplate) getMandatoryBean(context, "jpaTemplate");
+		TransactionTemplate txnTemplate = (TransactionTemplate) getMandatoryBean(context, "transactionTemplate");
 
-		LoadDatabaseService loadService = new LoadDatabaseService(jpaTemplate,
-				txnTemplate);
+		LoadDatabaseService loadService = new LoadDatabaseService(jpaTemplate, txnTemplate);
 		loadService.afterPropertiesSet();
 
 		Exception e = (Exception) txnTemplate.execute(new TransactionCallback() {
@@ -79,10 +77,12 @@ public class DataLoadTest extends SpringTestSupport {
 		List<User> allEntities = action.getAllEntities();
 		System.out.println("Found users: " + allEntities);
 
-		Assert.assertTrue(allEntities.size() > 1,
-				"Should have some users in the database now!");
+		Envelope envelope = new Envelope();
+		envelope.setUserList(allEntities);
 
-		JaxbTemplate template = new JaxbTemplate(User.class);
+		Assert.assertTrue(allEntities.size() > 1, "Should have some users in the database now!");
+
+		JaxbTemplate template = new JaxbTemplate(new Class[] { Envelope.class, User.class });
 		File dir = new File("target/data");
 		dir.mkdirs();
 		FileOutputStream out = null;
@@ -91,7 +91,7 @@ public class DataLoadTest extends SpringTestSupport {
 			System.out.println("Writing file: " + file);
 			log.info("file: " + file);
 			out = new FileOutputStream(file);
-			template.write(out, allEntities);
+			template.write(out, envelope);
 			return null;
 		} catch (Exception e) {
 			log.error(e);

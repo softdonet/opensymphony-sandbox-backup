@@ -1,4 +1,6 @@
 <%@ include file="/WEB-INF/header.jsp"%>
+<%@ taglib prefix="${entityUri}" tagdir="/WEB-INF/tags/entity/${entityUri}"%>
+<%@ taglib prefix="${propertyInfo.propertyEntityInfo.entityUri}" tagdir="/WEB-INF/tags/entity/${propertyInfo.propertyEntityInfo.entityUri}"%>
 <html>
 <body>
 
@@ -6,20 +8,47 @@
 
 <stripes:useActionBean binding="${actionUri}" var="actionBean"/>
 
-  <stripes:hidden name="id" />
+#set( $prefix = '${actionBean.owner}')
+  <h2><$entityUri:viewField entity="$prefix"/></h2>
+  
+  <stripes:hidden name="oid" />
   <stripes:errors />
 
+#if( $propertyInfo.input.type().name() == 'Combo')
 #set( $prefix = '${row.selected ?')
-  <c:forEach var="row" items="${actionBean.options}">
-    <input type="checkbox" value="${row.value}" $prefix 'checked' : ''} ${row.selected}> ${row.name}</option> <br>
-  </c:forEach>
-<%--
-  <select multiple name="entity.id">
+  <select multiple name="eid">
   <c:forEach var="row" items="${actionBean.options}">
     <option $prefix 'selected' : ''} value="${row.value}">${row.name}</option>
   </c:forEach>
   </select>
---%>
+#else
+#set( $prefix = '${row.')
+
+  <table id="entities" class="display sortable autostripe">
+   <thead>
+    <tr>
+      <th></th>
+#foreach( $nameProperty in $propertyInfo.propertyEntityInfo.viewFieldProperties )    
+      <th>$nameProperty.displayName</th>
+#end
+    </tr>
+    </thead>
+    <tbody>
+  <c:forEach var="row" items="${actionBean.options}">
+    <tr>
+      <td>
+        <input type="checkbox" name="eid" value="${row.value}" ${prefix}selected ? 'checked' : ''} ${row.selected}/>
+      </td>
+#foreach( $nameProperty in $propertyInfo.propertyEntityInfo.viewFieldProperties )    
+##      <td>${prefix}entity.$nameProperty.name}</td>
+       <td><${propertyInfo.propertyEntityInfo.entityUri}:${nameProperty.name}ViewField entity="${row.entity}"/></td>
+#end    
+    </tr>
+  </c:forEach>
+      </tbody>
+  </table>
+  
+#end    
   <div class="buttons"><stripes:submit name="save" value="Save" /> <stripes:submit name="cancel" value="Cancel" /></div>
 </stripes:form>
 </body>

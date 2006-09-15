@@ -11,6 +11,7 @@
   <table class="display">
 
 #foreach( $property in $entityInfo.editFormProperties )
+#if( !$property.collection )
 #set( $name = "entity.${property.name}")
 #if( $property.persistent ) 
  #set( $name = "${name}.id" )
@@ -23,6 +24,7 @@
       <td><${entityInfo.entityUri}:${property.name}ViewField entity="${actionBean.entity}"/></td>
  #end
     </tr>
+#end
 #end
 
   </table>

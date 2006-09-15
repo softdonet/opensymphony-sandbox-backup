@@ -14,30 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.opensymphony.able.util;
+package org.opensymphony.able.util;
 
-import java.lang.reflect.Array;
-import java.util.Collection;
+import java.util.*;
+
+import org.testng.annotations.Test;
+
+import com.opensymphony.able.util.CollectionHelper;
+
+import static org.testng.Assert.*;
 
 /**
- * Some collection helper methods
  * 
  * version $Revision: 1 $
  */
-public class CollectionUtil {
-
-	/**
-	 * Returns the size of the collection or array
-	 */
-	public static int size(Object collection) {
-		if (collection instanceof Collection) {
-			Collection value = (Collection) collection;
-			return value.size();
-		} else if (collection != null) {
-			if (collection.getClass().isArray()) {
-				return Array.getLength(collection);
-			}
-		}
-		return 0;
+public class CollectionHelperTest {
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSize() throws Exception {
+		String[] array = new String[] { "a", "b", "c" };
+		assertSize(array, 3);
+		List list = new ArrayList(Arrays.asList(array));
+		assertSize(list, 3);
 	}
+
+	private void assertSize(Object value, int expected) {
+		int size = CollectionHelper.size(value);
+		assertEquals(size, expected, "size of: " + value);
+	}
+
 }

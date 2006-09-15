@@ -14,34 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.opensymphony.able.jaxb;
+package com.opensymphony.able.util;
 
-import java.io.OutputStream;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+import java.lang.reflect.Array;
+import java.util.Collection;
 
 /**
+ * Some collection helper methods
  * 
  * version $Revision: 1 $
  */
-public class JaxbTemplate {
+public class CollectionHelper {
 
-	private Class[] types;
-
-	public JaxbTemplate(Class[] types) {
-		this.types = types;
-	}
-
-	public JaxbTemplate(Class entityType) {
-		this( new Class[] {entityType });
-	}
-
-	public void write(OutputStream out, Object value) throws JAXBException {
-		JAXBContext context = JAXBContext.newInstance(types);
-		Marshaller marshaller = context.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		marshaller.marshal(value, out);
+	/**
+	 * Returns the size of the collection or array
+	 */
+	public static int size(Object collection) {
+		if (collection instanceof Collection) {
+			Collection value = (Collection) collection;
+			return value.size();
+		} else if (collection != null) {
+			if (collection.getClass().isArray()) {
+				return Array.getLength(collection);
+			}
+		}
+		return 0;
 	}
 }

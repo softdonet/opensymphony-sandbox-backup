@@ -18,14 +18,13 @@ package com.opensymphony.able.action;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.DefaultHandler;
 import net.sourceforge.stripes.action.DontValidate;
 import net.sourceforge.stripes.action.ForwardResolution;
+import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
 
 import org.apache.commons.logging.Log;
@@ -47,6 +46,7 @@ public abstract class JpaEntityCollectionActionSupport<O, E> extends JpaActionSu
 
 	private String propertyName;
 	private Object ownerId;
+	private Set entityIds;
 	private O owner;
 	private Class<O> ownerClass;
 	private List<E> entities;
@@ -73,11 +73,9 @@ public abstract class JpaEntityCollectionActionSupport<O, E> extends JpaActionSu
 		return new ForwardResolution(getHomeUri());
 	}
 
-	/*
-	 * public Resolution edit() { return new
-	 * ForwardResolution(entityInfo.getEditUri()); }
+	/**
+	 * Lets remove the entities which were selected via the entityIds property
 	 */
-
 	@DontValidate
 	public Resolution delete() {
 		List<E> list = getEntities();
@@ -85,26 +83,42 @@ public abstract class JpaEntityCollectionActionSupport<O, E> extends JpaActionSu
 		while (iter.hasNext()) {
 			E e = iter.next();
 			Object idValue = entityInfo.getIdValue(e);
-			if (idValue != null) {
+			if (entityIds.contains(idValue)) {
 				iter.remove();
 				shouldCommit();
 			}
 		}
-		return new ForwardResolution(getHomeUri());
-		// return new RedirectResolution(getHomeUri());
+		return new RedirectResolution(getHomeUri());
 	}
 
 	public Resolution save() {
 		if (getContext().getValidationErrors().isEmpty()) {
+			System.out.println("Delete with: Entities: " + getEntities());
+			System.out.println("eids: " + entityIds);
+			
+			Iterator<E> iter = getEntities().iterator();
+			while (iter.hasNext()) {
+				E entity = iter.next();
+				Object primaryKey = entityInfo.getIdValue(entity);
+				boolean answer = entityIds.remove(primaryKey);
+				if (!answer) {
+					// lets remove this entity from the collection
+					iter.remove();
+				}
+			}
+			// now any primary keys left in the set need to be added
+			for (Object entityId : entityIds) {
+				// TODO we could do a more efficient batch query here
+				E entity = findEntityByPrimaryKey(entityId);
+				getEntities().add(entity);
+			}
 			shouldCommit();
 		}
 
 		// TODO
 		// getContext().addMsg( "saved " + getEntityName(); );
 
-		String uri = entityInfo.getHomeUri();
-		return new ForwardResolution(uri);
-		// return new RedirectResolution(uri);
+		return new RedirectResolution(getHomeUri());
 	}
 
 	@DontValidate
@@ -114,12 +128,11 @@ public abstract class JpaEntityCollectionActionSupport<O, E> extends JpaActionSu
 		// TODO
 		// getContext().addMsg( Messages.cancelled( "Manufacturer" ) );
 
-		// return new RedirectResolution(entityInfo.getHomeUri());
-		return new ForwardResolution(getHomeUri());
+		return new RedirectResolution(getHomeUri());
 	}
 
 	protected String getHomeUri() {
-		return ownerInfo.getHomeUriForCollection(propertyName);
+		return ownerInfo.getHomeUri();
 	}
 
 	public Resolution xmlView() {
@@ -141,6 +154,7 @@ public abstract class JpaEntityCollectionActionSupport<O, E> extends JpaActionSu
 		if (entities == null) {
 			O owner = getOwner();
 			if (owner == null) {
+				log.warn("No entity for oid: " + ownerId);
 				entities = new ArrayList<E>();
 			} else {
 				entities = getOwnerCollection(owner);
@@ -167,7 +181,8 @@ public abstract class JpaEntityCollectionActionSupport<O, E> extends JpaActionSu
 	}
 
 	/**
-	 * Returns a collection of {@link Option} objects to make it easy to render multi select menus
+	 * Returns a collection of {@link Option} objects to make it easy to render
+	 * multi select menus
 	 */
 	public List<Option> getOptions() {
 		return Option.createOptions(getAllEntities(), getEntities(), entityInfo);
@@ -183,9 +198,19 @@ public abstract class JpaEntityCollectionActionSupport<O, E> extends JpaActionSu
 
 	@SuppressWarnings("unchecked")
 	protected void preBind() {
-		String[] idValues = uriStrategy.getEntityPrimaryKeyValues(this);
-		if (idValues != null && idValues.length > 0) {
-			ownerId = ownerInfo.convertToPrimaryKeyValkue(idValues[0]);
+		String idValue = uriStrategy.getOwnerPrimaryKeyValue(this);
+		if (idValue != null) {
+			ownerId = ownerInfo.convertToPrimaryKeyValkue(idValue);
+		}
+		entityIds = new HashSet();
+		String[] values = uriStrategy.getEntityPrimaryKeyValues(this);
+		if (values != null) {
+			for (String value : values) {
+				if (value != null) {
+					Object entityId = ownerInfo.convertToPrimaryKeyValkue(value);
+					entityIds.add(entityId);
+				}
+			}
 		}
 	}
 
@@ -193,8 +218,14 @@ public abstract class JpaEntityCollectionActionSupport<O, E> extends JpaActionSu
 	 * Looks up the owner by primary key
 	 */
 	protected O findOwnerByPrimaryKey() {
-		log.info("Loading primaryKey Value: " + ownerId + " of type: " + ownerId.getClass());
 		return getJpaTemplate().find(ownerClass, ownerId);
+	}
+
+	/**
+	 * Looks up an entity by primary key
+	 */
+	protected E findEntityByPrimaryKey(Object entityId) {
+		return getJpaTemplate().find(entityClass, entityId);
 	}
 
 	/**

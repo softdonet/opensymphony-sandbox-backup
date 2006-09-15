@@ -16,32 +16,13 @@
  */
 package com.opensymphony.able.jaxb;
 
-import java.io.OutputStream;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
 /**
+ * Represents a simple closure or callback object.
  * 
  * version $Revision: 1 $
  */
-public class JaxbTemplate {
+public interface Closure {
 
-	private Class[] types;
+	void call(Object values);
 
-	public JaxbTemplate(Class[] types) {
-		this.types = types;
-	}
-
-	public JaxbTemplate(Class entityType) {
-		this( new Class[] {entityType });
-	}
-
-	public void write(OutputStream out, Object value) throws JAXBException {
-		JAXBContext context = JAXBContext.newInstance(types);
-		Marshaller marshaller = context.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		marshaller.marshal(value, out);
-	}
 }

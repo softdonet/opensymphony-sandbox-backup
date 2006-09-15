@@ -33,6 +33,7 @@ import com.opensymphony.able.model.Component;
 import com.opensymphony.able.model.Person;
 import com.opensymphony.able.model.Priority;
 import com.opensymphony.able.model.Status;
+import com.opensymphony.able.model.Team;
 import com.opensymphony.able.model.User;
 
 /**
@@ -185,5 +186,18 @@ public class LoadDatabaseService implements InitializingBean {
 		bug.setComponent(component2);
 		bug.setOwner(person5);
 		persist(bug);
+		
+		Team team = new Team();
+		team.setName("Stripes");
+		team.getMembers().add(person0);
+		team.getMembers().add(person1);
+		persist(team);
+		
+		team = new Team();
+		team.setName("Able");
+		team.getMembers().add(person3);
+		team.getMembers().add(person5);
+		persist(team);
+		
 	}
 }

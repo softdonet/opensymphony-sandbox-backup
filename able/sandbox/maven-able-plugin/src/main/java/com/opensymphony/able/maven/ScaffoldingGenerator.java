@@ -66,8 +66,15 @@ public class ScaffoldingGenerator {
 			getLog().warn("No entities found!");
 			return;
 		}
+		boolean first = true;
 		for (Entry<String, EntityInfo> entry : entrySet) {
-			generate(entry.getKey(), entry.getValue());
+			EntityInfo entity = entry.getValue();
+			generate(entry.getKey(), entity);
+
+			if (first) {
+				first = false;
+				generateJaxbEnvelope(entity);
+			}
 		}
 	}
 
@@ -112,11 +119,20 @@ public class ScaffoldingGenerator {
 
 	// Implementation methods
 	// -------------------------------------------------------------------------
+	protected void generateJaxbEnvelope(EntityInfo entity) throws MojoExecutionException {
+		String packageName = getEntityPackageName(entity);
+		String jaxbPackageName = packageName + ".jaxb";
+		File jaxbPackageDir = new File(javaOutputDirectory.getAbsolutePath() + "/" + jaxbPackageName.replace('.', '/'));
+		jaxbPackageDir.mkdirs();
+		VelocityContext context = new VelocityContext();
+		context.put("entities", entities.getEntities());
+		context.put("packageName", jaxbPackageName);
+		addLicense(context);
+		generateFile(jaxbPackageDir, "Envelope.java", "jaxb/Envelope.vm", context);
+	}
+
 	protected void generateFiles(EntityInfo entity) throws MojoExecutionException {
-		String packageName = entity.getEntityClass().getPackage().getName();
-		if (packageName.endsWith(".model")) {
-			packageName = packageName.substring(0, packageName.length() - ".model".length());
-		}
+		String packageName = getEntityPackageName(entity);
 		packageName += ".action";
 
 		File packageDir = new File(javaOutputDirectory.getAbsolutePath() + "/" + packageName.replace('.', '/'));
@@ -164,7 +180,7 @@ public class ScaffoldingGenerator {
 				context.put("propertyName", info.getName());
 				context.put("propertyTypeSimpleName", info.getPropertyEntityInfo().getEntityName());
 				context.put("propertyTypeQualifiedName", info.getPropertyComponentType().getName());
-				
+
 				generateFile(packageDir, controllerClassName + ".java", "controller/EmbeddedCollectionActionBean.vm", context);
 
 				// now lets create the views for this embedded collection
@@ -199,14 +215,26 @@ public class ScaffoldingGenerator {
 		}
 	}
 
+	protected String getEntityPackageName(EntityInfo entity) {
+		String packageName = entity.getEntityClass().getPackage().getName();
+		if (packageName.endsWith(".model")) {
+			packageName = packageName.substring(0, packageName.length() - ".model".length());
+		}
+		return packageName;
+	}
+
 	protected VelocityContext createVelocityContext(EntityInfo entity) {
 		VelocityContext answer = new VelocityContext();
 		answer.put("entityName", entity.getEntityName());
 		answer.put("entityInfo", entity);
 		answer.put("entityClass", entity.getEntityClass());
 		answer.put("entityUri", entity.getEntityUri());
-		answer.put("license", "/** TODO license goes here */");
+		addLicense(answer);
 		return answer;
+	}
+
+	protected void addLicense(VelocityContext answer) {
+		answer.put("license", "/** TODO license goes here */");
 	}
 
 	protected VelocityContext createVelocityContext(EntityInfo entity, PropertyInfo propertyInfo) {
