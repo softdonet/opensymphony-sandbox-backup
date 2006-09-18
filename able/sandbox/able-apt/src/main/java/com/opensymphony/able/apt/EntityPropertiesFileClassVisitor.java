@@ -16,6 +16,12 @@
  */
 package com.opensymphony.able.apt;
 
+import com.sun.mirror.apt.AnnotationProcessorEnvironment;
+import com.sun.mirror.apt.Filer.Location;
+import com.sun.mirror.declaration.ClassDeclaration;
+import com.sun.mirror.util.SimpleDeclarationVisitor;
+
+import javax.persistence.Entity;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,145 +32,150 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Map.Entry;
-
-import javax.persistence.Entity;
-
-import com.sun.mirror.apt.AnnotationProcessorEnvironment;
-import com.sun.mirror.apt.Filer.Location;
-import com.sun.mirror.declaration.ClassDeclaration;
-import com.sun.mirror.util.SimpleDeclarationVisitor;
 
 /**
- * 
  * @version $Revision: 11 $
  */
 public class EntityPropertiesFileClassVisitor extends SimpleDeclarationVisitor {
-	private final AnnotationProcessorEnvironment env;
+    private final AnnotationProcessorEnvironment env;
 
-	private Properties entities = new Properties();
-	private Map<String, Collection<String>> packageToEntityMap = new HashMap();
+    private Properties entities = new Properties();
+    private Map<String, Collection<String>> packageToEntityMap = new HashMap();
 
-	public EntityPropertiesFileClassVisitor(
-			final AnnotationProcessorEnvironment env) {
-		this.env = env;
-	}
+    public EntityPropertiesFileClassVisitor(
+            final AnnotationProcessorEnvironment env) {
+        this.env = env;
+    }
 
-	public void visitClassDeclaration(ClassDeclaration declaration) {
-		if (matchesDeclaration(declaration)) {
-			String simpleName = declaration.getSimpleName();
-			entities.setProperty(declaration.getQualifiedName(), simpleName);
-			String packageName = declaration.getPackage().getQualifiedName();
-			Collection<String> collection = packageToEntityMap.get(packageName);
-			if (collection == null) {
-				collection = new ArrayList<String>();
-				packageToEntityMap.put(packageName, collection);
-			}
-			collection.add(simpleName);
-		}
-	}
+    public void visitClassDeclaration(ClassDeclaration declaration) {
+        if (matchesDeclaration(declaration)) {
+            String simpleName = declaration.getSimpleName();
+            entities.setProperty(declaration.getQualifiedName(), simpleName);
+            String packageName = declaration.getPackage().getQualifiedName();
+            Collection<String> collection = packageToEntityMap.get(packageName);
+            if (collection == null) {
+                collection = new ArrayList<String>();
+                packageToEntityMap.put(packageName, collection);
+            }
+            collection.add(simpleName);
+        }
+    }
 
-	protected boolean matchesDeclaration(ClassDeclaration declaration) {
-		Entity annotation = declaration.getAnnotation(Entity.class);
-		return annotation != null;
-	}
+    protected boolean matchesDeclaration(ClassDeclaration declaration) {
+        Entity annotation = declaration.getAnnotation(Entity.class);
+        return annotation != null;
+    }
 
-	public void writeFile(AbleAnnotationProcessor processor) {
+    public void writeFile(AbleAnnotationProcessor processor) {
         writeEntityPropertiesFile(processor);
-	    //writeEntityPropertiesFileIncludingOldContents(processor);
-		writeJaxbFile(processor);
-	}
+        writeEntityPropertiesFileIncludingOldContents(processor);
+        writeJaxbFile(processor);
+    }
 
-	public void writeEntityPropertiesFileIncludingOldContents(AbleAnnotationProcessor processor) {
-	    OutputStream out = null;
-	    try {
-	        out = env.getFiler().createBinaryFile(Location.CLASS_TREE, "",
-	                new File("META-INF/services/able/entities.properties"));
-	    } catch (Exception e) {
-	        throw new RuntimeException("Failed to create file: " + e, e);
-	    }
-	    Properties oldProperties = new Properties();
-	    try {
-	        oldProperties.load(new FileInputStream("target/classes/META-INF/services/able/entities.properties"));
-	    }
-	    catch (FileNotFoundException e1) {
-	        // ignore
-	    }
-	    catch (IOException e) {
-	        System.out.println("Failed to load old entities.properties file: " + e);
-	    }
-	    try {
+    public void writeEntityPropertiesFileIncludingOldContents(AbleAnnotationProcessor processor) {
+        OutputStream out = null;
+        try {
+            out = env.getFiler().createBinaryFile(Location.CLASS_TREE, "",
+                    new File("META-INF/services/able/entities.properties"));
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to create file: " + e, e);
+        }
+        Properties oldProperties = new Properties();
+        try {
+            File file = new File("target/classes/META-INF/services/able/entities.properties");
+            if (file.exists()) {
+                oldProperties.load(new FileInputStream(file));
+            }
+        }
+        catch (FileNotFoundException e1) {
+            // ignore
+        }
+        catch (IOException e) {
+            System.out.println("Failed to load old entities.properties file: " + e);
+        }
+        try {
             oldProperties.putAll(entities);
             oldProperties.store(out, "All JPA Entity Beans auto-generated by Able");
-	    } catch (IOException e) {
-	        throw new RuntimeException(
-	                "Failed to write entity properties file: " + e, e);
-	    } finally {
-	        if (out != null) {
-	            try {
-	                out.close();
-	            } catch (IOException e) {
-	                // ignore
-	            }
-	        }
-	    }
-	}
-	
-	public void writeEntityPropertiesFile(AbleAnnotationProcessor processor) {
-		OutputStream out = null;
-		try {
-			out = env.getFiler().createBinaryFile(Location.CLASS_TREE, "",
-					new File("META-INF/services/able/entities.properties"));
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to create file: " + e, e);
-		}
-		try {
-			entities.store(out, "Changed JPA Entity Beans auto-generated by Able");
-		} catch (IOException e) {
-			throw new RuntimeException(
-					"Failed to write entity properties file: " + e, e);
-		} finally {
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-					// ignore
-				}
-			}
-		}
-	}
+        }
+        catch (IOException e) {
+            throw new RuntimeException(
+                    "Failed to write entity properties file: " + e, e);
+        }
+        finally {
+            if (out != null) {
+                try {
+                    out.close();
+                }
+                catch (IOException e) {
+                    // ignore
+                }
+            }
+        }
+    }
 
-	public void writeJaxbFile(AbleAnnotationProcessor processor) {
-		Set<Entry<String, Collection<String>>> entrySet = packageToEntityMap
-				.entrySet();
-		for (Entry<String, Collection<String>> entry : entrySet) {
-			writeJaxbFile(processor, entry.getKey(), entry.getValue());
-		}
+    public void writeEntityPropertiesFile(AbleAnnotationProcessor processor) {
+        OutputStream out = null;
+        try {
+            out = env.getFiler().createBinaryFile(Location.CLASS_TREE, "",
+                    new File("META-INF/services/able/changedEntities.properties"));
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to create file: " + e, e);
+        }
+        try {
+            entities.store(out, "Changed JPA Entity Beans auto-generated by Able");
+        }
+        catch (IOException e) {
+            throw new RuntimeException(
+                    "Failed to write entity properties file: " + e, e);
+        }
+        finally {
+            if (out != null) {
+                try {
+                    out.close();
+                }
+                catch (IOException e) {
+                    // ignore
+                }
+            }
+        }
+    }
 
-	}
+    public void writeJaxbFile(AbleAnnotationProcessor processor) {
+        Set<Entry<String, Collection<String>>> entrySet = packageToEntityMap
+                .entrySet();
+        for (Entry<String, Collection<String>> entry : entrySet) {
+            writeJaxbFile(processor, entry.getKey(), entry.getValue());
+        }
 
-	public void writeJaxbFile(AbleAnnotationProcessor processor,
-			String packageName, Collection<String> names) {
-		PrintWriter out = null;
-		try {
-			String name = packageName + "/jaxb.index";
-			System.out.println("Creating source file: " + name);
-			out = env.getFiler().createTextFile(Location.CLASS_TREE, "",
-					new File(packageName.replace('.', '/') + "/jaxb.index"),
-					"UTF8");
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to create file: " + e, e);
-		}
-		try {
-			for (String name : names) {
-				out.println(name);
-			}
-		} finally {
-			if (out != null) {
-				out.close();
-			}
-		}
-	}
+    }
+
+    public void writeJaxbFile(AbleAnnotationProcessor processor,
+                              String packageName, Collection<String> names) {
+        PrintWriter out = null;
+        try {
+            String name = packageName + "/jaxb.index";
+            System.out.println("Creating source file: " + name);
+            out = env.getFiler().createTextFile(Location.CLASS_TREE, "",
+                    new File(packageName.replace('.', '/') + "/jaxb.index"),
+                    "UTF8");
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to create file: " + e, e);
+        }
+        try {
+            for (String name : names) {
+                out.println(name);
+            }
+        }
+        finally {
+            if (out != null) {
+                out.close();
+            }
+        }
+    }
 }
