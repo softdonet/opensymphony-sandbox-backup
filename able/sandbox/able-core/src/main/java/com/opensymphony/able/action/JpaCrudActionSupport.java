@@ -28,6 +28,7 @@ import net.sourceforge.stripes.action.DontValidate;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
+import net.sourceforge.stripes.integration.spring.SpringBean;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.orm.jpa.JpaTemplate;
@@ -61,6 +62,9 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport implement
     private UriStrategy uriStrategy = new UriStrategy();
     private int bulkEditCount = 5;
     private Validator validator = new HibernateValidator();
+    private String query;
+    @SpringBean
+    private QueryStrategy queryStrategy;
 
     public JpaCrudActionSupport() {
         init();
@@ -69,6 +73,11 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport implement
     protected JpaCrudActionSupport(JpaTemplate jpaTemplate) {
         super(jpaTemplate);
         init();
+    }
+
+    protected JpaCrudActionSupport(JpaTemplate jpaTemplate, QueryStrategy queryStrategy) {
+        this(jpaTemplate);
+        this.queryStrategy = queryStrategy;
     }
 
     private void init() {
@@ -121,6 +130,10 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport implement
             shouldCommit();
             return new RedirectResolution(entityInfo.getHomeUri());
         }
+        return getContext().getSourcePageResolution();
+    }
+
+    public Resolution search() {
         return getContext().getSourcePageResolution();
     }
 
@@ -204,6 +217,14 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport implement
 
     @SuppressWarnings("unchecked")
     public List<E> getAllEntities() {
+        if (query != null) {
+            if (queryStrategy == null) {
+                throw new IllegalArgumentException("No QueryStrategy was injected!");
+            }
+            List answer = queryStrategy.execute(entityClass, query);
+            log.info("Query with: " + query + " found: " + answer);
+            return answer;
+        }
         return query(getAllElementsQuery());
     }
 
@@ -234,6 +255,23 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport implement
             }
         };
     }
+
+
+    /**
+     * @return the text query being used
+     */
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
+    public QueryStrategy getQueryStrategy() {
+        return queryStrategy;
+    }
+
 
     // Implementation methods
     // -------------------------------------------------------------------------
@@ -360,4 +398,5 @@ public abstract class JpaCrudActionSupport<E> extends JpaActionSupport implement
 
         property.setValue(entity, relatedEntity);
     }
+
 }

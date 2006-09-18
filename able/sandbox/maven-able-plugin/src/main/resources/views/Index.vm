@@ -9,6 +9,10 @@
 
   <stripes:errors />
 
+  <p>
+  Search: <stripes:text name="query"/> <stripes:submit name="search" value="Go" />
+  </p>
+
   <table id="entities" class="display sortable autostripe">
    <thead>
     <tr>

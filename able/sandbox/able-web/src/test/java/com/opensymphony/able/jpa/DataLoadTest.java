@@ -36,8 +36,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.testng.Assert;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -88,6 +87,7 @@ public class DataLoadTest extends SpringTestSupport {
 
     protected Object assertDataPresent(ApplicationContext context) {
         assertCompassQueryWorks(context);
+        assertActionBeanQueryWorks(context);
         return assertJaxbMarshallingWorks(context);
     }
 
@@ -122,6 +122,17 @@ public class DataLoadTest extends SpringTestSupport {
         System.out.println("Found user: " + answer);
 
         assertNotNull(answer, "Should have found a user!");
+    }
+
+    protected void assertActionBeanQueryWorks(ApplicationContext context) {
+        UserActionBean action = new UserActionBean();
+        action.setQuery("James");
+        SpringHelper.injectBeans(action, context);
+
+        List<User> allEntities = action.getAllEntities();
+        System.out.println("Found users: " + allEntities);
+
+        assertEquals(allEntities.size(), 1, "Search results: " + allEntities);
     }
 
     protected Object assertJaxbMarshallingWorks(ApplicationContext context) {

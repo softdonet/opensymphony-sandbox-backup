@@ -36,7 +36,7 @@
   <bean id="compass" class="org.compass.spring.LocalCompassBean">
     <property name="resourceLocations">
       <list>
-        <value>classpath:com/opensymphony/able/compass/user.cmd.xml</value>
+        <value>classpath:com/opensymphony/able/model/user.cmd.xml</value>
         <value>classpath:user.cpm.xml</value>
       </list>
     </property>
@@ -70,4 +70,6 @@
       </list>
     </property>
   </bean>
+
+  <bean id="queryStrategy" class="com.opensymphony.able.compass.CompassQueryStrategy" autowire="constructor"/>
 </beans>

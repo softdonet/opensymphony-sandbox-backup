@@ -16,18 +16,6 @@
  */
 package com.opensymphony.able.service;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
-
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.orm.jpa.JpaCallback;
-import org.springframework.orm.jpa.JpaTemplate;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
-
 import com.opensymphony.able.model.Bug;
 import com.opensymphony.able.model.Component;
 import com.opensymphony.able.model.Person;
@@ -35,6 +23,17 @@ import com.opensymphony.able.model.Priority;
 import com.opensymphony.able.model.Status;
 import com.opensymphony.able.model.Team;
 import com.opensymphony.able.model.User;
+import org.compass.core.CompassTemplate;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.orm.jpa.JpaCallback;
+import org.springframework.orm.jpa.JpaTemplate;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
+import java.util.Date;
 
 /**
  * TODO replace with an XML based alternative
@@ -45,13 +44,15 @@ public class LoadDatabaseService implements InitializingBean {
 
 	private JpaTemplate jpaTemplate;
 	private final TransactionTemplate transactionTemplate;
-	private EntityManager entityManager;
+    private CompassTemplate compassTemplate; // only done to force Compass to be initialised
+    private EntityManager entityManager;
 
 	public LoadDatabaseService(JpaTemplate jpaTemplate,
-			TransactionTemplate transactionTemplate) {
+			TransactionTemplate transactionTemplate, CompassTemplate compassTemplate) {
 		this.jpaTemplate = jpaTemplate;
 		this.transactionTemplate = transactionTemplate;
-	}
+        this.compassTemplate = compassTemplate;
+    }
 
 	public void afterPropertiesSet() throws Exception {
 		transactionTemplate.execute(new TransactionCallback() {
