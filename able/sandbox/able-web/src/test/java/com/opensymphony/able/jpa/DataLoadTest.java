@@ -36,8 +36,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.testng.Assert;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -100,12 +100,24 @@ public class DataLoadTest extends SpringTestSupport {
             public Object doInCompass(CompassSession session) {
                 CompassHits hits = session.find("James");
                 int count = hits.length();
-                assertTrue(count > 0, "Did not find any hits!!");
-                Resource resource = hits.resource(0);
-                String id = resource.getId();
-                return session.load(type, id);
+                Object answer = null;
+                for (int i = 0; i < count; i++) {
+                    Resource resource = hits.resource(i);
+                    String id = resource.getId();
+                    Object value = session.load(type, id);
+
+                    System.out.println("Result: " + i + " id: " + id + " value: " + value);
+
+                    if (i == 0) {
+                        answer = value;
+                    }
+                }
+                assertEquals(count, 1, "Number of hits");
+                return answer;
             }
         });
+        System.out.println("Found user: " + answer);
+        
         assertNotNull(answer, "Should have found a user!");
     }
 

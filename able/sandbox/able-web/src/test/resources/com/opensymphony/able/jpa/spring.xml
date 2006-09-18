@@ -40,7 +40,8 @@
     <property name="transactionManager" ref="transactionManager"/>
   </bean>
 
-  <bean id="jpaGpsDevice" class="org.compass.gps.device.jpa.JpaGpsDevice">
+  <!--<bean id="jpaGpsDevice" class="org.compass.gps.device.jpa.JpaGpsDevice">-->
+  <bean id="jpaGpsDevice" class="com.opensymphony.able.compass.AbleJpaGpsDevice">
     <constructor-arg index="0" value="default"/>
     <constructor-arg index="1" ref="entityManagerFactory"/>
     <property name="injectEntityLifecycleListener" value="true"/>
@@ -56,6 +57,6 @@
           <property name="name" value="default"/>
         </bean>
       </list>
-    </property>
+    </property>                                                                                               
   </bean>
 </beans>
