@@ -24,12 +24,20 @@ import com.opensymphony.able.service.LoadDatabaseService;
 import net.sourceforge.stripes.integration.spring.SpringHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.compass.core.Compass;
+import org.compass.core.CompassCallback;
+import org.compass.core.CompassHits;
+import org.compass.core.CompassSession;
+import org.compass.core.CompassTemplate;
+import org.compass.core.Resource;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.jpa.JpaTemplate;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.testng.Assert;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -44,7 +52,9 @@ import java.util.List;
 public class DataLoadTest extends SpringTestSupport {
 	private static final Log log = LogFactory.getLog(DataLoadTest.class);
 
-	@DataProvider(name = "springUriWithEntityManager")
+    protected Compass compass;
+
+    @DataProvider(name = "springUriWithEntityManager")
 	public String[][] getSpringFiles() {
 		return new String[][] { { "spring.xml" } };
 	};
@@ -53,8 +63,13 @@ public class DataLoadTest extends SpringTestSupport {
 	public void testLoadOfSomeData(String classpathUri) throws Exception {
 		final ApplicationContext context = loadContext(classpathUri);
 
+        // force load of the Compass Gps
+        getMandatoryBean(context, "jpaGps");
+
 		JpaTemplate jpaTemplate = (JpaTemplate) getMandatoryBean(context, "jpaTemplate");
-		TransactionTemplate txnTemplate = (TransactionTemplate) getMandatoryBean(context, "transactionTemplate");
+        compass = (Compass) getMandatoryBean(context, "compass");
+
+        TransactionTemplate txnTemplate = (TransactionTemplate) getMandatoryBean(context, "transactionTemplate");
 
 		LoadDatabaseService loadService = new LoadDatabaseService(jpaTemplate, txnTemplate);
 		loadService.afterPropertiesSet();
@@ -69,39 +84,64 @@ public class DataLoadTest extends SpringTestSupport {
 		}
 	}
 
-	protected Object assertDataPresent(ApplicationContext context) {
-		UserActionBean action = new UserActionBean();
-		SpringHelper.injectBeans(action, context);
 
-		List<User> allEntities = action.getAllEntities();
-		System.out.println("Found users: " + allEntities);
 
-		Envelope envelope = new Envelope();
-		envelope.setUserList(allEntities);
-
-		Assert.assertTrue(allEntities.size() > 1, "Should have some users in the database now!");
-
-		JaxbTemplate template = new JaxbTemplate(new Class[] { Envelope.class, User.class });
-		File dir = new File("target/data");
-		dir.mkdirs();
-		FileOutputStream out = null;
-		try {
-			File file = new File(dir, "users.xml");
-			System.out.println("Writing file: " + file);
-			log.info("file: " + file);
-			out = new FileOutputStream(file);
-			template.write(out, envelope);
-			return null;
-		} catch (Exception e) {
-			log.error(e);
-			return e;
-		} finally {
-			try {
-				out.close();
-			} catch (Exception e) {
-				log.error("Failed to close file: " + e, e);
-			}
-		}
+    protected Object assertDataPresent(ApplicationContext context) {
+        assertCompassQueryWorks(context);
+        return assertJaxbMarshallingWorks(context);
 	}
+
+    protected void assertCompassQueryWorks(ApplicationContext context) {
+        CompassTemplate template = new CompassTemplate(compass);
+
+        final Class type = User.class;
+
+        User answer = (User) template.execute(new CompassCallback() {
+            public Object doInCompass(CompassSession session) {
+                CompassHits hits = session.find("James");
+                int count = hits.length();
+                assertTrue(count > 0, "Did not find any hits!!");
+                Resource resource = hits.resource(0);
+                String id = resource.getId();
+                return session.load(type, id);
+            }
+        });
+        assertNotNull(answer, "Should have found a user!");
+    }
+
+    protected Object assertJaxbMarshallingWorks(ApplicationContext context) {
+        UserActionBean action = new UserActionBean();
+        SpringHelper.injectBeans(action, context);
+
+        List<User> allEntities = action.getAllEntities();
+        System.out.println("Found users: " + allEntities);
+
+        Envelope envelope = new Envelope();
+        envelope.setUserList(allEntities);
+
+        Assert.assertTrue(allEntities.size() > 1, "Should have some users in the database now!");
+
+        JaxbTemplate template = new JaxbTemplate(new Class[] { Envelope.class, User.class });
+        File dir = new File("target/data");
+        dir.mkdirs();
+        FileOutputStream out = null;
+        try {
+            File file = new File(dir, "users.xml");
+            System.out.println("Writing file: " + file);
+            log.info("file: " + file);
+            out = new FileOutputStream(file);
+            template.write(out, envelope);
+            return null;
+        } catch (Exception e) {
+            log.error(e);
+            return e;
+        } finally {
+            try {
+                out.close();
+            } catch (Exception e) {
+                log.error("Failed to close file: " + e, e);
+            }
+        }
+    }
 
 }
