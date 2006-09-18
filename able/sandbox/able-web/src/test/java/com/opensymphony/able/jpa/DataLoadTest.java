@@ -71,7 +71,7 @@ public class DataLoadTest extends SpringTestSupport {
 
         TransactionTemplate txnTemplate = (TransactionTemplate) getMandatoryBean(context, "transactionTemplate");
 
-        LoadDatabaseService loadService = new LoadDatabaseService(jpaTemplate, txnTemplate);
+        LoadDatabaseService loadService = new LoadDatabaseService(jpaTemplate, txnTemplate, new CompassTemplate(compass));
         loadService.afterPropertiesSet();
 
         Exception e = (Exception) txnTemplate.execute(new TransactionCallback() {
