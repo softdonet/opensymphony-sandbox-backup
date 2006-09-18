@@ -40,6 +40,15 @@
         <enabled>true</enabled>
       </releases>
     </pluginRepository>
+    
+    <!-- temporary hack to download the maven-surefire-plugin in the root pom -->
+    <pluginRepository>
+      <id>project-repo-hack</id>
+      <url>file:${basedir}/maven-repo</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
   </pluginRepositories>
 
   <build>
