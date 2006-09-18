@@ -23,7 +23,7 @@
     <repository>
       <id>project-repo</id>
       <name>project repo</name>
-      <url>file:${basedir}/${topDirectoryLocation}/maven-repo</url>
+      <url>file:${basedir}/../maven-repo</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -35,7 +35,7 @@
   <pluginRepositories>
     <pluginRepository>
       <id>project-repo</id>
-      <url>file:${basedir}/${topDirectoryLocation}/maven-repo</url>
+      <url>file:${basedir}/../maven-repo</url>
       <releases>
         <enabled>true</enabled>
       </releases>

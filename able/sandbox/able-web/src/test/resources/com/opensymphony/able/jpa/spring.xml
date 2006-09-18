@@ -24,6 +24,15 @@
 
 
   <!-- Compass -->
+<!--
+  <bean id="compassDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+    <property name="url" value="jdbc:hsqldb:mem:able-compass"/>
+    <property name="username" value="sa"/>
+    <property name="password" value=""/>
+  </bean>
+-->
+
   <bean id="compass" class="org.compass.spring.LocalCompassBean">
     <property name="resourceLocations">
       <list>
@@ -31,8 +40,10 @@
         <value>classpath:user.cpm.xml</value>
       </list>
     </property>
+    <!--<property name="dataSource" ref="compassDataSource"/>-->
     <property name="compassSettings">
       <props>
+        <!--<prop key="compass.engine.connection">jdbc://jdbc:hsqldb:mem:able-compass</prop>-->
         <prop key="compass.engine.connection">file://target/testindex</prop>
         <prop key="compass.transaction.factory">org.compass.spring.transaction.SpringSyncTransactionFactory</prop>
       </props>
@@ -57,6 +68,6 @@
           <property name="name" value="default"/>
         </bean>
       </list>
-    </property>                                                                                               
+    </property>
   </bean>
 </beans>

@@ -127,6 +127,13 @@
       <artifactId>activation</artifactId>
       <version>1.1</version>
     </dependency>
+
+    <dependency>
+      <groupId>opensymphony.compass</groupId>
+      <artifactId>compass</artifactId>
+      <version>1.1M2-SNAPSHOT</version>
+    </dependency>
+
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
