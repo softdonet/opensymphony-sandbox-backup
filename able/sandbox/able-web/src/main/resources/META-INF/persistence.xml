@@ -11,33 +11,6 @@
     <class>com.opensymphony.able.model.Build</class>
     <class>com.opensymphony.able.model.User</class>
 
-    <properties>
-
-      <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
-      <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver" />
-      <property name="hibernate.connection.username" value="sa" />
-      <property name="hibernate.connection.password" value="" />
-      <property name="hibernate.connection.url" value="jdbc:hsqldb:mem:able-sample" />
-      <!-- 
-      <property name="hibernate.connection.url" value="jdbc:hsqldb:file:target/able-db" />
-       -->
-      <property name="hibernate.hbm2ddl.auto" value="create-drop" />
-      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider" />
-
-      <!--
-        <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-        <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-        <property name="hibernate.connection.url" value="jdbc:mysql://localhost/able"/>
-      -->
-
-      <!-- 
-        <property name="hibernate.dialect" value="org.hibernate.dialect.SybaseAnywhereDialect" />
-        <property name="hibernate.connection.driver_class" value="com.sybase.jdbc2.jdbc.SybDriver" />
-        <property name="hibernate.connection.url" value="jdbc:sybase:Tds:localhost:2638?ServiceName=able" />
-      -->
-
-    </properties>
-
   </persistence-unit>
 
 </persistence>

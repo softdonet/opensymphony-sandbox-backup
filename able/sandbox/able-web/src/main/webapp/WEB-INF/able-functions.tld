@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+
+    <description>Able Functions</description>
+    <display-name>Able Functions</display-name>
+    <tlib-version>1.1</tlib-version>
+    <short-name>af</short-name>
+
+    <function>
+        <name>contains</name>
+        <function-class>com.opensymphony.able.util.jsp.Functions</function-class>
+        <function-signature>boolean contains(java.lang.Object, java.lang.Object)</function-signature>
+    </function>
+    <function>
+        <name>isEmpty</name>
+        <function-class>com.opensymphony.able.util.jsp.Functions</function-class>
+        <function-signature>boolean isEmpty(java.lang.Object)</function-signature>
+    </function>
+    <function>
+        <name>extractFormName</name>
+        <function-class>com.opensymphony.able.util.jsp.Functions</function-class>
+        <function-signature>java.lang.String extractFormName(java.lang.String, java.lang.String)</function-signature>
+    </function>
+</taglib>

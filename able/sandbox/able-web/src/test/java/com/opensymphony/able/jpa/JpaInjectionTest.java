@@ -42,7 +42,7 @@ public class JpaInjectionTest extends SpringTestSupport {
         return new String[][] { { "spring.xml" } };
     };
 
-    @Test(dataProvider = "springUriWithEntityManager")
+    @Test(dataProvider = "springUriWithEntityManager", enabled = false)
     public void testInjectionOfActionBeans(String classpathUri) throws Exception {
         ApplicationContext context = loadContext(classpathUri);
 

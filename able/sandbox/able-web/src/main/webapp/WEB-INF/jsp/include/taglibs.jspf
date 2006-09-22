@@ -1,0 +1,19 @@
+<%@
+        taglib prefix="a" tagdir="/WEB-INF/tags"
+        %><%@
+        taglib prefix="af" uri="/able-functions"
+        %><%@
+        taglib prefix="s" uri="http://stripes.sourceforge.net/stripes.tld"
+        %><%@
+        taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld"
+        %><%@
+        taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"
+        %><%@
+        taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"
+        %><%@
+        taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"
+        %><%@
+        taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator"
+        %><%@
+        taglib prefix="page" uri="http://www.opensymphony.com/sitemesh/page"
+        %>

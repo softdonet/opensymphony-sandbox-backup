@@ -6,7 +6,6 @@ import org.hibernate.validator.NotNull;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Date;
 
 /**
  * @author Nicholas Hill <a
@@ -20,8 +19,6 @@ public class User {
     private String email;
     private String name;
     private String passwordHash;
-    private Date creationDate;
-    private Date updateDate;
 
     public User() {
     }
@@ -31,7 +28,6 @@ public class User {
         this.email = email;
         this.name = name;
         this.passwordHash = passwordHash;
-        this.creationDate = new Date();
     }
 
     public boolean equals(Object o) {
@@ -48,8 +44,8 @@ public class User {
     public int hashCode() {
         return (int) (id ^ (id >>> 32));
     }
-    
-    
+
+
     @Override
     public String toString() {
         return "User[id=" + id + ", username=" + username + ", name=" + name + "]";
@@ -98,21 +94,4 @@ public class User {
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
     }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
 }

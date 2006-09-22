@@ -1,79 +1,20 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:aop="http://www.springframework.org/schema/aop"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
-  default-autowire="byType">
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-autowire="byType">
 
- <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean" singleton="true">
-    <!-- 
-      <property name="persistenceUnitName" value="default" />
-    -->
-  </bean>
-
-  <bean id="jpaTemplate" class="org.springframework.orm.jpa.JpaTemplate" singleton="false" depends-on="compass">
-    <property name="entityManagerFactory" ref="entityManagerFactory" />
-    <property name="exposeNativeEntityManager" value="true" />
-  </bean>
-
-  <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" singleton="true">
-    <property name="entityManagerFactory" ref="entityManagerFactory" />
-  </bean>
-
-  <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate" singleton="false">
-    <property name="transactionManager" ref="transactionManager" />
-  </bean>
-    
-  <!-- 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-    <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
-    <property name="url" value="jdbc:hsqldb:mem:able-sample"/>
-    <property name="username" value="sa"/>
-    <property name="password" value=""/>
+        <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+        <property name="url" value="jdbc:hsqldb:mem:able"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
     </bean>
-  -->
 
-  <bean id="loadDatabaseService" class="com.opensymphony.able.service.LoadDatabaseService" autowire="constructor" singleton="true" depends-on="jpaGps"/>
+    <bean id="bootstrap" class="com.opensymphony.able.service.BootstrapService" lazy-init="false"
+          init-method="init" destroy-method="dispose" autowire="no">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="seed" value="true"/>
+    </bean>
 
-  <bean id="mailService" class="com.opensymphony.able.mail.MockMailService" singleton="true"/>
-
-
-
-  <!-- Compass -->
-  <bean id="compassTemplate" class="org.compass.core.CompassTemplate" autowire="constructor"/>
-  
-  <bean id="compass" class="org.compass.spring.LocalCompassBean">
-    <property name="resourceLocations">
-      <list>
-        <value>classpath:com/opensymphony/able/model/user.cmd.xml</value>
-        <value>classpath:user.cpm.xml</value>
-      </list>
-    </property>
-    <property name="compassSettings">
-      <props>
-        <prop key="compass.engine.connection">file://target/testindex</prop>
-        <prop key="compass.transaction.factory">org.compass.spring.transaction.SpringSyncTransactionFactory</prop>
-      </props>
-    </property>
-    <property name="transactionManager" ref="transactionManager"/>
-  </bean>
-
-  <bean id="jpaGpsDevice" class="com.opensymphony.able.compass.AbleJpaGpsDevice">
-    <constructor-arg index="0" value="default"/>
-    <constructor-arg index="1" ref="entityManagerFactory"/>
-    <property name="injectEntityLifecycleListener" value="true"/>
-    <property name="mirrorDataChanges" value="true"/>
-  </bean>
-
-  <bean id="jpaGps" class="org.compass.gps.impl.SingleCompassGps" init-method="start" destroy-method="stop">
-    <property name="compass" ref="compass"/>
-    <property name="gpsDevices">
-      <list>
-        <bean class="org.compass.spring.device.SpringSyncTransactionGpsDeviceWrapper">
-          <property name="gpsDevice" ref="jpaGpsDevice"/>
-          <property name="name" value="default"/>
-        </bean>
-      </list>
-    </property>
-  </bean>
-
-  <bean id="queryStrategy" class="com.opensymphony.able.compass.CompassQueryStrategy" autowire="constructor"/>
+    <bean id="mailService" class="com.opensymphony.able.mail.MockMailService"/>
 </beans>
