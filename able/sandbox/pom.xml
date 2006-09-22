@@ -1,70 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0	http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0	http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.opensymphony.able</groupId>
-  <artifactId>able-parent</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <name>Able Parent Project</name>
+    <groupId>com.opensymphony.able</groupId>
+    <artifactId>able-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>Able Parent Project</name>
 
-  <packaging>pom</packaging>
-  <modules>
-    <!-- 
-      <module>maven-apt-plugin</module>
-    -->
-    <module>able-apt</module>
-    <module>able-core</module>
-    <module>maven-able-plugin</module>
-    <module>able-web</module>
-  </modules>
+    <packaging>pom</packaging>
+    <modules>
+        <!--
+          <module>maven-apt-plugin</module>
+        -->
+        <module>able-apt</module>
+        <module>maven-able-plugin</module>
+        <module>able-web</module>
+    </modules>
 
-  <repositories>
-    <repository>
-      <id>project-repo</id>
-      <name>project repo</name>
-      <url>file:${basedir}/../maven-repo</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>project-repo</id>
-      <url>file:${basedir}/../maven-repo</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
-    
-    <!-- temporary hack to download the maven-surefire-plugin in the root pom -->
-    <pluginRepository>
-      <id>project-repo-hack</id>
-      <url>file:${basedir}/maven-repo</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
-  </pluginRepositories>
+    <repositories>
+        <repository>
+            <id>project-repo</id>
+            <name>project repo</name>
+            <url>file:${basedir}/../maven-repo</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>project-repo</id>
+            <url>file:${basedir}/../maven-repo</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.3-SNAPSHOT</version>
-        <configuration>
-          <forkMode>once</forkMode>
-          <redirectTestOutputToFile>true</redirectTestOutputToFile>
-          <printSummary>true</printSummary>
-          <useFile>true</useFile>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+        <!-- temporary hack to download the maven-surefire-plugin in the root pom -->
+        <pluginRepository>
+            <id>project-repo-hack</id>
+            <url>file:${basedir}/maven-repo</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.3-SNAPSHOT</version>
+                <configuration>
+                    <forkMode>once</forkMode>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <printSummary>true</printSummary>
+                    <useFile>true</useFile>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
 

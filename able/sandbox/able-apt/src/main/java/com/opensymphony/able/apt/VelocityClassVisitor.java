@@ -16,7 +16,6 @@
  */
 package com.opensymphony.able.apt;
 
-import com.opensymphony.able.entity.*;
 import com.sun.mirror.apt.AnnotationProcessorEnvironment;
 import com.sun.mirror.declaration.ClassDeclaration;
 import com.sun.mirror.util.SimpleDeclarationVisitor;

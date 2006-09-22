@@ -1,5 +1,2 @@
 #!/bin/sh
-pushd ../able-core
-mvn install
-popd
 mvn jetty:run

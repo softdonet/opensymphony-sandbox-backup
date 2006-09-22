@@ -23,5 +23,4 @@ Other modules
 =============
 
 able-apt = an APT processing tool for processing the @Entity objects (maybe ActionBeans too)
-able-core = a core library of useful code such as mail & JPA helper classes
 	
