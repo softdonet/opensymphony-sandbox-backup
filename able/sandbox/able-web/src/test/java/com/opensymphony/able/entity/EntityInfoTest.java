@@ -43,7 +43,7 @@ import java.util.Map;
  */
 public class EntityInfoTest {
 
-    @Test
+    @Test(enabled = false)
     public void testAutoDiscoveredEntity() throws Exception {
         Map<String, EntityInfo> map = Entities.getInstance().getEntityMap();
         assertEquals(2, map.size(), "Should have one item: " + map);
