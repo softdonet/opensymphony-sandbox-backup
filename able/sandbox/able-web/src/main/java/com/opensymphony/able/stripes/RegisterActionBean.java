@@ -1,9 +1,12 @@
 package com.opensymphony.able.stripes;
 
-import com.opensymphony.able.model.User;
-import com.opensymphony.able.service.UserService;
 import com.opensymphony.able.filter.TransactionServletFilter;
-import net.sourceforge.stripes.action.*;
+import com.opensymphony.able.service.UserService;
+import net.sourceforge.stripes.action.DefaultHandler;
+import net.sourceforge.stripes.action.DontValidate;
+import net.sourceforge.stripes.action.ForwardResolution;
+import net.sourceforge.stripes.action.RedirectResolution;
+import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.integration.spring.SpringBean;
 import net.sourceforge.stripes.validation.Validate;
 import net.sourceforge.stripes.validation.ValidationMethod;
@@ -32,7 +35,7 @@ public class RegisterActionBean extends AbstractUserActionBean {
 
     public Resolution register() {
         user.setPasswordHash(userService.encrypt(password));
-        userService.create(user);
+        userService.insert(user);
         TransactionServletFilter.shouldCommit(getContext().getRequest());
 
         //auto login

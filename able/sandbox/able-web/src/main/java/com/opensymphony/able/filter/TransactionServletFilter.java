@@ -30,7 +30,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-
 import java.io.IOException;
 
 /**
@@ -114,6 +113,7 @@ public class TransactionServletFilter implements Filter {
             log.error("No transaction in progress!");
         }
     }
+    
     public static TransactionOutcome getTransactionOutcome(ServletRequest request) {
         return (TransactionOutcome) request.getAttribute(TRANSACTION_OUTCOME);
     }

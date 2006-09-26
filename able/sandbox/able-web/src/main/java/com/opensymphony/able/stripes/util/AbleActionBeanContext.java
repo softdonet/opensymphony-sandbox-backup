@@ -1,18 +1,18 @@
 package com.opensymphony.able.stripes.util;
 
-import com.opensymphony.able.util.Log;
 import com.opensymphony.able.model.User;
 import com.opensymphony.able.service.UserService;
+import com.opensymphony.able.util.Log;
 import net.sourceforge.stripes.action.ActionBeanContext;
-import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.RedirectResolution;
-import net.sourceforge.stripes.integration.spring.SpringHelper;
-import net.sourceforge.stripes.integration.spring.SpringBean;
+import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.controller.ActionResolver;
+import net.sourceforge.stripes.integration.spring.SpringBean;
+import net.sourceforge.stripes.integration.spring.SpringHelper;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpSession;
 
 public class AbleActionBeanContext extends ActionBeanContext {
     private static final Log log = new Log();
@@ -36,7 +36,7 @@ public class AbleActionBeanContext extends ActionBeanContext {
     public User getUser() {
         Long id = (Long) getSession().getAttribute(USER_KEY);
         if (id != null) {
-            user = userService.findUserById(id);
+            user = userService.findById(id);
         }
 
         return user;

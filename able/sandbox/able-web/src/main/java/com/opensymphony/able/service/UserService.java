@@ -3,36 +3,21 @@ package com.opensymphony.able.service;
 import com.opensymphony.able.model.User;
 import com.opensymphony.able.util.Blowfish;
 import org.springframework.orm.jpa.JpaTemplate;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-
 import sun.misc.BASE64Encoder;
 
-public class UserService extends Service {
-    protected Blowfish cipher = new Blowfish("secretkey");
-    private JpaTemplate jpaTemplate;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
-    public User findUserById(long id) {
-        return jpaTemplate.find(User.class, id);
+public class UserService extends JpaCrudService<User> {
+    protected Blowfish cipher = new Blowfish("secretkey");
+
+    public UserService(JpaTemplate jpaTemplate) {
+        super(jpaTemplate);
     }
 
     public User findByUsername(String username) {
-        return (User) jpaTemplate.find("from User u where u.username = ?", username);
-    }
-
-    public List<User> findAll() {
-        return jpaTemplate.find("from User u");
-    }
-
-    public void create(User user) {
-        jpaTemplate.persist(user);
-    }
-
-    public void update(User user) {
-        jpaTemplate.persist(user);
+        return (User) find("from User u where u.username = ?", username);
     }
 
     public boolean authenticate(String username, String password) {
@@ -92,7 +77,4 @@ public class UserService extends Service {
         return null;
     }
 
-    public void setJpaTemplate(JpaTemplate jpaTemplate) {
-        this.jpaTemplate = jpaTemplate;
-    }
 }
