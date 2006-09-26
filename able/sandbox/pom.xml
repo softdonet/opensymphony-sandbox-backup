@@ -14,7 +14,7 @@
           <module>maven-apt-plugin</module>
         -->
         <module>able-apt</module>
-        <module>maven-able-plugin</module>
+        <!--<module>maven-able-plugin</module>-->
         <module>able-web</module>
     </modules>
 
