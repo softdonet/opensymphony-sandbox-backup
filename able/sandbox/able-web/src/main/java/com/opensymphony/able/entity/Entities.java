@@ -20,18 +20,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A collection of {@link EntityInfo} instances which can be auto-discovered by
@@ -50,6 +47,14 @@ public class Entities {
 
     public static Entities getInstance() {
         return instance;
+    }
+
+    public static EntityInfo info(Object value) {
+        Class type = Object.class;
+        if (value != null) {
+            type = value.getClass();
+        }
+        return getInstance().getEntityByClass(type.getName());
     }
 
     public synchronized Map<String, EntityInfo> getEntityMap() {
