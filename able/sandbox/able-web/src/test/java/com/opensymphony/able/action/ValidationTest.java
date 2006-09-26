@@ -36,7 +36,7 @@ import java.util.Set;
  */
 public class ValidationTest {
 
-    @Test
+    @Test(enabled = false)
     public void testValidationWithoutContainer() throws Throwable {
         UserActionBean action = new UserActionBean();
 
