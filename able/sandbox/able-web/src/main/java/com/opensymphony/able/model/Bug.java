@@ -1,10 +1,10 @@
 package com.opensymphony.able.model;
 
-import com.opensymphony.able.view.EditForm;
+import com.opensymphony.able.view.DisplayEdit;
+import com.opensymphony.able.view.DisplayList;
 import com.opensymphony.able.view.Input;
 import com.opensymphony.able.view.InputType;
 import com.opensymphony.able.view.Label;
-import com.opensymphony.able.view.ViewTable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,8 +21,8 @@ import java.util.List;
  * @author Tim Fennell
  */
 @Entity
-@ViewTable(excludes = { "longDescription", "attachments" })
-@EditForm(excludes = { "id", "attachments" })
+@DisplayList(excludes = { "longDescription", "attachments" })
+@DisplayEdit(excludes = { "id", "attachments" })
 public class Bug {
     private Integer id;
     private Date openDate;

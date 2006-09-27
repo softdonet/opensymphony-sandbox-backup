@@ -24,7 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Specify the metadata for the edit table for a POJO.
+ * Specify the metadata for the view form for a POJO.
  *  
  * @version $Revision$
  */
@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 @Target( { ElementType.TYPE })
 @Inherited
 @Documented
-public @interface EditTable {
+public @interface DisplayView {
     
     /**
      * Specifies the sort order of the properties of the bean, listing the properties which come first. 

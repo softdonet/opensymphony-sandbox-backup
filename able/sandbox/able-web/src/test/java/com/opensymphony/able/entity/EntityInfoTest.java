@@ -19,10 +19,10 @@ package com.opensymphony.able.entity;
 import com.opensymphony.able.example.model.Address;
 import com.opensymphony.able.example.model.TestProject;
 import com.opensymphony.able.example.model.TestUser;
-import com.opensymphony.able.view.EditTable;
+import com.opensymphony.able.view.DisplayBulkEdit;
+import com.opensymphony.able.view.DisplayList;
 import com.opensymphony.able.view.Input;
 import com.opensymphony.able.view.ViewField;
-import com.opensymphony.able.view.ViewTable;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
@@ -116,7 +116,7 @@ public class EntityInfoTest {
         assertProperty("email", properties, 2);
         assertProperty("type", properties, 3);
 
-        List<PropertyInfo> editTableProperties = info.getEditTableProperties();
+        List<PropertyInfo> editTableProperties = info.getBulkEditProperties();
         assertProperty("username", editTableProperties, 0);
         assertProperty("type", editTableProperties, 1);
         assertExcludes(editTableProperties, "name");
@@ -127,9 +127,9 @@ public class EntityInfoTest {
     public void testEditViewsExcludeItemsExcludedFromView() throws Exception {
         EntityInfo info = new EntityInfo(TestUser.class);
 
-        assertExcludes(info.getViewFormProperties(), "creationDate");
+        assertExcludes(info.getViewProperties(), "creationDate");
 
-        List<PropertyInfo> properties = info.getEditFormProperties();
+        List<PropertyInfo> properties = info.getEditProperties();
         assertExcludes(properties, "creationDate");
     }
 
@@ -137,18 +137,18 @@ public class EntityInfoTest {
     public void testViewWithIncludesAndEditWithInheritedFilterAndExcludes() throws Exception {
         EntityInfo info = new EntityInfo(TestUserWithViewWithIncludes.class);
 
-        List<PropertyInfo> viewTableProperties = info.getViewTableProperties();
+        List<PropertyInfo> viewTableProperties = info.getListProperties();
         assertProperty("name", viewTableProperties, 0);
         assertProperty("email", viewTableProperties, 1);
         assertEquals(2, viewTableProperties.size());
 
-        List<PropertyInfo> editTableProperties = info.getEditTableProperties();
+        List<PropertyInfo> editTableProperties = info.getBulkEditProperties();
         assertEquals(editTableProperties.size(), 1, "wrong size of properties: " + editTableProperties);
         assertProperty("email", editTableProperties, 0);
     }
 
-    @ViewTable(includes = { "name", "email" })
-    @EditTable(excludes = { "name" })
+    @DisplayList(includes = { "name", "email" })
+    @DisplayBulkEdit(excludes = { "name" })
     public static class TestUserWithViewWithIncludes extends TestUser {
     }
 
@@ -156,18 +156,18 @@ public class EntityInfoTest {
     public void testEditWithOverloadedIncludes() throws Exception {
         EntityInfo info = new EntityInfo(TestUserWithOverloadedIncludes.class);
 
-        List<PropertyInfo> viewTableProperties = info.getViewTableProperties();
+        List<PropertyInfo> viewTableProperties = info.getListProperties();
         assertProperty("name", viewTableProperties, 0);
         assertProperty("email", viewTableProperties, 1);
         assertEquals(2, viewTableProperties.size());
 
-        List<PropertyInfo> editTableProperties = info.getEditTableProperties();
+        List<PropertyInfo> editTableProperties = info.getBulkEditProperties();
         assertEquals(editTableProperties.size(), 2, "wrong size of properties: " + editTableProperties);
         assertProperty("id", editTableProperties, 0);
         assertProperty("username", editTableProperties, 1);
     }
 
-    @EditTable(includes = { "id", "username" })
+    @DisplayBulkEdit(includes = { "id", "username" })
     public static class TestUserWithOverloadedIncludes extends TestUserWithViewWithIncludes {
     }
 

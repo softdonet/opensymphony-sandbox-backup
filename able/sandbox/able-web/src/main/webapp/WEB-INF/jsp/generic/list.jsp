@@ -6,52 +6,61 @@
 
 <body>
 
-<c:set var="action" value="/${actionBean.entityInfo.entityUri}"/>
-<stripes:form action="${action}">
+<stripes:form action="${actionBean.actionUri}">
 
-  <stripes:errors />
+    <stripes:errors/>
 
-  <p>
-  Search: <stripes:text name="query"/> <stripes:submit name="search" value="Go" />
-  </p>
+    <p>
+        Search:
+        <stripes:text name="query"/>
+        <stripes:submit name="search" value="Go"/>
+    </p>
 
-  <table id="entities" class="display sortable autostripe">
-   <thead>
-    <tr>
-      <th></th>
-      <th>Id</th>
-      <th>Username</th>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Email</th>
-      <th>Password</th>
-      <th>Leads</th>
-      <th>Team</th>
-      <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach items="${actionBean.allEntities}" var="row" varStatus="rowstat">
-      <tr>
-        <td><stripes:checkbox name="id" value="${row.id}" onclick="handleCheckboxRangeSelection(this, event);" /></td>
-        <td>${row.id}</td>
-        <td>${row.username}</td>
+    <table id="entities" class="display sortable autostripe">
+        <thead>
+            <tr>
+                <th></th>
+                <c:forEach items="${actionBean.entityInfo.listProperties}" var="property">
+                    <th>${property.displayName}</th>
+                </c:forEach>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach items="${actionBean.allEntities}" var="row" varStatus="rowstat">
+                <tr>
+                    <td>
+                        <stripes:checkbox name="entity" value="${row.id}"
+                                          onclick="handleCheckboxRangeSelection(this, event);"/>
+                    </td>
+                    <c:forEach items="${actionBean.entityInfo.listProperties}" var="property">
+                        <td>${row[property.name]}</td>
+                    </c:forEach>
 
-        <td><stripes:link href="${action}" event="edit">
-                                Edit
-                                <stripes:param name="entity" value="${row.id}" />
-        </stripes:link> <stripes:link href="${action}" event="delete">
-                                Delete
-                                <stripes:param name="entity" value="${row.id}" />
-        </stripes:link></td>
+                    <td>
+                        <stripes:link href="${actionBean.actionUri}" event="view">
+                            View
+                            <stripes:param name="entity" value="${row.id}"/>
+                        </stripes:link>
+                        <stripes:link href="${actionBean.actionUri}" event="edit">
+                            Edit
+                            <stripes:param name="entity" value="${row.id}"/>
+                        </stripes:link>
+                        <stripes:link href="${actionBean.actionUri}" event="delete">
+                            Delete
+                            <stripes:param name="entity" value="${row.id}"/>
+                        </stripes:link>
+                    </td>
 
-      </tr>
-    </c:forEach>
-    </tbody>
-  </table>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
 
-  <div class="buttons"><stripes:submit name="edit" value="New" /> <stripes:submit
-    name="delete" value="Delete" /></div>
+    <div class="buttons">
+        <stripes:submit name="edit" value="New"/>
+        <stripes:submit name="delete" value="Delete"/>
+    </div>
 </stripes:form>
 
 </body>

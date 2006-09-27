@@ -16,12 +16,12 @@
  */
 package com.opensymphony.able.entity;
 
-import com.opensymphony.able.view.EditForm;
-import com.opensymphony.able.view.EditTable;
-import com.opensymphony.able.view.ViewDefaults;
+import com.opensymphony.able.view.DisplayBulkEdit;
+import com.opensymphony.able.view.DisplayDefaults;
+import com.opensymphony.able.view.DisplayEdit;
+import com.opensymphony.able.view.DisplayList;
+import com.opensymphony.able.view.DisplayView;
 import com.opensymphony.able.view.ViewField;
-import com.opensymphony.able.view.ViewForm;
-import com.opensymphony.able.view.ViewTable;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.TypeConverter;
@@ -39,11 +39,11 @@ public class EntityInfo {
     private String actionUri;
     private Map<String, PropertyInfo> propertyMap = new HashMap<String, PropertyInfo>();
     private List<PropertyInfo> properties;
-    private List<PropertyInfo> viewTableProperties;
-    private List<PropertyInfo> editTableProperties;
-    private List<PropertyInfo> viewFormProperties;
-    private List<PropertyInfo> editFormProperties;
+    private List<PropertyInfo> listProperties;
+    private List<PropertyInfo> viewProperties;
+    private List<PropertyInfo> editProperties;
     private List<PropertyInfo> viewFieldProperties;
+    private List<PropertyInfo> bulkEditProperties;
     private PropertyInfo idProperty;
     private TypeConverter typeConverter = new BeanWrapperImpl();
     private String[] defaultViewFieldPropertyNames = { "name", "shortDescription", "description", "code" };
@@ -162,20 +162,20 @@ public class EntityInfo {
         return Collections.unmodifiableList(properties);
     }
 
-    public List<PropertyInfo> getViewTableProperties() {
-        return Collections.unmodifiableList(viewTableProperties);
+    public List<PropertyInfo> getListProperties() {
+        return Collections.unmodifiableList(listProperties);
     }
 
-    public List<PropertyInfo> getEditTableProperties() {
-        return Collections.unmodifiableList(editTableProperties);
+    public List<PropertyInfo> getBulkEditProperties() {
+        return Collections.unmodifiableList(bulkEditProperties);
     }
 
-    public List<PropertyInfo> getViewFormProperties() {
-        return Collections.unmodifiableList(viewFormProperties);
+    public List<PropertyInfo> getViewProperties() {
+        return Collections.unmodifiableList(viewProperties);
     }
 
-    public List<PropertyInfo> getEditFormProperties() {
-        return Collections.unmodifiableList(editFormProperties);
+    public List<PropertyInfo> getEditProperties() {
+        return Collections.unmodifiableList(editProperties);
     }
 
     /**
@@ -216,7 +216,7 @@ public class EntityInfo {
     }
 
     protected String createActionUri() {
-        return "/" + getEntityName() + ".action";
+        return "/" + getEntityUri();
     }
 
     /**
@@ -253,7 +253,7 @@ public class EntityInfo {
         String[] sortOrder = null;
         String[] includes = null;
         String[] excludes = null;
-        ViewDefaults annotation = (ViewDefaults) entityClass.getAnnotation(ViewDefaults.class);
+        DisplayDefaults annotation = (DisplayDefaults) entityClass.getAnnotation(DisplayDefaults.class);
         if (annotation != null) {
             sortOrder = annotation.sortOrder();
             includes = annotation.includes();
@@ -267,56 +267,56 @@ public class EntityInfo {
         String[] sortOrder = null;
         String[] includes = null;
         String[] excludes = null;
-        ViewTable annotation = (ViewTable) entityClass.getAnnotation(ViewTable.class);
+        DisplayList annotation = (DisplayList) entityClass.getAnnotation(DisplayList.class);
         if (annotation != null) {
             sortOrder = annotation.sortOrder();
             includes = annotation.includes();
             excludes = annotation.excludes();
         }
 
-        viewTableProperties = createOrderedList(properties, sortOrder, includes, excludes);
+        listProperties = createOrderedList(properties, sortOrder, includes, excludes);
     }
 
     protected void configureEditTable() {
         String[] sortOrder = null;
         String[] includes = null;
         String[] excludes = getDefaultEditExcludes();
-        EditTable annotation = (EditTable) entityClass.getAnnotation(EditTable.class);
+        DisplayBulkEdit annotation = (DisplayBulkEdit) entityClass.getAnnotation(DisplayBulkEdit.class);
         if (annotation != null) {
             sortOrder = annotation.sortOrder();
             includes = annotation.includes();
             excludes = annotation.excludes();
         }
 
-        editTableProperties = createOrderedList(viewTableProperties, sortOrder, includes, excludes);
+        bulkEditProperties = createOrderedList(listProperties, sortOrder, includes, excludes);
     }
 
     protected void configureViewForm() {
         String[] sortOrder = null;
         String[] includes = null;
         String[] excludes = null;
-        ViewForm annotation = (ViewForm) entityClass.getAnnotation(ViewForm.class);
+        DisplayView annotation = (DisplayView) entityClass.getAnnotation(DisplayView.class);
         if (annotation != null) {
             sortOrder = annotation.sortOrder();
             includes = annotation.includes();
             excludes = annotation.excludes();
         }
 
-        viewFormProperties = createOrderedList(properties, sortOrder, includes, excludes);
+        viewProperties = createOrderedList(properties, sortOrder, includes, excludes);
     }
 
     protected void configureEditForm() {
         String[] sortOrder = null;
         String[] includes = null;
         String[] excludes = getDefaultEditExcludes();
-        EditForm annotation = (EditForm) entityClass.getAnnotation(EditForm.class);
+        DisplayEdit annotation = (DisplayEdit) entityClass.getAnnotation(DisplayEdit.class);
         if (annotation != null) {
             sortOrder = annotation.sortOrder();
             includes = annotation.includes();
             excludes = annotation.excludes();
         }
 
-        editFormProperties = createOrderedList(viewFormProperties, sortOrder, includes, excludes);
+        editProperties = createOrderedList(viewProperties, sortOrder, includes, excludes);
     }
 
     protected String[] getDefaultEditExcludes() {
@@ -413,7 +413,7 @@ public class EntityInfo {
      * order in which the fields are defined as thats better than just sorting
      * them in alphabetical order which is the default introspection order. Note
      * this will not work for properties which do not have a matching field; but
-     * then folks can use the {@link ViewDefaults} annotation to fix those
+     * then folks can use the {@link DisplayDefaults} annotation to fix those
      * cases.
      * 
      * @return

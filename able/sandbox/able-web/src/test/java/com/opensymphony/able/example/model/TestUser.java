@@ -1,9 +1,9 @@
 package com.opensymphony.able.example.model;
 
-import com.opensymphony.able.view.EditTable;
+import com.opensymphony.able.view.DisplayBulkEdit;
+import com.opensymphony.able.view.DisplayDefaults;
+import com.opensymphony.able.view.DisplayView;
 import com.opensymphony.able.view.Input;
-import com.opensymphony.able.view.ViewDefaults;
-import com.opensymphony.able.view.ViewForm;
 import org.hibernate.validator.NotNull;
 
 import javax.persistence.Entity;
@@ -18,9 +18,9 @@ import java.util.List;
  * @author <a href="mailto:jhouse@revolition.net">James House</a>
  */
 @Entity
-@ViewDefaults(sortOrder = { "username", "name", "email", "type" })
-@EditTable(excludes = { "name", "email" })
-@ViewForm(excludes = { "creationDate" })
+@DisplayDefaults(sortOrder = { "username", "name", "email", "type" })
+@DisplayBulkEdit(excludes = { "name", "email" })
+@DisplayView(excludes = { "creationDate" })
 public class TestUser {
 	private Long id;
 	private String username;

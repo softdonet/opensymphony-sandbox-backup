@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 @Target( { ElementType.TYPE })
 @Inherited
 @Documented
-public @interface EditForm {
+public @interface DisplayEdit {
     
     /**
      * Specifies the sort order of the properties of the bean, listing the properties which come first. 

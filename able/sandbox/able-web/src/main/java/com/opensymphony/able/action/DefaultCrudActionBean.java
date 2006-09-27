@@ -117,7 +117,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
                 shouldCommit();
             }
         }
-        return new RedirectResolution(getHomeUri());
+        return new ForwardResolution(getEntityInfo().getListUri());
     }
 
     /**
@@ -136,7 +136,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
                     service.update(e);
                 }
                 shouldCommit();
-                return new RedirectResolution(getHomeUri());
+                return new RedirectResolution(getActionUri());
             }
         }
         return getContext().getSourcePageResolution();
@@ -152,7 +152,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
         // TODO
         // getContext().addMsg( Messages.cancelled( "Manufacturer" ) );
 
-        return new RedirectResolution(getHomeUri());
+        return new RedirectResolution(getActionUri());
     }
 
 
@@ -170,10 +170,6 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
         return new JaxbResolution(new JaxbTemplate(entityClass), getEntity());
     }
 
-
-    protected String getHomeUri() {
-        return "/" + getEntityInfo().getEntityUri();
-    }
 
     // Properties
     // -------------------------------------------------------------------------
@@ -223,6 +219,13 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
             entityInfo = EntityInfo.newInstance(getService().getEntityClass());
         }
         return entityInfo;
+    }
+
+    /**
+     * Returns the URI of the Crud action (i.e. this POJO :)
+     */
+    public String getActionUri() {
+        return getEntityInfo().getActionUri();
     }
 
     public Map<String, Object> getAllValues() {

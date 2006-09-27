@@ -16,8 +16,7 @@
                     :
                 </th>
                 <td>
-                    <%-- TODO show different controls based on the property metadata --%>
-                    <stripes:text name="entity.${property.name}"/>
+                    ${actionBean.entity[property.name]}
                 </td>
             </tr>
         </c:forEach>
@@ -25,8 +24,7 @@
     </table>
 
     <div class="buttons">
-        <stripes:submit name="save" value="Save"/>
-        <stripes:submit name="cancel" value="Cancel"/>
+        <stripes:submit name="cancel" value="Back"/>
     </div>
 </stripes:form>
 
