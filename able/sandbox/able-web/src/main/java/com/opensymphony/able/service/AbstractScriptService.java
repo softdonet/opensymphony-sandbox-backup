@@ -18,28 +18,22 @@ import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 /**
  * @author Patrick Lightbody (plightbo at gmail dot com)
  */
-public class BootstrapService {
-    private static Logger logger = Logger.getLogger(BootstrapService.class.getName());
+public abstract class AbstractScriptService extends Service {
+    private String script;
 
-    private boolean seed;
+    protected AbstractScriptService(String script) {
+        this.script = script;
+    }
+
     private DataSource dataSource;
 
     public void init() {
         try {
             Class.forName("org.hsqldb.jdbcDriver");
-            runScript("/sql/schema_hsql.sql");
-
-            if (seed) {
-                logger.info("Seeding sample data...");
-
-                runScript("/sql/sample_hsql.sql");
-
-                logger.info("... done!");
-            }
+            runScript("/sql/" + script);
         } catch (Exception e) {
-            String msg = "Could not initialize Able";
-            logger.info(msg);
-            logger.throwing(BootstrapService.class.getName(), "init", e);
+            String msg = "Could not run script: " + script;
+            log.severe(msg, e);
             throw new RuntimeException(msg, e);
 
         }
@@ -58,11 +52,11 @@ public class BootstrapService {
 
             if (errors.toString().length() != 0) {
                 String msg = "There were errors initializing the in-memory database schema:\n" + errors.toString();
-                logger.info(msg);
+                log.info(msg);
                 throw new RuntimeException(msg);
             }
 
-            logger.fine("Automatic schema creation output:\n" + output.toString());
+            log.fine("Automatic schema creation output:\n" + output.toString());
         } finally {
             conn.close();
         }
@@ -76,14 +70,9 @@ public class BootstrapService {
             ps.executeUpdate();
         } catch (Exception e) {
             String msg = "Could not dispose Able";
-            logger.info(msg);
-            logger.throwing(BootstrapService.class.getName(), "dispose", e);
+            log.severe(msg, e);
             throw new RuntimeException(msg, e);
         }
-    }
-
-    public void setSeed(boolean seed) {
-        this.seed = seed;
     }
 
     public void setDataSource(DataSource dataSource) {

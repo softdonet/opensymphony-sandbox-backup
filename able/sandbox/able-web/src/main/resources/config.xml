@@ -10,15 +10,18 @@
         <property name="password" value=""/>
     </bean>
 
-    <bean id="loadStaticData" class="com.opensymphony.able.service.LoadDatabaseService" lazy-init="false" autowire="constructor"/>
-  
-  <!--
-  <bean id="bootstrap" class="com.opensymphony.able.service.BootstrapService" lazy-init="false"
-        init-method="init" destroy-method="dispose" autowire="no">
-      <property name="dataSource" ref="dataSource"/>
-      <property name="seed" value="true"/>
-  </bean>
-  -->
+    <bean id="schema" class="com.opensymphony.able.service.SchemaScriptService" lazy-init="false"
+          init-method="init" destroy-method="dispose" autowire="no">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="sample" class="com.opensymphony.able.service.SampleScriptService" lazy-init="false"
+          init-method="init" destroy-method="dispose" autowire="no" depends-on="schema,upgrade">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="loadStaticData" class="com.opensymphony.able.service.LoadDatabaseService" lazy-init="false"
+          autowire="constructor" depends-on="sample,upgrade"/>
 
     <bean id="mailService" class="com.opensymphony.able.mail.MockMailService"/>
 </beans>
