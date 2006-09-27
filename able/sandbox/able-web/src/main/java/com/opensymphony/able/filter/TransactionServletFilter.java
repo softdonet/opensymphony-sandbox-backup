@@ -45,17 +45,19 @@ public class TransactionServletFilter implements Filter {
     private static final Log log = LogFactory.getLog(TransactionServletFilter.class);
 
     protected static final String TRANSACTION_OUTCOME = TransactionServletFilter.class.getName() + ".outcome";
-    
-    private TransactionTemplate transactionTemplate;
+
+    private WebApplicationContext context;
+
 
     public void init(FilterConfig config) throws ServletException {
-        WebApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(config.getServletContext());
-        transactionTemplate = (TransactionTemplate) ctx.getBean("transactionTemplate");
+        context = WebApplicationContextUtils.getRequiredWebApplicationContext(config.getServletContext());
     }
 
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain filterChain) throws IOException, ServletException {
         // TODO we could get clever and figure out what URIs are read only transactions etc
+        TransactionTemplate transactionTemplate = (TransactionTemplate) context.getBean("transactionTemplate");
         transactionTemplate.setReadOnly(false);
+
         Exception e = (Exception) transactionTemplate.execute(new TransactionCallback() {
 
             public Object doInTransaction(TransactionStatus status) {
@@ -74,7 +76,7 @@ public class TransactionServletFilter implements Filter {
                 }
             }
         });
-
+        
         if (e instanceof IOException) {
             throw (IOException) e;
         }

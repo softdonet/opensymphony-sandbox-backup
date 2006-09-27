@@ -19,13 +19,9 @@ package com.opensymphony.able.service;
 
 import com.opensymphony.able.util.Log;
 import net.sourceforge.stripes.integration.spring.SpringBean;
-import org.springframework.orm.jpa.JpaCallback;
 import org.springframework.orm.jpa.JpaTemplate;
 
-import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -85,25 +81,30 @@ public abstract class JpaCrudService<E> implements CrudService<E> {
         return getJpaTemplate().find("from " + entityClass.getName());
     }
 
-    protected List find(final String queryText) {
-        return (List) getJpaTemplate().execute(new JpaCallback() {
-            public Object doInJpa(EntityManager entityManager) throws PersistenceException {
-                return entityManager.createQuery(queryText).getResultList();
-            }
-        });
+    protected List find(String queryText) {
+        return getJpaTemplate().find(queryText);
     }
 
-    protected List find(final String queryText, final Object... parameters) {
-        return (List) getJpaTemplate().execute(new JpaCallback() {
-            public Object doInJpa(EntityManager entityManager) throws PersistenceException {
-                Query query = entityManager.createQuery(queryText);
-                int index = 0;
-                for (Object object : parameters) {
-                    query.setParameter(index++, object);
-                }
-                return query.getResultList();
-            }
-        });
+    protected List find(String queryText, Object... parameters) {
+        return getJpaTemplate().find(queryText, parameters);
+    }
+    
+    protected Object findFirst(String queryText) {
+        return first(getJpaTemplate().find(queryText));
+    }
+
+    protected Object findFirst(String queryText, Object... parameters) {
+        return first(getJpaTemplate().find(queryText, parameters));
+    }
+
+    /**
+     * Returns the first item of a list or null if the list is empty
+     */
+    protected Object first(List list) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 
 }

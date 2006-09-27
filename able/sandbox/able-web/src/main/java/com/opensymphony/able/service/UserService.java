@@ -17,7 +17,7 @@ public class UserService extends JpaCrudService<User> {
     }
 
     public User findByUsername(String username) {
-        return (User) find("from User u where u.username = ?", username);
+        return (User) findFirst("from User u where u.username = ?1", username);
     }
 
     public boolean authenticate(String username, String password) {
