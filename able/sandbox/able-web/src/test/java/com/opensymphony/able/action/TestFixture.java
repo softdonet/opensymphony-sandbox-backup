@@ -34,8 +34,10 @@ public class TestFixture {
             servletContext = new MockServletContext("test");
             // Add the Stripes Filter
             Map<String, String> filterParams = new HashMap<String, String>();
-            filterParams.put("ActionResolver.PackageFilters", "com.opensymphony.able.example.action.*");
+            filterParams.put("ActionResolver.PackageFilters", "com.opensymphony.able.service.*");
             filterParams.put("Interceptor.Classes", "net.sourceforge.stripes.integration.spring.SpringInterceptor, net.sourceforge.stripes.controller.BeforeAfterMethodInterceptor");
+            filterParams.put("TypeConverterFactory.Class", "com.opensymphony.able.stripes.util.JpaTypeConverterFactory");
+
             servletContext.addFilter(StripesFilter.class, "StripesFilter", filterParams);
 
             // Add the Stripes Dispatcher

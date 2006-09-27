@@ -17,20 +17,13 @@
  */
 package com.opensymphony.able.service;
 
-import com.opensymphony.able.model.User;
-
-import java.util.List;
+import com.opensymphony.able.action.DefaultCrudActionBean;
 
 /**
  * @version $Revision$
-*/
-public class SampleUserService extends JpaCrudService<User> {
-
-    public List<User> findUserViaName(String userName) {
-        return findUsingSql("select * from User where username = 'james'");
-    }
-
-    public List<User> findUserViaNameUsingParameter(String userName) {
-        return findUsingSql("select * from User where username = ?", userName);
+ */
+public class PersonActionBean extends DefaultCrudActionBean<Person> {
+    public PersonActionBean() {
+        super(new PersonService());
     }
 }
