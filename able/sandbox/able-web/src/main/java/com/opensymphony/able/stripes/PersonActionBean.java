@@ -21,6 +21,8 @@ import com.opensymphony.able.action.JpaCrudActionBean;
 import com.opensymphony.able.model.Person;
 
 /**
+ * TODO code generate or create dynamically at runtime?
+ *
  * @version $Revision$
  */
 public class PersonActionBean extends JpaCrudActionBean<Person> {

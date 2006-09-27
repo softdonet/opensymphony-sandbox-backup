@@ -8,17 +8,17 @@
     if (propertyInfo != null && propertyInfo.isEnum()) {
 %>
 <c:forEach var="value" items="${actionBean.allValues[name]}">
-  <stripes:radio id="${name}.${stripes:enumName(value)}" name="${name}" value="${stripes:enumName(value)}"
+  <stripes:radio id="entity.${name}.${stripes:enumName(value)}" name="entity.${name}" value="${stripes:enumName(value)}"
     checked="New" />
-  <stripes:label for="${name}.${stripes:enumName(value)}">${stripes:enumName(value)}</stripes:label>
+  <stripes:label for="entity.${name}.${stripes:enumName(value)}">${stripes:enumName(value)}</stripes:label>
 </c:forEach>
 <%
     } else {
 %>
 <c:forEach var="value" items="${actionBean.allValues[name]}">
-  <stripes:radio id="${name}.${value.id}" name="${name}" value="${value}.id"
+  <stripes:radio id="entity.${name}.${value.id}" name="entity.${name}" value="${value}.id"
     checked="New" />
-  <stripes:label for="${name}.${value.id}">${value}.name</stripes:label>
+  <stripes:label for="entity.${name}.${value.id}">${value}.name</stripes:label>
 </c:forEach>
 <%
     }

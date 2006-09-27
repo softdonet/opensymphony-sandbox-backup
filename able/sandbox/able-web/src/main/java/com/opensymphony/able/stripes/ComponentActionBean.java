@@ -18,15 +18,15 @@
 package com.opensymphony.able.stripes;
 
 import com.opensymphony.able.action.JpaCrudActionBean;
-import com.opensymphony.able.model.Bug;
+import com.opensymphony.able.model.Component;
 
 /**
  * TODO code generate or create dynamically at runtime?
  *
  * @version $Revision$
  */
-public class BugActionBean extends JpaCrudActionBean<Bug> {
-    public BugActionBean() {
-        super(Bug.class);
+public class ComponentActionBean extends JpaCrudActionBean<Component> {
+    public ComponentActionBean() {
+        super(Component.class);
     }
 }

@@ -24,7 +24,7 @@
             value = entity.toString();
         }
 %>
-<stripes:link href="<%= href %>"><%= value %><stripes:param name="entity" value="<%= pk %>"/></stripes:link>
+<stripes:link href="<%= href %>"><%= value %><stripes:param name="entity" value="<%= pk %>"/><stripes:param name="view"/></stripes:link>
 <%
     }
 %>
