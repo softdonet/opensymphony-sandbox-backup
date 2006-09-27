@@ -23,10 +23,7 @@
                     :
                 </th>
                 <td>
-                    <able:field entity="${actionBean.entity}" name="${property.name}"/>
-                    <%-- TODO show different controls based on the property metadata
-                    <stripes:text name="entity.${property.name}"/>
-                    --%>
+                    <able:editField entity="${actionBean.entity}" name="${property.name}"/>
                 </td>
             </tr>
         </c:forEach>

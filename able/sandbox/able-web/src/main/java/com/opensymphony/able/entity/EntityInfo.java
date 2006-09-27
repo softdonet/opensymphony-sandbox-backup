@@ -189,6 +189,9 @@ public class EntityInfo {
      * Returns the first name property used to present the entity in a pick list, combo box, radio selection etc
      */
     public PropertyInfo getNameProperty() {
+        if (viewFieldProperties.isEmpty()) {
+            return null;
+        }
         return viewFieldProperties.get(0);
     }
 

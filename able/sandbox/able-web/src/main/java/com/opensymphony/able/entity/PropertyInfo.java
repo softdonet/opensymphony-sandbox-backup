@@ -16,6 +16,7 @@
  */
 package com.opensymphony.able.entity;
 
+import com.opensymphony.able.util.CollectionHelper;
 import com.opensymphony.able.util.StringHelper;
 import com.opensymphony.able.view.Input;
 
@@ -90,6 +91,9 @@ public class PropertyInfo {
         return entity;
     }
 
+    /**
+     * Returns the value of the property
+     */
     public Object getValue(Object entity) {
         try {
             return descriptor.getReadMethod().invoke(entity, EMPTY_ARGS);
@@ -109,6 +113,18 @@ public class PropertyInfo {
             throw new RuntimeException("Failed to update property: "
                     + getName() + " on entity: " + entity + ". Reason: " + e, e);
         }
+    }
+
+
+    /**
+     * Returns the size of the collection if the property is a collection (array or Collection)
+     */
+    public int getSize(Object entity) {
+        if (!isCollection()) {
+            return 1;
+        }
+        Object value = getValue(entity);
+        return CollectionHelper.size(value);
     }
 
     public boolean isReadable() {

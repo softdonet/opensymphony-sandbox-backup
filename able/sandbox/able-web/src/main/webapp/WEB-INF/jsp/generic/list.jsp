@@ -36,7 +36,9 @@
                                           onclick="handleCheckboxRangeSelection(this, event);"/>
                     </td>
                     <c:forEach items="${actionBean.entityInfo.listProperties}" var="property">
-                        <td>${row[property.name]}</td>
+                        <td>
+                            <able:viewField entity="${row}" name="${property.name}"/>
+                        </td>
                     </c:forEach>
 
                     <td>
