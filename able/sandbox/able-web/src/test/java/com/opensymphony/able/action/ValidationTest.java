@@ -16,7 +16,7 @@
  */
 package com.opensymphony.able.action;
 
-import com.opensymphony.able.example.action.UserActionBean;
+import com.opensymphony.able.stripes.PersonActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.Resolution;
@@ -38,7 +38,7 @@ public class ValidationTest {
 
     @Test(enabled = false)
     public void testValidationWithoutContainer() throws Throwable {
-        UserActionBean action = new UserActionBean();
+        PersonActionBean action = new PersonActionBean();
 
         Locale locale = Locale.getDefault();
 
@@ -56,7 +56,7 @@ public class ValidationTest {
                 return new ForwardResolution("/sourcePage");
             }
         };
-        MockHttpServletRequest request = new MockHttpServletRequest("/", "/User.action");
+        MockHttpServletRequest request = new MockHttpServletRequest("/", "/person");
         request.getParameterMap().put("id", new String[]{"1234"});
         context.setRequest(request);
 

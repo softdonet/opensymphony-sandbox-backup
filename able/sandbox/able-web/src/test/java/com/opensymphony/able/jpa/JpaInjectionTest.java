@@ -16,7 +16,9 @@
  */
 package com.opensymphony.able.jpa;
 
-import com.opensymphony.able.action.UserActionBean;
+import com.opensymphony.able.model.Person;
+import com.opensymphony.able.service.JpaCrudService;
+import com.opensymphony.able.stripes.PersonActionBean;
 import net.sourceforge.stripes.integration.spring.SpringHelper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.jpa.JpaCallback;
@@ -47,10 +49,12 @@ public class JpaInjectionTest extends SpringTestSupport {
         String[] names = context.getBeanNamesForType(EntityManagerFactory.class);
         Assert.assertEquals(1, names.length, "number of names");
 
-        final UserActionBean target = new UserActionBean();
+        final PersonActionBean target = new PersonActionBean();
         SpringHelper.injectBeans(target, context);
 
-        final JpaTemplate jpaTemplate = target.getJpaTemplate();
+        JpaCrudService<Person> service = (JpaCrudService<Person>) target.getService();
+
+        final JpaTemplate jpaTemplate = service.getJpaTemplate();
         Assert.assertNotNull(jpaTemplate, "Failed to inject an JpaTemplate: " + jpaTemplate);
 
         System.out.println("Found template: " + jpaTemplate);

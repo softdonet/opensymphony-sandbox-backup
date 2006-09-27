@@ -20,6 +20,7 @@ package com.opensymphony.able.service;
 import com.opensymphony.able.action.TestFixture;
 import com.opensymphony.able.jpa.SpringTestSupport;
 import com.opensymphony.able.model.Person;
+import com.opensymphony.able.stripes.PersonActionBean;
 import net.sourceforge.stripes.exception.StripesServletException;
 import net.sourceforge.stripes.integration.spring.SpringHelper;
 import net.sourceforge.stripes.mock.MockRoundtrip;
