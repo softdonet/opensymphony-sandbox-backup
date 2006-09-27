@@ -17,7 +17,7 @@
  */
 package com.opensymphony.able.example.jaxb;
 
-import com.opensymphony.able.example.model.User;
+import com.opensymphony.able.model.User;
 
 import java.util.List;
 

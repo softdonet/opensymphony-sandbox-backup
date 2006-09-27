@@ -17,6 +17,8 @@
  */
 package com.opensymphony.able.service;
 
+import com.opensymphony.able.model.Person;
+
 import java.util.List;
 
 /**

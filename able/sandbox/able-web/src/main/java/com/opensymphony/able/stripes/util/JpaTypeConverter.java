@@ -22,12 +22,16 @@ import net.sourceforge.stripes.integration.spring.SpringBean;
 import net.sourceforge.stripes.validation.ScopedLocalizableError;
 import net.sourceforge.stripes.validation.TypeConverter;
 import net.sourceforge.stripes.validation.ValidationError;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.orm.jpa.JpaTemplate;
 
 import java.util.Collection;
 import java.util.Locale;
 
 public class JpaTypeConverter<T> implements TypeConverter<T> {
+    private static final transient Log log = LogFactory.getLog(JpaTypeConverter.class);
+
     @SpringBean
     private JpaTemplate jpaTemplate;
     private EntityInfo entityInfo;
@@ -52,6 +56,10 @@ public class JpaTypeConverter<T> implements TypeConverter<T> {
         }
         if (primaryKey == null) {
             return null;
+        }
+
+        if (log.isDebugEnabled()) {
+            log.debug("Looking up entity: " + entityInfo + " with primary key: " + primaryKey);
         }
         return (T) jpaTemplate.find(entityInfo.getEntityClass(), primaryKey);
     }

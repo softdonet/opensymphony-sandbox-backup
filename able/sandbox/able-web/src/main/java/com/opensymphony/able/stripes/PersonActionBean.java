@@ -15,16 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.opensymphony.able.service;
+package com.opensymphony.able.stripes;
 
-import com.opensymphony.able.action.DefaultCrudActionBean;
+import com.opensymphony.able.action.JpaCrudActionBean;
 import com.opensymphony.able.model.Person;
 
 /**
  * @version $Revision$
  */
-public class PersonActionBean extends DefaultCrudActionBean<Person> {
+public class PersonActionBean extends JpaCrudActionBean<Person> {
     public PersonActionBean() {
-        super(new PersonService());
+        super(Person.class);
     }
 }

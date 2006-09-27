@@ -47,7 +47,7 @@ public class EntityInfo {
     private PropertyInfo idProperty;
     private TypeConverter typeConverter = new BeanWrapperImpl();
     private String[] defaultViewFieldPropertyNames = { "name", "shortDescription", "description", "code" };
-    private String uriPrefix = "/views/entity/";
+    private String uriPrefix = "/WEB-INF/jsp/generic/";
 
 
     /**
@@ -119,24 +119,29 @@ public class EntityInfo {
         return entityUri;
     }
 
-    public String getHomeUri() {
-        return uriPrefix + getEntityUri() + "/index.jsp";
+    public String getListUri() {
+        //return uriPrefix + getEntityUri() + "/index.jsp";
+        return uriPrefix + "/list.jsp";
     }
 
     public String getViewUri() {
-        return uriPrefix + getEntityUri() + "/view.jsp?id=";
+        //return uriPrefix + getEntityUri() + "/view.jsp?id=";
+        return uriPrefix + "/view.jsp?id=";
     }
 
     public String getEditUri() {
-        return uriPrefix + getEntityUri() + "/edit.jsp?id=";
+        //return uriPrefix + getEntityUri() + "/edit.jsp?id=";
+        return uriPrefix + "/edit.jsp?id=";
     }
 
     public String getBulkEditUri() {
-        return uriPrefix + getEntityUri() + "/editTable.jsp?id=";
+        //return uriPrefix + getEntityUri() + "/editTable.jsp?id=";
+        return uriPrefix + "/editTable.jsp?id=";
     }
     
 	public String getHomeUriForCollection(String propertyName) {
-        return uriPrefix + getEntityUri() + "/" + propertyName + "/edit.jsp?oid=";
+        //return uriPrefix + getEntityUri() + "/" + propertyName + "/edit.jsp?oid=";
+        return uriPrefix + "/" + propertyName + "/edit.jsp?oid=";
 	}
 
 

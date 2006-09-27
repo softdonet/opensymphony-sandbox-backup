@@ -16,17 +16,17 @@
  */
 package com.opensymphony.able.action;
 
-import java.util.List;
-
-import com.opensymphony.able.example.model.Type;
-import com.opensymphony.able.example.model.User;
 import com.opensymphony.able.example.action.UserActionBean;
+import com.opensymphony.able.example.model.TestUser;
+import com.opensymphony.able.example.model.Type;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.TypeConverter;
 import org.springframework.validation.DataBinder;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 /**
  * 
@@ -42,8 +42,8 @@ public class JpaCrudActionSupportTest {
         Class idClass = action.getIdClass();
         Assert.assertEquals(Long.class, idClass);
 
-        Class<User> entityClass = action.getEntityClass();
-        Assert.assertEquals(User.class, entityClass);
+        Class<TestUser> entityClass = action.getEntityClass();
+        Assert.assertEquals(TestUser.class, entityClass);
         
         String entityName = action.getEntityInfo().getEntityName();
         Assert.assertEquals("User", entityName);
@@ -71,7 +71,7 @@ public class JpaCrudActionSupportTest {
 
     @Test
     public void testIntrospection() throws Exception {
-        User user = new User();
+        TestUser user = new TestUser();
 
         DataBinder binder = new DataBinder(user);
         MutablePropertyValues propertyValues = new MutablePropertyValues();

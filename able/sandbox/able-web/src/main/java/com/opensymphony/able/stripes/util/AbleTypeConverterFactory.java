@@ -1,9 +1,9 @@
 package com.opensymphony.able.stripes.util;
 
-import net.sourceforge.stripes.config.Configuration;
 import com.opensymphony.able.model.User;
+import net.sourceforge.stripes.config.Configuration;
 
-public class AbleTypeConverterFactory extends SpringTypeConverterFactory {
+public class AbleTypeConverterFactory extends JpaTypeConverterFactory {
     public void init(Configuration configuration) {
         super.init(configuration);
 

@@ -16,22 +16,14 @@
  */
 package com.opensymphony.able.entity;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
-
-import com.opensymphony.able.entity.Entities;
-import com.opensymphony.able.entity.EntityInfo;
-import com.opensymphony.able.entity.PropertyInfo;
+import com.opensymphony.able.example.model.Address;
+import com.opensymphony.able.example.model.TestProject;
+import com.opensymphony.able.example.model.TestUser;
 import com.opensymphony.able.view.EditTable;
 import com.opensymphony.able.view.Input;
 import com.opensymphony.able.view.ViewField;
 import com.opensymphony.able.view.ViewTable;
-
-import com.opensymphony.able.example.model.Address;
-import com.opensymphony.able.example.model.Project;
-import com.opensymphony.able.example.model.User;
+import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -52,7 +44,7 @@ public class EntityInfoTest {
         assertNotNull(info);
 
         Class entityClass = info.getEntityClass();
-        assertEquals(User.class, entityClass);
+        assertEquals(TestUser.class, entityClass);
 
         String entityName = info.getEntityName();
         assertEquals("User", entityName);
@@ -63,7 +55,7 @@ public class EntityInfoTest {
         Class idClass = info.getIdClass();
         assertEquals(Long.class, idClass);
 
-        assertEquals(info.getHomeUri(), "/views/entity/user/index.jsp");
+        assertEquals(info.getListUri(), "/views/entity/user/index.jsp");
         assertEquals(info.getActionUri(), "/User.action");
         assertEquals(info.getViewUri(), "/views/entity/user/view.jsp?id=");
         assertEquals(info.getEditUri(), "/views/entity/user/edit.jsp?id=");
@@ -93,12 +85,12 @@ public class EntityInfoTest {
         property = info.getProperty("projects");
         assertNotNull(property);
         assertTrue(property.isCollection(), "property should be a collection: " + property);
-        assertEquals(property.getPropertyComponentType(), Project.class);
+        assertEquals(property.getPropertyComponentType(), TestProject.class);
     }
 
     @Test
     public void testOrderOfPropertiesIsInFieldDeclarationOrder() throws Exception {
-        EntityInfo info = Entities.getInstance().getEntity(Project.class.getName());
+        EntityInfo info = Entities.getInstance().getEntity(TestProject.class.getName());
         assertNotNull(info);
 
         List<PropertyInfo> properties = info.getProperties();
@@ -111,7 +103,7 @@ public class EntityInfoTest {
     
     @Test
     public void testDefaultSortOrder() throws Exception {
-        EntityInfo info = new EntityInfo(User.class);
+        EntityInfo info = new EntityInfo(TestUser.class);
 
         List<PropertyInfo> properties = info.getProperties();
         for (PropertyInfo property : properties) {
@@ -133,7 +125,7 @@ public class EntityInfoTest {
 
     @Test
     public void testEditViewsExcludeItemsExcludedFromView() throws Exception {
-        EntityInfo info = new EntityInfo(User.class);
+        EntityInfo info = new EntityInfo(TestUser.class);
 
         assertExcludes(info.getViewFormProperties(), "creationDate");
 
@@ -143,7 +135,7 @@ public class EntityInfoTest {
 
     @Test
     public void testViewWithIncludesAndEditWithInheritedFilterAndExcludes() throws Exception {
-        EntityInfo info = new EntityInfo(UserWithViewWithIncludes.class);
+        EntityInfo info = new EntityInfo(TestUserWithViewWithIncludes.class);
 
         List<PropertyInfo> viewTableProperties = info.getViewTableProperties();
         assertProperty("name", viewTableProperties, 0);
@@ -157,12 +149,12 @@ public class EntityInfoTest {
 
     @ViewTable(includes = { "name", "email" })
     @EditTable(excludes = { "name" })
-    public static class UserWithViewWithIncludes extends User {
+    public static class TestUserWithViewWithIncludes extends TestUser {
     }
 
     @Test
     public void testEditWithOverloadedIncludes() throws Exception {
-        EntityInfo info = new EntityInfo(UserWithOverloadedIncludes.class);
+        EntityInfo info = new EntityInfo(TestUserWithOverloadedIncludes.class);
 
         List<PropertyInfo> viewTableProperties = info.getViewTableProperties();
         assertProperty("name", viewTableProperties, 0);
@@ -176,12 +168,12 @@ public class EntityInfoTest {
     }
 
     @EditTable(includes = { "id", "username" })
-    public static class UserWithOverloadedIncludes extends UserWithViewWithIncludes {
+    public static class TestUserWithOverloadedIncludes extends TestUserWithViewWithIncludes {
     }
 
     @Test
     public void testViewFieldsDefinedViaAnnotation() throws Exception {
-        EntityInfo info = new EntityInfo(UserWithViewField.class);
+        EntityInfo info = new EntityInfo(TestUserWithViewField.class);
 
         List<PropertyInfo> properties = info.getViewFieldProperties();
         assertEquals(2, properties.size());
@@ -190,7 +182,7 @@ public class EntityInfoTest {
     }
 
     @ViewField(includes = { "id", "username" })
-    public static class UserWithViewField extends User {
+    public static class TestUserWithViewField extends TestUser {
     }
 
     @Test

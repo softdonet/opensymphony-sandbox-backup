@@ -19,6 +19,7 @@ package com.opensymphony.able.service;
 
 import com.opensymphony.able.action.TestFixture;
 import com.opensymphony.able.jpa.SpringTestSupport;
+import com.opensymphony.able.model.Person;
 import net.sourceforge.stripes.exception.StripesServletException;
 import net.sourceforge.stripes.integration.spring.SpringHelper;
 import net.sourceforge.stripes.mock.MockRoundtrip;
@@ -59,7 +60,7 @@ public class CrudServiceAndActionTest extends SpringTestSupport {
             public Object doInTransaction(TransactionStatus transactionStatus) {
                 Person user = new Person();
                 user.setUsername("james");
-                user.setName("James Strachan");
+                user.setFirstName("James");
                 service.getJpaTemplate().persist(user);
                 return null;
             }

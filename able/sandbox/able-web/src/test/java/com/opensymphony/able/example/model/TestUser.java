@@ -1,13 +1,14 @@
 package com.opensymphony.able.example.model;
 
-import com.opensymphony.able.view.*;
-
+import com.opensymphony.able.view.EditTable;
+import com.opensymphony.able.view.Input;
+import com.opensymphony.able.view.ViewDefaults;
+import com.opensymphony.able.view.ViewForm;
 import org.hibernate.validator.NotNull;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,7 @@ import java.util.List;
 @ViewDefaults(sortOrder = { "username", "name", "email", "type" })
 @EditTable(excludes = { "name", "email" })
 @ViewForm(excludes = { "creationDate" })
-public class User {
+public class TestUser {
 	private Long id;
 	private String username;
 	private String email;
@@ -29,13 +30,13 @@ public class User {
 	private Date creationDate;
 	private Date updateDate;
 	private Type type;
-	private List<Project> projects;
+	private List<TestProject> projects;
 	private Address[] addresses;
 
-	public User() {
+	public TestUser() {
 	}
 
-	public User(String username, String email, String name, String passwordHash) {
+	public TestUser(String username, String email, String name, String passwordHash) {
 		this.username = username;
 		this.email = email;
 		this.name = name;
@@ -49,7 +50,7 @@ public class User {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		final User user = (User) o;
+		final TestUser user = (TestUser) o;
 
 		return id == user.id;
 	}
@@ -134,11 +135,11 @@ public class User {
 	}
 
     @OneToMany
-    public List<Project> getProjects() {
+    public List<TestProject> getProjects() {
 		return projects;
 	}
 
-	public void setProjects(List<Project> projects) {
+	public void setProjects(List<TestProject> projects) {
 		this.projects = projects;
 	}
 

@@ -134,7 +134,7 @@ public abstract class JpaEntityCollectionActionSupport<O, E> extends JpaActionSu
 	}
 
 	protected String getHomeUri() {
-		return ownerInfo.getHomeUri();
+		return ownerInfo.getListUri();
 	}
 
 	public Resolution xmlView() {

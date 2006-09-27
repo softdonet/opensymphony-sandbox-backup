@@ -6,11 +6,6 @@
 
   <persistence-unit name="default" transaction-type="RESOURCE_LOCAL">
 
-    <!--  TODO - code generate these in able-apt -->
-
-    <class>com.opensymphony.able.model.Build</class>
-    <class>com.opensymphony.able.model.User</class>
-
   </persistence-unit>
 
 </persistence>

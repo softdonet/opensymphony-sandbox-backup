@@ -35,7 +35,7 @@ import java.util.List;
  *
  * @version $Revision$
  */
-public abstract class JpaCrudService<E> implements CrudService<E> {
+public class JpaCrudService<E> implements CrudService<E> {
     protected Log log = new Log(getClass());
 
     @PersistenceContext
@@ -43,6 +43,10 @@ public abstract class JpaCrudService<E> implements CrudService<E> {
     private JpaTemplate jpaTemplate;
     private Class<E> entityClass;
 
+    public JpaCrudService(Class<E> entityClass, JpaTemplate jpaTemplate) {
+        this.entityClass = entityClass;
+        this.jpaTemplate = jpaTemplate;
+    }
 
     protected JpaCrudService() {
         ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();

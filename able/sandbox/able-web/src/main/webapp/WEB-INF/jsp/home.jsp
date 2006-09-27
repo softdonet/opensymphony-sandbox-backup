@@ -6,7 +6,26 @@
 
 <body>
 
-Welcome to Able. These other users are also enjoying Able:
+<p>Welcome to the starter web application for Able</p>
+
+<p>Useful links</p>
+
+<ul>
+    <li><stripes:link href="/person">Person List</stripes:link></li>
+</ul>
+
+<h2>Entity List</h2>
+<jsp:useBean id="helper" class="com.opensymphony.able.entity.Entities" scope="page" />
+
+<ul>
+  <c:forEach var="entity" items="${helper.entities}">
+    <li><stripes:link href="/${entity.entityUri}">${entity.entityName} List</stripes:link></li>
+  </c:forEach>
+</ul>
+
+
+<h2>Current users</h2>
+These other users are also enjoying Able:
 
 <ul>
     <c:forEach items="${actionBean.users}" var="user">

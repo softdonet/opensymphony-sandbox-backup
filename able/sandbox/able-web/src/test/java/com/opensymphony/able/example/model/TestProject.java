@@ -24,7 +24,7 @@ import javax.persistence.Id;
  * @version $Revision$
  */
 @Entity
-public class Project {
+public class TestProject {
     Long id;
     String name;
     String description;

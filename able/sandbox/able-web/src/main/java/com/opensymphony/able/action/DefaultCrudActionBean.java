@@ -63,6 +63,8 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
     private EntityInfo entityInfo;
     private String query;
 
+    public DefaultCrudActionBean() {
+    }
 
     public DefaultCrudActionBean(CrudService<E> service) {
         this.service = service;
@@ -85,21 +87,21 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
     @DontValidate
     @DefaultHandler
     public Resolution list() {
-        return new ForwardResolution(entityInfo.getHomeUri());
+        return new ForwardResolution(getEntityInfo().getListUri());
     }
 
     /**
      * Views a single entity in a read only form
      */
     public Resolution view() {
-        return new ForwardResolution(entityInfo.getViewUri());
+        return new ForwardResolution(getEntityInfo().getViewUri());
     }
 
     /**
      * Views the edit form
      */
     public Resolution edit() {
-        return new ForwardResolution(entityInfo.getEditUri());
+        return new ForwardResolution(getEntityInfo().getEditUri());
     }
 
     /**
@@ -109,13 +111,13 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
     public Resolution delete() {
         E e = getEntity();
         if (e != null) {
-            Object idValue = entityInfo.getIdValue(e);
+            Object idValue = getEntityInfo().getIdValue(e);
             if (idValue != null) {
                 service.delete(e);
                 shouldCommit();
             }
         }
-        return new RedirectResolution(entityInfo.getHomeUri());
+        return new RedirectResolution(getHomeUri());
     }
 
     /**
@@ -126,7 +128,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
         if (getContext().getValidationErrors().isEmpty()) {
             E e = getEntity();
             if (e != null) {
-                Object idValue = entityInfo.getIdValue(e);
+                Object idValue = getEntityInfo().getIdValue(e);
                 if (idValue == null) {
                     service.insert(e);
                 }
@@ -134,7 +136,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
                     service.update(e);
                 }
                 shouldCommit();
-                return new RedirectResolution(entityInfo.getHomeUri());
+                return new RedirectResolution(getHomeUri());
             }
         }
         return getContext().getSourcePageResolution();
@@ -150,7 +152,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
         // TODO
         // getContext().addMsg( Messages.cancelled( "Manufacturer" ) );
 
-        return new RedirectResolution(entityInfo.getHomeUri());
+        return new RedirectResolution(getHomeUri());
     }
 
 
@@ -169,6 +171,10 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
     }
 
 
+    protected String getHomeUri() {
+        return "/" + getEntityInfo().getEntityUri();
+    }
+
     // Properties
     // -------------------------------------------------------------------------
     public ActionBeanContext getContext() {
@@ -178,7 +184,6 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
     public void setContext(ActionBeanContext context) {
         this.context = context;
     }
-
 
     /**
      * The current entity
@@ -197,7 +202,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
     }
 
     public Class getIdClass() {
-        return entityInfo.getIdClass();
+        return getEntityInfo().getIdClass();
     }
 
     @SuppressWarnings("unchecked")
@@ -214,6 +219,9 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
     }
 
     public EntityInfo getEntityInfo() {
+        if (entityInfo == null) {
+            entityInfo = EntityInfo.newInstance(getService().getEntityClass());
+        }
         return entityInfo;
     }
 
@@ -249,6 +257,13 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
         return queryStrategy;
     }
 
+    public CrudService<E> getService() {
+        if (service == null) {
+            service = createService();
+        }
+        return service;
+    }
+
     // Implementation methods
     // -------------------------------------------------------------------------
 
@@ -280,9 +295,9 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
      * This method is used so we can render pick lists of values to be chosen for related values
      */
     protected Object getAllValuesForProperty(String propertyName) {
-        PropertyInfo property = entityInfo.getProperty(propertyName);
+        PropertyInfo property = getEntityInfo().getProperty(propertyName);
         if (property == null) {
-            throw new IllegalArgumentException("Entity " + entityInfo.getEntityName() + " does not have a property called: " + propertyName);
+            throw new IllegalArgumentException("Entity " + getEntityInfo().getEntityName() + " does not have a property called: " + propertyName);
         }
         EntityInfo propertyTypeInfo = property.getPropertyEntityInfo();
         if (propertyTypeInfo.isPersistent()) {
@@ -303,5 +318,9 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
             }
         }
         return null;
+    }
+
+    protected CrudService<E> createService() {
+        throw new IllegalArgumentException("No service property has been configured!");
     }
 }
