@@ -69,7 +69,12 @@
         }
     }
     if (!done) {
-        if (propertyInfo.isCollection() || propertyInfo.isPersistent() || propertyInfo.isEnum()) {
+        if (propertyInfo.isCollection()) {
+%>
+<%-- TODO - what to do here - link to the edit page? --%>
+<%
+        }
+        else if (propertyInfo.isPersistent() || propertyInfo.isEnum()) {
 %>
 <able:selectField entity="${entity}" name="${name}"/>
 <%

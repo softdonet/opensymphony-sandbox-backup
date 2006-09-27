@@ -320,6 +320,15 @@ public class EntityInfo {
         }
 
         editProperties = createOrderedList(viewProperties, sortOrder, includes, excludes);
+
+        // lets remove any collection types
+        Iterator<PropertyInfo> iter = editProperties.iterator();
+        while (iter.hasNext()) {
+            PropertyInfo propertyInfo = iter.next();
+            if (propertyInfo.isCollection()) {
+                iter.remove();
+            }
+        }
     }
 
     protected String[] getDefaultEditExcludes() {

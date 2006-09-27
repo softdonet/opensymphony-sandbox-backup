@@ -185,6 +185,16 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
      * The current entity
      */
     public E getEntity() {
+        if (entity == null) {
+            // lets lazily create an instance so we pre-populate the
+            // create new edit form
+            try {
+                entity = getService().newInstance();
+            }
+            catch (Exception e) {
+                throw new RuntimeException("Failed to create a new instance of: " + getEntityClass() + ". Reason: " + e, e);
+            }
+        }
         return entity;
     }
 
