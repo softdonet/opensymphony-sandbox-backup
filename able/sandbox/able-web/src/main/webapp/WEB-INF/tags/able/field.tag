@@ -11,6 +11,7 @@
     if (entityName == null) {
         entityName = "entity.";
     }
+    String fieldName = entityName + name;
     if (entity == null) {
         System.out.println("No entity!!!");
     }
@@ -18,16 +19,19 @@
     if (propertyInfo != null) {
         boolean done = true;
         Input input = propertyInfo.getInput();
-        if (input != null) {
+        if (input == null) {
+            done = false;
+        }
+        else {
             String customControl = input.customControl();
             if (customControl != null) {
                 // TODO include some custom controll here...
             }
             InputType type = input.type();
             switch (type) {
-                case Checkbox:
+            case Checkbox:
 %>
-<stripes:checkbox name="<%=entityName %>${name}"/>
+<stripes:checkbox name="<%=fieldName%>"/>
 <%
         break;
 
@@ -39,7 +43,7 @@
 
     case Password:
 %>
-<stripes:password name="<%= entityName %>${name}"/>
+<stripes:password name="<%=fieldName%>"/>
 <%
         break;
 
@@ -51,13 +55,13 @@
 
     case Text:
 %>
-<stripes:text name="<%= entityName %>${name}"/>
+<stripes:text name="<%=fieldName%>"/>
 <%
         break;
 
     case TextArea:
 %>
-<stripes:textarea name="<%= entityName %>${name}" formatPattern="medium"/>
+<stripes:textarea name="<%=fieldName%>" formatPattern="medium"/>
 <%
                 break;
             default:
@@ -77,14 +81,14 @@ else if (propertyInfo.isDate()) {
 }
 else {
 %>
-<stripes:text name="<%= entityName %>${name}"/>
+<stripes:text name="<%=fieldName%>"/>
 <%
             }
         }
     }
     else {
 %>
-No Property Info for ${name}
+No Property Info for <%=fieldName%>
 <%
     }
 %>

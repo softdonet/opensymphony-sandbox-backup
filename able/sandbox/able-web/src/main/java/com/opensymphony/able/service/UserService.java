@@ -24,7 +24,7 @@ public class UserService extends JpaCrudService<User> {
         String hash = encrypt(password);
         User account = findByUsername(username);
 
-        if (account == null) {
+        if (account == null || account.getPasswordHash() == null) {
             return false;
         }
 

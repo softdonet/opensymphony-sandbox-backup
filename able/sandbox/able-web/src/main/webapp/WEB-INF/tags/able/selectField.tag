@@ -4,7 +4,7 @@
 <%@ attribute name="entity" type="java.lang.Object" required="true" %>
 <%@ attribute name="name" type="java.lang.String" required="true" %>
 <%
-    String label = null;
+    String label = "";
     PropertyInfo propertyInfo = PropertyInfo.getPropertyInfo(entity, name);
     if (propertyInfo != null) {
         List<PropertyInfo> list = propertyInfo.getPropertyEntityInfo().getViewFieldProperties();
@@ -12,17 +12,17 @@
             label = list.get(0).getName();
         }
     }
-    if (label != null) {
+    if (propertyInfo.isEnum()) {
+%>
+<stripes:select name="${name}" value="Medium">
+    <stripes:options-collection collection="${actionBean.allValues[name]}"/>
+</stripes:select>
+<%
+    }
+    else {
 %>
 <stripes:select name="${name}" value="Medium">
     <stripes:options-collection collection="${actionBean.allValues[name]}" label="<%= label %>" value="id"/>
-</stripes:select>
-<%
-}
-else {
-%>
-<stripes:select name="${name}" value="Medium">
-    <stripes:options-collection collection="${actionBean.allValues[name]}" value="id"/>
 </stripes:select>
 <%
     }

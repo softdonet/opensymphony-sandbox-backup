@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include/taglibs.jspf" %>
+
 <html>
 <head>
 <title>Edit ${actionBean.entityInfo.entityName}</title>
@@ -22,8 +23,10 @@
                     :
                 </th>
                 <td>
-                    <%-- TODO show different controls based on the property metadata --%>
+                    <able:field entity="${actionBean.entity}" name="${property.name}"/>
+                    <%-- TODO show different controls based on the property metadata
                     <stripes:text name="entity.${property.name}"/>
+                    --%>
                 </td>
             </tr>
         </c:forEach>
