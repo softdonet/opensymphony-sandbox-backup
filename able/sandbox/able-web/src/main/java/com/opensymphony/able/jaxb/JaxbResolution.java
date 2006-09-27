@@ -16,29 +16,33 @@
  */
 package com.opensymphony.able.jaxb;
 
-import java.util.List;
+import net.sourceforge.stripes.action.Resolution;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sourceforge.stripes.action.Resolution;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A {@link Resolution} for rendering the entities using JAXB
- * 
+ * <p/>
  * version $Revision: 1 $
  */
 public class JaxbResolution implements Resolution {
 
-	private JaxbTemplate template;
-	private List list;
-	
-	public JaxbResolution(JaxbTemplate template, List list) {
-		this.template = template;
-		this.list = list;
-	}
+    private JaxbTemplate template;
+    private List list;
 
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		template.write(response.getOutputStream(), list);
-	}
+    public JaxbResolution(JaxbTemplate template, Object element) {
+        this(template, Arrays.asList(new Object[]{element}));
+    }
+
+    public JaxbResolution(JaxbTemplate template, List list) {
+        this.template = template;
+        this.list = list;
+    }
+
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        template.write(response.getOutputStream(), list);
+    }
 }

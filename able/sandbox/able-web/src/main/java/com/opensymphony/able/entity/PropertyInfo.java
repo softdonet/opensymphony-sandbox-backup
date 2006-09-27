@@ -196,8 +196,7 @@ public class PropertyInfo {
     }
 
     public EntityInfo getPropertyEntityInfo() {
-        // TODO - use registry....
-        return new EntityInfo(getPropertyComponentType());
+        return EntityInfo.newInstance(getPropertyComponentType());
     }
 
     public Input getInput() {

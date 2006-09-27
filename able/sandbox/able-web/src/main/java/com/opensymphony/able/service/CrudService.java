@@ -47,6 +47,11 @@ public interface CrudService<E> {
     public void update(E entity);
 
     /**
+     * Deletes the given entity
+     */
+    public void delete(E entity);
+
+    /**
      * Finds all the entities
      */
     public List<E> findAll();

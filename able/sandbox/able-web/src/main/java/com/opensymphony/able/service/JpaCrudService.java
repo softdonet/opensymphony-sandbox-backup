@@ -81,6 +81,10 @@ public abstract class JpaCrudService<E> implements CrudService<E> {
     public void update(E entity) {
     }
 
+    public void delete(E entity) {
+        getJpaTemplate().remove(entity);
+    }
+
     public List<E> findAll() {
         return getJpaTemplate().find("from " + entityClass.getName());
     }

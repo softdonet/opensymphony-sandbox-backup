@@ -22,26 +22,15 @@ import com.opensymphony.able.view.ViewDefaults;
 import com.opensymphony.able.view.ViewField;
 import com.opensymphony.able.view.ViewForm;
 import com.opensymphony.able.view.ViewTable;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.TypeConverter;
 
 import javax.persistence.Entity;
-
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class EntityInfo {
     private Class entityClass;
@@ -59,6 +48,14 @@ public class EntityInfo {
     private TypeConverter typeConverter = new BeanWrapperImpl();
     private String[] defaultViewFieldPropertyNames = { "name", "shortDescription", "description", "code" };
     private String uriPrefix = "/views/entity/";
+
+
+    /**
+     * Creates a new instance making it available in the static registry
+     */
+    public static EntityInfo newInstance(Class type) {
+        return Entities.getInstance().getEntityByClass(type);
+    }
 
     public EntityInfo(Class entityClass) {
         this.entityClass = entityClass;
@@ -443,5 +440,4 @@ public class EntityInfo {
     protected boolean empty(String[] names) {
         return names == null || names.length == 0;
     }
-
 }
