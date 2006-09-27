@@ -1,10 +1,12 @@
 <%@ include file="/WEB-INF/jsp/include/taglibs.jspf" %>
 <html>
 <head>
-    <title>List entities</title>
+    <title>${actionBean.entityInfo.entityName} Browse</title>
 </head>
 
 <body>
+
+<h1>${actionBean.entityInfo.entityName} Browse</h1>
 
 <stripes:form action="${actionBean.actionUri}">
 

@@ -1,6 +1,12 @@
-<%@ include file="/WEB-INF/header.jsp" %>
+<%@ include file="/WEB-INF/jsp/include/taglibs.jspf" %>
 <html>
+<head>
+<title>Edit ${actionBean.entityInfo.entityName}</title>
+</head>
+
 <body>
+
+<h1>Edit ${actionBean.entityInfo.entityName}</h1>
 
 <stripes:form action="${actionBean.actionUri}">
     <stripes:hidden name="entity"/>
