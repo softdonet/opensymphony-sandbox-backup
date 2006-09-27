@@ -22,7 +22,7 @@
                     :
                 </th>
                 <td>
-                    ${actionBean.entity[property.name]}
+                    <able:viewField entity="${actionBean.entity}" name="${property.name}"/>
                 </td>
             </tr>
         </c:forEach>

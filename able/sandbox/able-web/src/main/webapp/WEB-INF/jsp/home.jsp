@@ -10,7 +10,8 @@
 
 <h2>Entity List</h2>
 
-<p>The following are all the entities you can modify</p>
+<p>The following are all the entities you can modify.
+    A good starting point is the <stripes:link href="/bug">Bug List</stripes:link></p>
 
 <ul>
   <c:forEach var="entity" items="${actionBean.entities}">

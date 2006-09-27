@@ -43,6 +43,7 @@ public class Entities {
     private static final Entities instance = new Entities();
 
     private SortedMap<String, EntityInfo> entityMap;
+    private SortedMap<String, EntityInfo> persistentTypes = new TreeMap<String, EntityInfo>();
 
     public static Entities getInstance() {
         return instance;
@@ -81,7 +82,7 @@ public class Entities {
         }
 
         EntityInfo entityInfo = new EntityInfo(type);
-        entityMap.put(entityInfo.getEntityName(), entityInfo);
+        addEntity(entityInfo);
         return entityInfo;
     }
 
@@ -101,13 +102,15 @@ public class Entities {
     }
 
     public Collection<EntityInfo> getEntities() {
-        return getEntityMap().values();
+        // force lazy load
+        getEntityMap();
+        return persistentTypes.values();
     }
 
     public EntityInfo addEntity(String className) {
         Class type = loadClass(className);
         EntityInfo entityInfo = new EntityInfo(type);
-        entityMap.put(entityInfo.getEntityName(), entityInfo);
+        addEntity(entityInfo);
         return entityInfo;
     }
 
@@ -115,7 +118,25 @@ public class Entities {
         Class type = loadClass(className);
         EntityInfo entityInfo = new EntityInfo(type);
         entityMap.put(shortName, entityInfo);
+        if (isPersistentEntity(entityInfo)) {
+            persistentTypes.put(shortName, entityInfo);
+        }
         return entityInfo;
+    }
+
+    protected void addEntity(EntityInfo entityInfo) {
+        entityMap.put(entityInfo.getEntityName(), entityInfo);
+        if (isPersistentEntity(entityInfo)) {
+            persistentTypes.put(entityInfo.getEntityName(), entityInfo);
+        }
+    }
+
+    protected boolean isPersistentEntity(EntityInfo entityInfo) {
+        Class type = entityInfo.getEntityClass();
+        if (type.isPrimitive() || type.getPackage().getName().startsWith("java.lang") || type.isEnum()) {
+            return false;
+        }
+        return true;
     }
 
     protected void populateEntityMap(Map<String, EntityInfo> map) {
@@ -146,7 +167,7 @@ public class Entities {
             throw new RuntimeException("Failed to load properties file: " + file + ". Reason: " + e, e);
         }
 
-        
+
     }
 
     protected Class loadClass(String className) {
