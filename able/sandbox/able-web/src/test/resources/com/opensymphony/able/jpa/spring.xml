@@ -11,6 +11,10 @@
 
   <bean id="mailService" class="com.opensymphony.able.mail.MockMailService"/>
 
+  <bean id="userService" class="com.opensymphony.able.service.UserService" autowire="constructor"/>
+
+  <bean id="queryStrategy" class="com.opensymphony.able.action.StubQueryStrategy" autowire="constructor"/>
+
   <!-- infrastructure services -->
 
   <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

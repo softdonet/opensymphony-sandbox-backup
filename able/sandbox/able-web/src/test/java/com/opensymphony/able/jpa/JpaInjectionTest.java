@@ -17,9 +17,7 @@
 package com.opensymphony.able.jpa;
 
 import com.opensymphony.able.action.UserActionBean;
-
 import net.sourceforge.stripes.integration.spring.SpringHelper;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.jpa.JpaCallback;
 import org.springframework.orm.jpa.JpaTemplate;
@@ -42,7 +40,7 @@ public class JpaInjectionTest extends SpringTestSupport {
         return new String[][] { { "spring.xml" } };
     };
 
-    @Test(dataProvider = "springUriWithEntityManager", enabled = false)
+    @Test(dataProvider = "springUriWithEntityManager")
     public void testInjectionOfActionBeans(String classpathUri) throws Exception {
         ApplicationContext context = loadContext(classpathUri);
 
