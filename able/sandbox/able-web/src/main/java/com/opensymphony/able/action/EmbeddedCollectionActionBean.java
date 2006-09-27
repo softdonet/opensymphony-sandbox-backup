@@ -179,11 +179,19 @@ public abstract class EmbeddedCollectionActionBean<O, E> implements CrudActionBe
         return entities;
     }
 
+    public void setEntities(List<E> entities) {
+        this.entities = entities;
+    }
+
     /**
      * Returns the entities submitted from a form which should be deleted
      */
     public List<E> getDelete() {
         return delete;
+    }
+
+    public void setDelete(List<E> delete) {
+        this.delete = delete;
     }
 
 
