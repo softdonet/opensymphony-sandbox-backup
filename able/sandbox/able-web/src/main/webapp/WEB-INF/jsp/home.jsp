@@ -15,10 +15,9 @@
 </ul>
 
 <h2>Entity List</h2>
-<jsp:useBean id="helper" class="com.opensymphony.able.entity.Entities" scope="page" />
 
 <ul>
-  <c:forEach var="entity" items="${helper.entities}">
+  <c:forEach var="entity" items="${actionBean.entities}">
     <li><stripes:link href="/${entity.entityUri}">${entity.entityName} List</stripes:link></li>
   </c:forEach>
 </ul>
