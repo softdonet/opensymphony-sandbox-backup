@@ -11,10 +11,13 @@
 <p>Useful links</p>
 
 <ul>
+    <li><stripes:link href="/bug">Bug List</stripes:link></li>
     <li><stripes:link href="/person">Person List</stripes:link></li>
 </ul>
 
 <h2>Entity List</h2>
+
+<p><b>NOTE</b> we don't currently have auto-created ActionBean implementations for all of these yet.</p>
 
 <ul>
   <c:forEach var="entity" items="${actionBean.entities}">
