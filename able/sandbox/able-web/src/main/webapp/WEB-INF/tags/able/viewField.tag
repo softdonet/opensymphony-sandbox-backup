@@ -14,7 +14,7 @@
         if (propertyInfo.isCollection()) {
 %>
 [<%= propertyInfo.getSize(entity) %>]
-<stripes:link href="${actionBean.actionUri}/${name}?oid=${entity.id}">Edit</stripes:link>
+<stripes:link href="${actionBean.actionUri}_${name}?owner=${entity.id}">Edit</stripes:link>
 <%
         }
         else if (propertyInfo.isPersistent()) {

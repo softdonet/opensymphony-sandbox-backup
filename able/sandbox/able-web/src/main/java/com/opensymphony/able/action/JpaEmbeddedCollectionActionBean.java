@@ -23,30 +23,36 @@ import net.sourceforge.stripes.integration.spring.SpringBean;
 import org.springframework.orm.jpa.JpaTemplate;
 
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 /**
- * A helper class to make it easy to create a JPA based implementation of {@link DefaultCrudActionBean}
+ * A helper class to make it easy to create a JPA based implementation of {@link EmbeddedCollectionActionBean}
  * with minimal extra coding.
  *
- *  @version $Revision$
+ * @version $Revision$
  */
-public abstract class JpaCrudActionBean<E> extends DefaultCrudActionBean<E> {
-    private Class<E> entityClass;
+public class JpaEmbeddedCollectionActionBean<O, E> extends EmbeddedCollectionActionBean<O, E> {
+    private CrudService<E> service;
     @PersistenceContext
     @SpringBean
     private JpaTemplate jpaTemplate;
 
-    public JpaCrudActionBean(Class<E> entityClass) {
-        this.entityClass = entityClass;
+    public JpaEmbeddedCollectionActionBean(String propertyName, Class<O> ownerClass, Class<E> entityClass) {
+        super(propertyName, ownerClass, entityClass);
     }
 
-    protected JpaCrudActionBean(Class<E> entityClass, JpaTemplate jpaTemplate) {
-        this(entityClass);
-        this.jpaTemplate = jpaTemplate;
+    public CrudService<E> getService() {
+        if (service == null) {
+            service = createService();
+        }
+        return service;
     }
 
-    @Override
     protected CrudService<E> createService() {
-        return new JpaCrudService<E>(entityClass, jpaTemplate);
+        return new JpaCrudService<E>(getEntityClass(), jpaTemplate);
+    }
+
+    public List<E> getAllEntities() {
+        return getService().findAll();
     }
 }

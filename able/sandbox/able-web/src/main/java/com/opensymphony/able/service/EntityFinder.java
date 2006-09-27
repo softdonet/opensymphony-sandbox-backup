@@ -18,12 +18,10 @@
 package com.opensymphony.able.service;
 
 import com.opensymphony.able.entity.Entities;
-import com.opensymphony.able.entity.EntityInfo;
 import org.hibernate.ejb.HibernateEntityManagerFactory;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,11 +46,6 @@ public class EntityFinder {
                     entities.getEntityByClass(className);
                 }
             }
-        }
-
-        Collection<EntityInfo> collection = entities.getEntities();
-        for (EntityInfo entityInfo : collection) {
-            System.out.println("Entity: " + entityInfo);
         }
     }
 }

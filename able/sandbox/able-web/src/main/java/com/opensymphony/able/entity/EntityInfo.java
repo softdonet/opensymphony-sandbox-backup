@@ -42,7 +42,7 @@ public class EntityInfo {
     private List<PropertyInfo> listProperties;
     private List<PropertyInfo> viewProperties;
     private List<PropertyInfo> editProperties;
-    private List<PropertyInfo> viewFieldProperties;
+    private List<PropertyInfo> nameProperties;
     private List<PropertyInfo> bulkEditProperties;
     private PropertyInfo idProperty;
     private TypeConverter typeConverter = new BeanWrapperImpl();
@@ -181,18 +181,18 @@ public class EntityInfo {
     /**
      * Returns the list of properties to display in a field view or pick list, combo box, radio selection etc
      */
-    public List<PropertyInfo> getViewFieldProperties() {
-    	return Collections.unmodifiableList(viewFieldProperties);
+    public List<PropertyInfo> getNameProperties() {
+    	return Collections.unmodifiableList(nameProperties);
     }
 
     /**
      * Returns the first name property used to present the entity in a pick list, combo box, radio selection etc
      */
     public PropertyInfo getNameProperty() {
-        if (viewFieldProperties.isEmpty()) {
+        if (nameProperties.isEmpty()) {
             return null;
         }
-        return viewFieldProperties.get(0);
+        return nameProperties.get(0);
     }
 
     public Object convertToPrimaryKeyValkue(String value) {
@@ -348,10 +348,10 @@ public class EntityInfo {
             sortOrder = annotation.sortOrder();
             includes = annotation.includes();
             excludes = annotation.excludes();
-            viewFieldProperties = createOrderedList(properties, sortOrder, includes, excludes);
+            nameProperties = createOrderedList(properties, sortOrder, includes, excludes);
         }
         else {
-            viewFieldProperties = findDefaultViewFields(properties);
+            nameProperties = findDefaultViewFields(properties);
         }
     }
 

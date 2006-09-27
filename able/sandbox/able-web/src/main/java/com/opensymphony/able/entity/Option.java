@@ -39,7 +39,7 @@ public class Option {
 			Option option = new Option();
 			option.setEntity(entity);
 			option.setValue(info.getIdValue(entity));
-			List<PropertyInfo> viewFieldProperties = info.getViewFieldProperties();
+			List<PropertyInfo> viewFieldProperties = info.getNameProperties();
 			Object name = null;
 			if (!viewFieldProperties.isEmpty()) {
 				name = viewFieldProperties.get(0).getValue(entity);

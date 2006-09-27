@@ -1,5 +1,4 @@
 <%@ include file="/WEB-INF/jsp/include/taglibs.jspf" %>
-
 <html>
 <head>
 <title>Edit ${actionBean.entityInfo.entityName}</title>

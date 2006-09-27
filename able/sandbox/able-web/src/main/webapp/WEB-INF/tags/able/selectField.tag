@@ -7,7 +7,7 @@
     String label = "";
     PropertyInfo propertyInfo = PropertyInfo.getPropertyInfo(entity, name);
     if (propertyInfo != null) {
-        List<PropertyInfo> list = propertyInfo.getPropertyEntityInfo().getViewFieldProperties();
+        List<PropertyInfo> list = propertyInfo.getPropertyEntityInfo().getNameProperties();
         if (!list.isEmpty()) {
             label = list.get(0).getName();
         }

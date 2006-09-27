@@ -73,7 +73,7 @@ public class EntityInfoTest {
         Input input = property.getInput();
         assertNotNull(input);
 
-        List<PropertyInfo> viewFieldProperties = info.getViewFieldProperties();
+        List<PropertyInfo> viewFieldProperties = info.getNameProperties();
         assertEquals(viewFieldProperties.size(), 1, "view field properties: " + viewFieldProperties);
         assertProperty("name", viewFieldProperties, 0);
         
@@ -175,7 +175,7 @@ public class EntityInfoTest {
     public void testViewFieldsDefinedViaAnnotation() throws Exception {
         EntityInfo info = new EntityInfo(TestUserWithViewField.class);
 
-        List<PropertyInfo> properties = info.getViewFieldProperties();
+        List<PropertyInfo> properties = info.getNameProperties();
         assertEquals(2, properties.size());
         assertProperty("id", properties, 0);
         assertProperty("username", properties, 1);
@@ -189,7 +189,7 @@ public class EntityInfoTest {
     public void testViewFieldsWithDescriptionProperty() throws Exception {
         EntityInfo info = new EntityInfo(BeanWithDescriptionProperty.class);
 
-        List<PropertyInfo> properties = info.getViewFieldProperties();
+        List<PropertyInfo> properties = info.getNameProperties();
         assertEquals(1, properties.size());
         assertProperty("description", properties, 0);
     }
