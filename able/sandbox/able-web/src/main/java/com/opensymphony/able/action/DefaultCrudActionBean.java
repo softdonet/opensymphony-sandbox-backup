@@ -267,7 +267,6 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
 
             @Override
             public Set<Entry<String, Object>> entrySet() {
-                // TODO Auto-generated method stub
                 return Collections.EMPTY_SET;
             }
         };
@@ -333,8 +332,9 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
         }
         EntityInfo propertyTypeInfo = property.getPropertyEntityInfo();
         if (propertyTypeInfo.isPersistent()) {
-            if (service instanceof JpaCrudService) {
-                JpaCrudService jpaService = (JpaCrudService) service;
+            CrudService<E> s = getService();
+            if (s instanceof JpaCrudService) {
+                JpaCrudService jpaService = (JpaCrudService) s;
                 return jpaService.getJpaTemplate().find(propertyTypeInfo.getFindAllQuery());
             }
         }
@@ -349,7 +349,8 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
                 }
             }
         }
-        return null;
+        log.warn("No such property: " + propertyName + " for entity: " + entityInfo.getEntityName());
+        return Collections.EMPTY_LIST;
     }
 
     protected CrudService<E> createService() {

@@ -14,7 +14,7 @@
     }
     if (propertyInfo.isEnum()) {
 %>
-<stripes:select name="entity.${name}" value="Medium">
+<stripes:select name="entity.${name}">
     <stripes:options-collection collection="${actionBean.allValues[name]}"/>
 </stripes:select>
 <%
