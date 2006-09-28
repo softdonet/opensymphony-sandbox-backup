@@ -21,7 +21,7 @@
     }
     else {
 %>
-<stripes:select name="entity.${name}" value="Medium">
+<stripes:select name="entity.${name}" value="${actionBean.entity[name].id}">
     <stripes:options-collection collection="${actionBean.allValues[name]}" label="<%= label %>" value="id" />
 </stripes:select>
 <%
