@@ -121,28 +121,23 @@ public class EntityInfo {
 
     public String getListUri() {
         //return uriPrefix + getEntityUri() + "/index.jsp";
-        return uriPrefix + "/list.jsp";
+        return uriPrefix + "list.jsp";
     }
 
     public String getViewUri() {
         //return uriPrefix + getEntityUri() + "/view.jsp?id=";
-        return uriPrefix + "/view.jsp?id=";
+        return uriPrefix + "view.jsp?entity=";
     }
 
     public String getEditUri() {
         //return uriPrefix + getEntityUri() + "/edit.jsp?id=";
-        return uriPrefix + "/edit.jsp?id=";
+        return uriPrefix + "edit.jsp?entity=";
     }
 
     public String getBulkEditUri() {
         //return uriPrefix + getEntityUri() + "/editTable.jsp?id=";
-        return uriPrefix + "/editTable.jsp?id=";
+        return uriPrefix + "bulkEdit.jsp?entity=";
     }
-    
-	public String getHomeUriForCollection(String propertyName) {
-        //return uriPrefix + getEntityUri() + "/" + propertyName + "/edit.jsp?oid=";
-        return uriPrefix + "/" + propertyName + "/edit.jsp?oid=";
-	}
 
 
     public PropertyInfo getProperty(String name) {

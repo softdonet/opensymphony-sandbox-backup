@@ -16,9 +16,9 @@
  */
 package com.opensymphony.able.action;
 
-import com.opensymphony.able.example.model.Type;
-import com.opensymphony.able.model.Person;
-import com.opensymphony.able.stripes.PersonActionBean;
+import com.opensymphony.able.model.Bug;
+import com.opensymphony.able.model.Status;
+import com.opensymphony.able.stripes.BugActionBean;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.TypeConverter;
@@ -32,26 +32,26 @@ import java.util.List;
  * 
  * @version $Revision$
  */
-public class JpaCrudActionSupportTest {
+public class JpaCrudActionBeanTest {
 
     @Test
     public void testReflection() throws Exception {
 
-        PersonActionBean action = new PersonActionBean();
+        BugActionBean action = new BugActionBean();
 
         Class idClass = action.getIdClass();
-        Assert.assertEquals(Long.class, idClass);
+        Assert.assertEquals(Integer.class, idClass);
 
-        Class<Person> entityClass = action.getEntityClass();
-        Assert.assertEquals(Person.class, entityClass);
+        Class<Bug> entityClass = action.getEntityClass();
+        Assert.assertEquals(Bug.class, entityClass);
         
         String entityName = action.getEntityInfo().getEntityName();
-        Assert.assertEquals("User", entityName);
+        Assert.assertEquals("Bug", entityName);
 
         String entityUri = action.getEntityInfo().getEntityUri();
-        Assert.assertEquals("user", entityUri);
+        Assert.assertEquals("bug", entityUri);
         
-        Object values = action.getAllValues().get("type");
+        Object values = action.getAllValues().get("status");
         System.out.println("Values: " + values);
         
         Assert.assertTrue(values instanceof List, "values is an array");
@@ -61,28 +61,29 @@ public class JpaCrudActionSupportTest {
 			System.out.println("Found type value: " + object);
 		}
         
-        Assert.assertEquals(3, valueArray.size());
+        Assert.assertEquals(4, valueArray.size());
         System.out.println("found values: " + values);
         
-        Assert.assertEquals(Type.Customer, valueArray.get(0));
-        Assert.assertEquals(Type.Manager, valueArray.get(1));
-        Assert.assertEquals(Type.Admin, valueArray.get(2));
+        Assert.assertEquals(Status.New, valueArray.get(0));
+        Assert.assertEquals(Status.Assigned, valueArray.get(1));
+        Assert.assertEquals(Status.Resolved, valueArray.get(2));
+        Assert.assertEquals(Status.Closed, valueArray.get(3));
     }
 
     @Test
     public void testIntrospection() throws Exception {
-        Person user = new Person();
+        Bug bug = new Bug();
 
-        DataBinder binder = new DataBinder(user);
+        DataBinder binder = new DataBinder(bug);
         MutablePropertyValues propertyValues = new MutablePropertyValues();
-        propertyValues.addPropertyValue("id", "1234567890");
+        propertyValues.addPropertyValue("id", "123456");
         binder.bind(propertyValues);
 
-        Assert.assertEquals(new Long(1234567890), user.getId());
+        Assert.assertEquals(new Integer(123456), bug.getId());
         
         TypeConverter typeConverter = new BeanWrapperImpl();
-        Object value = typeConverter.convertIfNecessary("1234567890", Long.class);
-        Assert.assertEquals(new Long(1234567890), value);
+        Object value = typeConverter.convertIfNecessary("123456", Integer.class);
+        Assert.assertEquals(new Integer(123456), value);
     }
 
 }

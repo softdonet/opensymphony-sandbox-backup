@@ -66,17 +66,23 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
     public DefaultCrudActionBean() {
     }
 
-    public DefaultCrudActionBean(CrudService<E> service) {
-        this.service = service;
-        this.entityClass = service.getEntityClass();
+
+    public DefaultCrudActionBean(Class<E> entityClass) {
+        this.entityClass = entityClass;
         this.entityInfo = new EntityInfo(entityClass);
     }
 
-    public DefaultCrudActionBean(CrudService<E> service, QueryStrategy queryStrategy, Validator validator) {
+    public DefaultCrudActionBean(CrudService<E> service) {
+        this(service.getEntityClass());
         this.service = service;
+    }
+
+    public DefaultCrudActionBean(CrudService<E> service, QueryStrategy queryStrategy, Validator validator) {
+        this(service);
         this.queryStrategy = queryStrategy;
         this.validator = validator;
     }
+
 
     // Actions
     // -------------------------------------------------------------------------

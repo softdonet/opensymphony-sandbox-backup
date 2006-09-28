@@ -31,22 +31,21 @@ import javax.persistence.PersistenceContext;
  *  @version $Revision$
  */
 public abstract class JpaCrudActionBean<E> extends DefaultCrudActionBean<E> {
-    private Class<E> entityClass;
     @PersistenceContext
     @SpringBean
     private JpaTemplate jpaTemplate;
 
     public JpaCrudActionBean(Class<E> entityClass) {
-        this.entityClass = entityClass;
+        super(entityClass);
     }
 
     protected JpaCrudActionBean(Class<E> entityClass, JpaTemplate jpaTemplate) {
-        this(entityClass);
+        super(entityClass);
         this.jpaTemplate = jpaTemplate;
     }
 
     @Override
     protected CrudService<E> createService() {
-        return new JpaCrudService<E>(entityClass, jpaTemplate);
+        return new JpaCrudService<E>(getEntityClass(), jpaTemplate);
     }
 }

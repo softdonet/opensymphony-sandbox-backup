@@ -55,7 +55,7 @@ public class Bug {
         this.openDate = openDate;
     }
 
-    @Label("Description")
+    @Input(label = "Description")
     public String getShortDescription() {
         return shortDescription;
     }
