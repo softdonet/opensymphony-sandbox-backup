@@ -16,8 +16,6 @@
  */
 package com.opensymphony.able.filter;
 
-import com.opensymphony.able.filter.TransactionOutcome;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -29,20 +27,20 @@ public class TransactionOutcomeTest {
 
     @Test
     public void testDefaultIsRollback() {
-        TransactionOutcome outcome = new TransactionOutcome(null);
+        TransactionOutcome outcome = new TransactionOutcome(null, null);
         Assert.assertEquals(true, outcome.isRollbackOnly(), "Should be rollback by default");
     }
 
     @Test
     public void testNotRollbackIfShouldCommit() {
-        TransactionOutcome outcome = new TransactionOutcome(null);
+        TransactionOutcome outcome = new TransactionOutcome(null, null);
         outcome.shouldCommit();
         Assert.assertEquals(false, outcome.isRollbackOnly());
     }
 
     @Test
     public void testRollbackIfCommitThenLaterOnDecideToRollback() {
-        TransactionOutcome outcome = new TransactionOutcome(null);
+        TransactionOutcome outcome = new TransactionOutcome(null, null);
         outcome.shouldCommit();
         outcome.shouldRollback();
         outcome.shouldCommit();

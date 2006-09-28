@@ -20,7 +20,7 @@ package com.opensymphony.able.action;
 import com.opensymphony.able.entity.EntityInfo;
 import com.opensymphony.able.entity.Option;
 import com.opensymphony.able.entity.PropertyInfo;
-import com.opensymphony.able.filter.TransactionServletFilter;
+import com.opensymphony.able.filter.TransactionOutcome;
 import com.opensymphony.able.jaxb.JaxbResolution;
 import com.opensymphony.able.jaxb.JaxbTemplate;
 import net.sourceforge.stripes.action.ActionBean;
@@ -36,10 +36,10 @@ import org.apache.commons.logging.LogFactory;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * A base {@link ActionBean} class for viewing and editing an embedded
@@ -97,26 +97,33 @@ public abstract class EmbeddedCollectionActionBean<O, E> implements CrudActionBe
         if (getContext().getValidationErrors().isEmpty()) {
             List<E> ownerCollection = getOwnedEntities();
 
+            List<E> formSubmittedEntities = getEntities();
+
             System.out.println(">>>> owned entities: " + ownerCollection);
-            System.out.println(">>>> submitted entities: " + getEntities());
+            System.out.println(">>>> submitted entities: " + formSubmittedEntities);
             System.out.println(">>>> delete entities: " + getDelete());
 
-            Set<E> set = new HashSet<E>(getEntities());
-
-            System.out.println(">>>> submitted set: " + set);
+            Map<Object, E> set = new HashMap<Object, E>(formSubmittedEntities.size());
+            for (E formSubmittedEntity : formSubmittedEntities) {
+                Object id = getEntityInfo().getIdValue(formSubmittedEntity);
+                set.put(id, formSubmittedEntity);
+            }
 
             Iterator<E> iter = ownerCollection.iterator();
             while (iter.hasNext()) {
                 E entity = iter.next();
-                if (!set.contains(entity)) {
+                Object id = getEntityInfo().getIdValue(entity);
+                if (set.remove(id) == null) {
                     iter.remove();
                 }
             }
 
-            ownerCollection.addAll(set);
+            ownerCollection.addAll(set.values());
             ownerCollection.removeAll(getDelete());
 
-            shouldCommit();
+            System.out.println(">>>> owner collection before commit: " + getOwnedEntities());
+
+            TransactionOutcome.shouldCommit();
         }
 
         // TODO
@@ -127,7 +134,7 @@ public abstract class EmbeddedCollectionActionBean<O, E> implements CrudActionBe
 
     @DontValidate
     public Resolution cancel() {
-        shouldRollback();
+        TransactionOutcome.shouldRollback();
 
         // TODO
         // getContext().addMsg( Messages.cancelled( "Manufacturer" ) );
@@ -145,7 +152,7 @@ public abstract class EmbeddedCollectionActionBean<O, E> implements CrudActionBe
             }
         }
         if (shouldCommit) {
-            shouldCommit();
+            TransactionOutcome.shouldCommit();
         }
         return new RedirectResolution(getHomeUri());
     }
@@ -234,22 +241,6 @@ public abstract class EmbeddedCollectionActionBean<O, E> implements CrudActionBe
 
     protected String getHomeUri() {
         return ownerInfo.getActionUri();
-    }
-
-    /**
-     * Forces the current transaction to rollback which will cancel any updates
-     * made as part of a form submission.
-     */
-    protected void shouldRollback() {
-        TransactionServletFilter.shouldRollback(getContext().getRequest());
-    }
-
-    /**
-     * Marks the transaction has being one that should commit (unless another
-     * object decides it should rollback)
-     */
-    protected void shouldCommit() {
-        TransactionServletFilter.shouldCommit(getContext().getRequest());
     }
 
     /**

@@ -44,7 +44,12 @@ public class Person {
 		return (obj instanceof Person) && this.id == ((Person) obj).id;
 	}
 
-	/** Gets the ID of the person. */
+    @Override
+    public String toString() {
+        return "Persion[id:" + id + "]";
+    }
+
+    /** Gets the ID of the person. */
 	@Id
 	@GeneratedValue
 	public Integer getId() {

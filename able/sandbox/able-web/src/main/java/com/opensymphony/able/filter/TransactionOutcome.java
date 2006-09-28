@@ -16,28 +16,79 @@
  */
 package com.opensymphony.able.filter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * A holder class of the transaction status together with providing hints to the
  * current transaction on whether or not it should be commit or rolled back.
- * 
+ *
  * @version $Revision$
  */
 public class TransactionOutcome {
+    private static final transient Log log = LogFactory.getLog(TransactionOutcome.class);
+
+    private static final ThreadLocal<TransactionOutcome> threadLocal = new ThreadLocal<TransactionOutcome>();
 
     private final TransactionStatus status;
+    private TransactionTemplate transactionTemplate;
     private boolean shouldRollback = false;
     private boolean shouldCommit = false;
+    private boolean delayCommit = true;
 
-    public TransactionOutcome(TransactionStatus status) {
+    /**
+     * Marks that a transaction should be rolled back rather than commit
+     */
+    public static void shouldRollback() {
+        TransactionOutcome outcome = getTransactionOutcome();
+        if (outcome != null) {
+            outcome.enableRollback();
+        }
+        else {
+            log.error("No transaction in progress!");
+        }
+    }
+
+    /**
+     * Marks that a transaction should be committed. If this method is not
+     * called then the transaction will be rolled back to avoid accidental
+     * updates.
+     */
+    public static void shouldCommit() {
+        TransactionOutcome outcome = getTransactionOutcome();
+        if (outcome != null) {
+            outcome.enableCommit();
+        }
+        else {
+            log.error("No transaction in progress!");
+        }
+    }
+
+    public static TransactionOutcome getTransactionOutcome() {
+        return threadLocal.get();
+    }
+
+    public static void setTransactionOutcome(TransactionOutcome value) {
+        threadLocal.set(value);
+    }
+
+
+    public TransactionOutcome(TransactionStatus status, TransactionTemplate transactionTemplate) {
         this.status = status;
+        this.transactionTemplate = transactionTemplate;
     }
 
     /**
      * Marks that a transaction should be rolled back rather than commit
      */
-    public void shouldRollback() {
+    public void enableRollback() {
+        Exception exception = new Exception();
+        log.warn("Being told to rollback!", exception);
+        exception.printStackTrace();
+
         shouldRollback = true;
     }
 
@@ -46,8 +97,17 @@ public class TransactionOutcome {
      * called then the transaction wil be rolled back to avoid accidental
      * updates.
      */
-    public void shouldCommit() {
-        shouldCommit = true;
+    public void enableCommit() {
+        if (delayCommit) {
+            shouldCommit = true;
+        }
+        else {
+            if (log.isDebugEnabled()) {
+                log.debug("Committing the transaction with rollback status: " + status.isRollbackOnly());
+            }
+            PlatformTransactionManager transactionManager = transactionTemplate.getTransactionManager();
+            transactionManager.commit(status);
+        }
     }
 
     /**
@@ -62,4 +122,14 @@ public class TransactionOutcome {
         return status;
     }
 
+    public boolean isDelayCommit() {
+        return delayCommit;
+    }
+
+    /**
+     * Should we delay the commit until the end of the filter or perform it immediately inside the action bean?
+     */
+    public void setDelayCommit(boolean delayCommit) {
+        this.delayCommit = delayCommit;
+    }
 }

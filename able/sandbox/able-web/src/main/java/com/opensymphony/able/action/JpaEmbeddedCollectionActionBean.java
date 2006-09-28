@@ -48,11 +48,24 @@ public class JpaEmbeddedCollectionActionBean<O, E> extends EmbeddedCollectionAct
         return service;
     }
 
+    public List<E> getAllEntities() {
+        return getService().findAll();
+    }
+
     protected CrudService<E> createService() {
         return new JpaCrudService<E>(getEntityClass(), jpaTemplate);
     }
 
-    public List<E> getAllEntities() {
-        return getService().findAll();
+    /*
+    @Override
+    protected void shouldCommit() {
+        super.shouldCommit();
+
+        jpaTemplate.refresh(getOwner());;
+
+        System.out.println(">>>> After commit the owned entities are: " + getOwnedEntities());
     }
+    */
 }
+
+

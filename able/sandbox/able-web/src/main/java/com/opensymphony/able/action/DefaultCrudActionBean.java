@@ -19,7 +19,7 @@ package com.opensymphony.able.action;
 
 import com.opensymphony.able.entity.EntityInfo;
 import com.opensymphony.able.entity.PropertyInfo;
-import com.opensymphony.able.filter.TransactionServletFilter;
+import com.opensymphony.able.filter.TransactionOutcome;
 import com.opensymphony.able.jaxb.JaxbResolution;
 import com.opensymphony.able.jaxb.JaxbTemplate;
 import com.opensymphony.able.service.CrudService;
@@ -83,7 +83,6 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
         this.validator = validator;
     }
 
-
     // Actions
     // -------------------------------------------------------------------------
 
@@ -120,7 +119,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
             Object idValue = getEntityInfo().getIdValue(e);
             if (idValue != null) {
                 getService().delete(e);
-                shouldCommit();
+                TransactionOutcome.shouldCommit();
             }
         }
         return new RedirectResolution(getActionUri());
@@ -141,7 +140,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
                 else {
                     getService().update(e);
                 }
-                shouldCommit();
+                TransactionOutcome.shouldCommit();
                 return new RedirectResolution(getActionUri());
             }
         }
@@ -153,7 +152,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
      */
     @DontValidate
     public Resolution cancel() {
-        shouldRollback();
+        TransactionOutcome.shouldRollback();
 
         // TODO
         // getContext().addMsg( Messages.cancelled( "Manufacturer" ) );
@@ -224,6 +223,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
 
     /**
      * Returns the type of the primary key of the entity
+     *
      * @return
      */
     public Class getIdClass() {
@@ -299,26 +299,12 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
     // -------------------------------------------------------------------------
 
     /**
-     * Forces the current transaction to rollback which will cancel any updates
-     * made as part of a form submission.
-     */
-    protected void shouldRollback() {
-        TransactionServletFilter.shouldRollback(getContext().getRequest());
-    }
-
-    /**
-     * Marks the transaction has being one that should commit (unless another
-     * object decides it should rollback)
-     */
-    protected void shouldCommit() {
-        TransactionServletFilter.shouldCommit(getContext().getRequest());
-    }
-
-    /**
      * Performs any custom validation
      */
     protected void validate() {
-        validator.validate(getContext(), "entity.", getEntity());
+        if (validator != null) {
+            validator.validate(getContext(), "entity.", getEntity());
+        }
     }
 
     /**

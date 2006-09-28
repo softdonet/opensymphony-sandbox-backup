@@ -18,8 +18,9 @@ package com.opensymphony.able.filter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -33,10 +34,7 @@ import javax.servlet.ServletResponse;
 import java.io.IOException;
 
 /**
- * A simple transactional filter so that all web operations are in a transaction
- * for JPA reads and writes.
- * <p/>
- * TODO we could get clever and figure out what URIs are read only transactions etc
+ * A more complex transactional filter which avoids using the TransactionTemplate so that the transaction can be committed & resumed within the filter
  *
  * @version $Revision$
  */
@@ -62,71 +60,57 @@ public class TransactionServletFilter implements Filter {
             log.debug("Starting a transaction");
         }
 
-        Exception e = (Exception) transactionTemplate.execute(new TransactionCallback() {
+        PlatformTransactionManager transactionManager = transactionTemplate.getTransactionManager();
+        TransactionStatus status = transactionManager.getTransaction(transactionTemplate);
+        TransactionOutcome outcome = new TransactionOutcome(status, transactionTemplate);
+        request.setAttribute(TRANSACTION_OUTCOME, outcome);
 
-            public Object doInTransaction(TransactionStatus status) {
-                try {
-                    TransactionOutcome outcome = new TransactionOutcome(status);
-                    request.setAttribute(TRANSACTION_OUTCOME, outcome);
-                    filterChain.doFilter(request, response);
 
-                    if (outcome.isRollbackOnly()) {
-                        status.setRollbackOnly();
-                    }
+        Exception exception = null;
+        try {
+            filterChain.doFilter(request, response);
+            status = transactionManager.getTransaction(transactionTemplate);
+        }
+        catch (Exception e) {
+            exception = e;
+            log.warn("Caught: " + e, e);
+        }
 
-                    if (log.isDebugEnabled()) {
-                        log.debug("Completing a transaction with rollback: " + status);
-                    }
-                    return null;
-                }
-                catch (Exception e) {
-                    return e;
-                }
+        if (outcome.isRollbackOnly() || exception != null) {
+            status.setRollbackOnly();
+        }
+
+        try {
+            if (status.isRollbackOnly()) {
+                log.debug("Rolling back transaction");
+                transactionManager.rollback(status);
             }
-        });
-
-        if (log.isDebugEnabled()) {
-            log.debug("Completed a transaction with exception: " + e);
+            else {
+                log.debug("Committing transaction");
+                transactionManager.commit(status);
+            }
+        }
+        catch (TransactionException e) {
+            if (exception == null) {
+                exception = e;
+            }
+            else {
+                log.debug("Failed to rollback transaction: " + e, e);
+            }
         }
 
-        if (e instanceof IOException) {
-            throw(IOException) e;
+
+        if (exception instanceof IOException) {
+            throw(IOException) exception;
         }
-        else if (e instanceof ServletException) {
-            throw(ServletException) e;
+        else if (exception instanceof ServletException) {
+            throw(ServletException) exception;
         }
-        else if (e != null) {
-            throw new ServletException(e);
+        else if (exception != null) {
+            throw new ServletException(exception);
         }
     }
 
-    /**
-     * Marks that a transaction should be rolled back rather than commit
-     */
-    public static void shouldRollback(ServletRequest request) {
-        TransactionOutcome outcome = getTransactionOutcome(request);
-        if (outcome != null) {
-            outcome.shouldRollback();
-        }
-        else {
-            log.error("No transaction in progress!");
-        }
-    }
-
-    /**
-     * Marks that a transaction should be committed. If this method is not
-     * called then the transaction will be rolled back to avoid accidental
-     * updates.
-     */
-    public static void shouldCommit(ServletRequest request) {
-        TransactionOutcome outcome = getTransactionOutcome(request);
-        if (outcome != null) {
-            outcome.shouldCommit();
-        }
-        else {
-            log.error("No transaction in progress!");
-        }
-    }
 
     public static TransactionOutcome getTransactionOutcome(ServletRequest request) {
         return (TransactionOutcome) request.getAttribute(TRANSACTION_OUTCOME);
