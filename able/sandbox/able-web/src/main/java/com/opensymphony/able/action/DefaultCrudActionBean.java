@@ -119,7 +119,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
         if (e != null) {
             Object idValue = getEntityInfo().getIdValue(e);
             if (idValue != null) {
-                service.delete(e);
+                getService().delete(e);
                 shouldCommit();
             }
         }
@@ -136,10 +136,10 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
             if (e != null) {
                 Object idValue = getEntityInfo().getIdValue(e);
                 if (idValue == null) {
-                    service.insert(e);
+                    getService().insert(e);
                 }
                 else {
-                    service.update(e);
+                    getService().update(e);
                 }
                 shouldCommit();
                 return new RedirectResolution(getActionUri());
@@ -240,7 +240,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
             log.info("Query with: " + query + " found: " + answer);
             return answer;
         }
-        return service.findAll();
+        return getService().findAll();
     }
 
     public EntityInfo getEntityInfo() {
