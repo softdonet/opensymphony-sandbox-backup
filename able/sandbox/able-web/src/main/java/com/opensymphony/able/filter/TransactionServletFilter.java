@@ -35,9 +35,9 @@ import java.io.IOException;
 /**
  * A simple transactional filter so that all web operations are in a transaction
  * for JPA reads and writes.
- * 
+ * <p/>
  * TODO we could get clever and figure out what URIs are read only transactions etc
- * 
+ *
  * @version $Revision$
  */
 public class TransactionServletFilter implements Filter {
@@ -58,6 +58,10 @@ public class TransactionServletFilter implements Filter {
         TransactionTemplate transactionTemplate = (TransactionTemplate) context.getBean("transactionTemplate");
         transactionTemplate.setReadOnly(false);
 
+        if (log.isDebugEnabled()) {
+            log.debug("Starting a transaction");
+        }
+
         Exception e = (Exception) transactionTemplate.execute(new TransactionCallback() {
 
             public Object doInTransaction(TransactionStatus status) {
@@ -65,9 +69,13 @@ public class TransactionServletFilter implements Filter {
                     TransactionOutcome outcome = new TransactionOutcome(status);
                     request.setAttribute(TRANSACTION_OUTCOME, outcome);
                     filterChain.doFilter(request, response);
-                    
+
                     if (outcome.isRollbackOnly()) {
                         status.setRollbackOnly();
+                    }
+
+                    if (log.isDebugEnabled()) {
+                        log.debug("Completing a transaction with rollback: " + status);
                     }
                     return null;
                 }
@@ -76,12 +84,16 @@ public class TransactionServletFilter implements Filter {
                 }
             }
         });
-        
+
+        if (log.isDebugEnabled()) {
+            log.debug("Completed a transaction with exception: " + e);
+        }
+
         if (e instanceof IOException) {
-            throw (IOException) e;
+            throw(IOException) e;
         }
         else if (e instanceof ServletException) {
-            throw (ServletException) e;
+            throw(ServletException) e;
         }
         else if (e != null) {
             throw new ServletException(e);
@@ -100,7 +112,7 @@ public class TransactionServletFilter implements Filter {
             log.error("No transaction in progress!");
         }
     }
-    
+
     /**
      * Marks that a transaction should be committed. If this method is not
      * called then the transaction will be rolled back to avoid accidental
@@ -115,11 +127,11 @@ public class TransactionServletFilter implements Filter {
             log.error("No transaction in progress!");
         }
     }
-    
+
     public static TransactionOutcome getTransactionOutcome(ServletRequest request) {
         return (TransactionOutcome) request.getAttribute(TRANSACTION_OUTCOME);
     }
-    
+
     public void destroy() {
     }
 }

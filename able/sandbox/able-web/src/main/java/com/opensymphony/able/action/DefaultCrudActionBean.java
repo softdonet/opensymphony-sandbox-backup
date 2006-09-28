@@ -117,7 +117,7 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
                 shouldCommit();
             }
         }
-        return new ForwardResolution(getEntityInfo().getListUri());
+        return new RedirectResolution(getActionUri());
     }
 
     /**
@@ -198,15 +198,28 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
         return entity;
     }
 
-
     public void setEntity(E entity) {
         this.entity = entity;
     }
 
+    /**
+     * Returns the type of the entity
+     */
     public Class<E> getEntityClass() {
         return entityClass;
     }
 
+    /**
+     * Returns the primary key of the entity
+     */
+    public Object getId() {
+        return getEntityInfo().getIdValue(getEntity());
+    }
+
+    /**
+     * Returns the type of the primary key of the entity
+     * @return
+     */
     public Class getIdClass() {
         return getEntityInfo().getIdClass();
     }

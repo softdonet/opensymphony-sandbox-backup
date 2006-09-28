@@ -9,7 +9,7 @@
 <h1>Edit ${actionBean.entityInfo.entityName}</h1>
 
 <stripes:form action="${actionBean.actionUri}">
-    <stripes:hidden name="entity"/>
+    <stripes:hidden name="entity" value="${actionBean.id}"/>
 
     <stripes:errors/>
 

@@ -3,11 +3,20 @@ package com.opensymphony.able.stripes.util;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.config.Configuration;
-import net.sourceforge.stripes.controller.*;
+import net.sourceforge.stripes.controller.DispatcherHelper;
+import net.sourceforge.stripes.controller.ExecutionContext;
+import net.sourceforge.stripes.controller.LifecycleStage;
+import net.sourceforge.stripes.controller.StripesConstants;
+import net.sourceforge.stripes.controller.StripesFilter;
 import net.sourceforge.stripes.exception.StripesServletException;
 import net.sourceforge.stripes.validation.BooleanTypeConverter;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspFactory;
@@ -36,7 +45,8 @@ public class AbleActionBeanFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        if ("/".equals(request.getServletPath())) {
+        String servletPath = request.getServletPath();
+        if ("/".equals(servletPath)) {
             filterChain.doFilter(request, response);
             return;
         }
