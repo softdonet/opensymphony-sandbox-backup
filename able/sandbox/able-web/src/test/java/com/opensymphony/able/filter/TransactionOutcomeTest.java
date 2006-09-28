@@ -34,16 +34,16 @@ public class TransactionOutcomeTest {
     @Test
     public void testNotRollbackIfShouldCommit() {
         TransactionOutcome outcome = new TransactionOutcome(null, null);
-        outcome.shouldCommit();
+        outcome.enableCommit();
         Assert.assertEquals(false, outcome.isRollbackOnly());
     }
 
     @Test
     public void testRollbackIfCommitThenLaterOnDecideToRollback() {
         TransactionOutcome outcome = new TransactionOutcome(null, null);
-        outcome.shouldCommit();
-        outcome.shouldRollback();
-        outcome.shouldCommit();
+        outcome.enableCommit();
+        outcome.enableRollback();
+        outcome.enableCommit();
         Assert.assertEquals(true, outcome.isRollbackOnly());
     }
 }

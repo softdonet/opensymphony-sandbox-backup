@@ -85,10 +85,6 @@ public class TransactionOutcome {
      * Marks that a transaction should be rolled back rather than commit
      */
     public void enableRollback() {
-        Exception exception = new Exception();
-        log.warn("Being told to rollback!", exception);
-        exception.printStackTrace();
-
         shouldRollback = true;
     }
 
