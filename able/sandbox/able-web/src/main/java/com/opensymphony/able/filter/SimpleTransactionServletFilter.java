@@ -19,6 +19,8 @@ package com.opensymphony.able.filter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.JDBCException;
+import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -32,6 +34,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * A simple transactional filter so that all web operations are in a transaction
@@ -101,6 +104,18 @@ public class SimpleTransactionServletFilter implements Filter {
             else if (e != null) {
                 throw new ServletException(e);
             }
+        }
+        catch (TransactionException e) {
+            Throwable cause = e.getCause();
+            if (cause.getCause() != null) {
+                cause = cause.getCause();
+            };
+            if (cause instanceof JDBCException) {
+                JDBCException jdbcException = (JDBCException) cause;
+                SQLException sqlException = jdbcException.getSQLException();
+                throw new ServletException("Failed to execute: " + jdbcException.getSQL() + ": error: " + sqlException.getSQLState() + ". Reason: " + sqlException, sqlException);
+            }
+            throw new ServletException(cause);
         }
         finally {
             TransactionOutcome.setTransactionOutcome(null);
