@@ -23,6 +23,8 @@ import com.opensymphony.able.entity.PropertyInfo;
 import com.opensymphony.able.filter.TransactionOutcome;
 import com.opensymphony.able.jaxb.JaxbResolution;
 import com.opensymphony.able.jaxb.JaxbTemplate;
+import com.opensymphony.able.view.Input;
+import com.opensymphony.able.view.InputType;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.DefaultHandler;
@@ -30,16 +32,20 @@ import net.sourceforge.stripes.action.DontValidate;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
+import net.sourceforge.stripes.integration.spring.SpringBean;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A base {@link ActionBean} class for viewing and editing an embedded
@@ -56,9 +62,13 @@ public abstract class EmbeddedCollectionActionBean<O, E> implements CrudActionBe
     private Class<O> ownerClass;
     private List<E> entities = new ArrayList<E>();
     private List<E> delete = new ArrayList<E>();
+    private List<E> add = new ArrayList<E>();
     private Class<E> entityClass;
     private EntityInfo ownerInfo;
     private EntityInfo entityInfo;
+    @SpringBean
+    protected QueryStrategy queryStrategy;
+    protected String query;
 
     public EmbeddedCollectionActionBean(String propertyName) {
         this.propertyName = propertyName;
@@ -99,16 +109,13 @@ public abstract class EmbeddedCollectionActionBean<O, E> implements CrudActionBe
 
             List<E> formSubmittedEntities = getEntities();
 
-            System.out.println(">>>> owned entities: " + ownerCollection);
-            System.out.println(">>>> submitted entities: " + formSubmittedEntities);
-            System.out.println(">>>> delete entities: " + getDelete());
-
             Map<Object, E> set = new HashMap<Object, E>(formSubmittedEntities.size());
             for (E formSubmittedEntity : formSubmittedEntities) {
                 Object id = getEntityInfo().getIdValue(formSubmittedEntity);
                 set.put(id, formSubmittedEntity);
             }
 
+            Set ids = new HashSet();
             Iterator<E> iter = ownerCollection.iterator();
             while (iter.hasNext()) {
                 E entity = iter.next();
@@ -116,12 +123,12 @@ public abstract class EmbeddedCollectionActionBean<O, E> implements CrudActionBe
                 if (set.remove(id) == null) {
                     iter.remove();
                 }
+                ids.add(id);
             }
 
             ownerCollection.addAll(set.values());
+            ownerCollection.addAll(getAdd());
             ownerCollection.removeAll(getDelete());
-
-            System.out.println(">>>> owner collection before commit: " + getOwnedEntities());
 
             TransactionOutcome.shouldCommit();
         }
@@ -203,6 +210,17 @@ public abstract class EmbeddedCollectionActionBean<O, E> implements CrudActionBe
 
 
     /**
+     * Returns the entities submitted froma form which should be added
+     */
+    public List<E> getAdd() {
+        return add;
+    }
+
+    public void setAdd(List<E> add) {
+        this.add = add;
+    }
+
+    /**
      * Returns the current embedded collection
      */
     public List<E> getOwnedEntities() {
@@ -236,6 +254,48 @@ public abstract class EmbeddedCollectionActionBean<O, E> implements CrudActionBe
         return ownerInfo.getActionUri() + "_" + propertyName;
     }
 
+
+    public List<E> getSearchResults() {
+        if (queryStrategy != null && query != null && query.trim().length() > 0) {
+            return queryStrategy.execute(getEntityClass(), query);
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
+    public QueryStrategy getQueryStrategy() {
+        return queryStrategy;
+    }
+
+    public void setQueryStrategy(QueryStrategy queryStrategy) {
+        this.queryStrategy = queryStrategy;
+    }
+
+
+    /**
+     * Returns the type of the display whether to use the check box or pick list style
+     */
+    public String getDisplayType() {
+        PropertyInfo propertyInfo = ownerInfo.getProperty(propertyName);
+        if (propertyInfo != null) {
+            Input input = propertyInfo.getInput();
+            if (input != null) {
+                InputType type = input.type();
+                if (type != null) {
+                    return type.name();
+                }
+            }
+        }
+        return "checkbox";
+    }
+
     // Implementation methods
     // -------------------------------------------------------------------------
 
@@ -253,4 +313,5 @@ public abstract class EmbeddedCollectionActionBean<O, E> implements CrudActionBe
         }
         return (List<E>) info.getValue(owningEntity);
     }
+
 }

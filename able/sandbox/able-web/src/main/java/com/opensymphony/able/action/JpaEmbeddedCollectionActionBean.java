@@ -55,17 +55,6 @@ public class JpaEmbeddedCollectionActionBean<O, E> extends EmbeddedCollectionAct
     protected CrudService<E> createService() {
         return new JpaCrudService<E>(getEntityClass(), jpaTemplate);
     }
-
-    /*
-    @Override
-    protected void shouldCommit() {
-        super.shouldCommit();
-
-        jpaTemplate.refresh(getOwner());;
-
-        System.out.println(">>>> After commit the owned entities are: " + getOwnedEntities());
-    }
-    */
 }
 
 

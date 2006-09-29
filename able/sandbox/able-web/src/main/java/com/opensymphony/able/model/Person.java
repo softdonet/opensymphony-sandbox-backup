@@ -1,5 +1,7 @@
 package com.opensymphony.able.model;
 
+import com.opensymphony.able.view.Input;
+import com.opensymphony.able.view.InputType;
 import com.opensymphony.able.view.ViewField;
 
 import javax.persistence.Entity;
@@ -111,7 +113,8 @@ public class Person {
 		this.password = password;
 	}
 
-	@OneToMany()
+    @Input(type = InputType.PickList)
+    @OneToMany()
 	public List<Component> getLeads() {
 		return leads;
 	}

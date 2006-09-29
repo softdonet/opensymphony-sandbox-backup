@@ -76,7 +76,19 @@
       <alias id="user" displayName="User">
           <description>User alias</description>
           <uri>http://compass/sample/petclinic/alias/user</uri>
-          <name>owner</name>
+          <name>user</name>
+      </alias>
+
+      <alias id="person" displayName="Person">
+          <description>Person alias</description>
+          <uri>http://compass/sample/petclinic/alias/person</uri>
+          <name>person</name>
+      </alias>
+
+      <alias id="component" displayName="Component">
+          <description>Component alias</description>
+          <uri>http://compass/sample/petclinic/alias/component</uri>
+          <name>component</name>
       </alias>
 
         <meta-data id="username" displayName="User Name">

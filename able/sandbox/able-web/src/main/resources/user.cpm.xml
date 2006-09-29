@@ -31,5 +31,25 @@
 
     </class>
 
+    <class name="Component" alias="${user.component}" extends="named-entity">
+
+        <property name="name">
+            <meta-data>${user.name}</meta-data>
+        </property>
+
+    </class>
+
+    <class name="Person" alias="${user.person}" extends="entity">
+
+        <property name="firstName">
+            <meta-data>${user.firstName}</meta-data>
+        </property>
+
+        <property name="lastName">
+            <meta-data>${user.lastName}</meta-data>
+        </property>
+
+    </class>
+
 
 </compass-core-mapping>
