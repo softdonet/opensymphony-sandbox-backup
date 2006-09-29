@@ -14,14 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.opensymphony.able.jaxb;
-
-import org.testng.annotations.Test;
+package com.opensymphony.able.xml;
 
 /**
- *
+ * Represents a simple closure or callback object.
+ * 
  * version $Revision: 1 $
  */
-public class MashallTest {
+public interface Closure {
+
+	void call(Object values);
 
 }

@@ -14,37 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.opensymphony.able.jaxb;
-
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlRootElement;
+package com.opensymphony.able.xml;
 
 /**
- * A simple holder of objects for JAXB marshalling
- * 
+ *
  * version $Revision: 1 $
  */
-@XmlRootElement(name = "objects")
-public class ObjectCollection {
+public class MashallTest {
 
-	private List objects;
-
-	public ObjectCollection() {
-	}
-
-    //@XmlAnyElement(lax = true)
-	public List getObjects() {
-		return objects;
-	}
-
-	public void setObjects(List objects) {
-		this.objects = objects;
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "[objects=" + objects + "]";
-	}
 }

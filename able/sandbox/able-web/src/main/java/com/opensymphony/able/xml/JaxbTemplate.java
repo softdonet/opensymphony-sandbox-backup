@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.opensymphony.able.jaxb;
+package com.opensymphony.able.xml;
 
 import com.opensymphony.able.entity.EntityInfo;
 

@@ -14,15 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.opensymphony.able.jaxb;
+package com.opensymphony.able.xml;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 /**
- * Represents a simple closure or callback object.
+ * A simple holder of objects for JAXB marshalling
  * 
  * version $Revision: 1 $
  */
-public interface Closure {
+@XmlRootElement(name = "objects")
+public class ObjectCollection {
 
-	void call(Object values);
+	private List objects;
 
+	public ObjectCollection() {
+	}
+
+    //@XmlAnyElement(lax = true)
+	public List getObjects() {
+		return objects;
+	}
+
+	public void setObjects(List objects) {
+		this.objects = objects;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "[objects=" + objects + "]";
+	}
 }
