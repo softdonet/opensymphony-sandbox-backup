@@ -20,7 +20,6 @@ import net.sourceforge.stripes.action.Resolution;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,9 +31,12 @@ public class JaxbResolution implements Resolution {
 
     private JaxbTemplate template;
     private List list;
+    private Object element;
+    private String contentType = "application/xml";
 
     public JaxbResolution(JaxbTemplate template, Object element) {
-        this(template, Arrays.asList(new Object[]{element}));
+        this.template = template;
+        this.element = element;
     }
 
     public JaxbResolution(JaxbTemplate template, List list) {
@@ -43,6 +45,21 @@ public class JaxbResolution implements Resolution {
     }
 
     public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        template.write(response.getOutputStream(), list);
+        response.setContentType(contentType);
+        if (element != null) {
+            template.writeElement(response.getOutputStream(), element);
+        }
+        else {
+            template.write(response.getOutputStream(), list);
+        }
+    }
+
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 }

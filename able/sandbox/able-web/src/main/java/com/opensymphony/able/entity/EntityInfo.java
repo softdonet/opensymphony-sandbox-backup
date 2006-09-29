@@ -27,6 +27,7 @@ import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.TypeConverter;
 
 import javax.persistence.Entity;
+import javax.xml.namespace.QName;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
@@ -451,5 +452,13 @@ public class EntityInfo {
 
     protected boolean empty(String[] names) {
         return names == null || names.length == 0;
+    }
+
+    /**
+     * Creates a new QName for this entity type
+     * @return
+     */
+    public QName getQName() {
+        return new QName(getEntityUri());
     }
 }

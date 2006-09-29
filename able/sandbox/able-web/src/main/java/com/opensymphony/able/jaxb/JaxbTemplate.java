@@ -16,11 +16,15 @@
  */
 package com.opensymphony.able.jaxb;
 
-import java.io.OutputStream;
+import com.opensymphony.able.entity.EntityInfo;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.namespace.QName;
+import java.io.OutputStream;
 
 /**
  * 
@@ -44,4 +48,21 @@ public class JaxbTemplate {
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		marshaller.marshal(value, out);
 	}
+
+    public void writeElement(OutputStream out, Object value) throws JAXBException {
+        if (value == null) {
+            throw new IllegalArgumentException("Value must not be null");
+        }
+        Class type = value.getClass();
+
+        // lets deal with entities which have no root element annotation
+        if (type.getAnnotation(XmlRootElement.class) == null) {
+            QName qname = EntityInfo.newInstance(type).getQName();
+            value = new JAXBElement(qname, type, value);
+        }
+        JAXBContext context = JAXBContext.newInstance(types);
+		Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.marshal(value, out);
+    }
 }
