@@ -16,7 +16,7 @@
     } else {
 %>
 <c:forEach var="value" items="${actionBean.allValues[name]}">
-  <stripes:radio id="entity.${name}.${value.id}" name="entity.${name}" value="${value}.id"
+  <stripes:radio id="entity.${name}.${value.id}" name="entity.${name}" value="${value}"
     checked="New" />
   <stripes:label for="entity.${name}.${value.id}">${value}.name</stripes:label>
 </c:forEach>
