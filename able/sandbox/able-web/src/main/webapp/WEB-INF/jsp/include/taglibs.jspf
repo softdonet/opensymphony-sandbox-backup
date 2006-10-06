@@ -1,8 +1,6 @@
 <%@
         taglib prefix="a" tagdir="/WEB-INF/tags"
         %><%@
-        taglib prefix="able" tagdir="/WEB-INF/tags/able"
-        %><%@
         taglib prefix="af" uri="/able-functions"
         %><%@
         taglib prefix="s" uri="http://stripes.sourceforge.net/stripes.tld"

@@ -5,7 +5,7 @@
 <stripes:form action="${actionBean.actionUri}">
 
     <h1>
-        <able:viewSummary entity="${actionBean.owner}"/>
+        <a:viewSummary entity="${actionBean.owner}"/>
     </h1>
 
     <stripes:hidden name="owner"/>

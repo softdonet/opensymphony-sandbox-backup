@@ -3,10 +3,10 @@
         %><%@
         tag body-content="scriptless"
         %><%@
-        include file="form-field-common-attrs.tag"
+        include file="formFieldCommonAttrs.tag"
         %><%@
-        include file="form-field-header.jsp"
-        %><s:password name="${name}"
+        include file="formFieldHeader.jsp"
+        %><s:text name="${name}"
         id="${id}"
         onblur="${onblur}"
         onchange="${onchange}"
@@ -23,5 +23,5 @@
         onmouseup="${onmouseup}"
         onselect="${onselect}"
         /><%@
-        include file="form-field-footer.jsp"
+        include file="formFieldFooter.jsp"
         %>

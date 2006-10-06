@@ -3,13 +3,13 @@
         %><%@
         tag body-content="scriptless"
         %><%@
-        include file="form-field-common-attrs.tag"
+        include file="formFieldCommonAttrs.tag"
         %><%@
         attribute name="rows" required="true" type="java.lang.Integer"
         %><%@
         attribute name="cols" required="true" type="java.lang.Integer"
         %><%@
-        include file="form-field-header.jsp"
+        include file="formFieldHeader.jsp"
         %><s:textarea name="${name}" rows="${rows}" cols="${cols}"
             id="${id}"
             onblur="${onblur}"
@@ -26,5 +26,5 @@
             onmouseover="${onmouseover}"
             onmouseup="${onmouseup}"
             onselect="${onselect}"
-        /><%@ include file="form-field-footer.jsp"
+        /><%@ include file="formFieldFooter.jsp"
         %>

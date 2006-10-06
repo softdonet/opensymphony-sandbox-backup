@@ -7,13 +7,13 @@
 <body>
 
 <a:form beanclass="com.opensymphony.able.stripes.UserSettingsActionBean"
-         title="updateTitle" description="updateDescription"
+         title="updateTitle"
          submitEvent="update">
     <input type="hidden" name="user" value="${actionBean.userId}"/>
-    <a:form-field-text name="user.name"/>
-    <a:form-field-text name="user.email"/>
-    <a:form-field-password name="password"/>
-    <a:form-field-password name="passwordAgain"/>
+    <a:formFieldText name="user.name"/>
+    <a:formFieldText name="user.email"/>
+    <a:formFieldPassword name="password"/>
+    <a:formFieldPassword name="passwordAgain"/>
 </a:form>
 
 

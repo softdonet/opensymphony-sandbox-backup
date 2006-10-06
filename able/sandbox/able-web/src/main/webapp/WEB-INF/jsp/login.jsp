@@ -8,9 +8,9 @@
 
 <a:form beanclass="com.opensymphony.able.stripes.LoginActionBean"
          title="title" description="description" submitEvent="login">
-    <a:form-field-text name="username"/>
-    <a:form-field-password name="password"/>
-    <a:form-field-checkbox name="remember"/>
+    <a:formFieldText name="username"/>
+    <a:formFieldPassword name="password"/>
+    <a:formFieldCheckbox name="remember"/>
 </a:form>
 
 </body>

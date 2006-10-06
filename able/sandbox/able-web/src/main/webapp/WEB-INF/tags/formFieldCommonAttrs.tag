@@ -1,6 +1,10 @@
 <%@
         attribute name="name" required="true" type="java.lang.String"
         %><%@
+        attribute name="value" required="false" type="java.lang.String"
+        %><%@
+        attribute name="label" required="false" type="java.lang.String"
+        %><%@
         attribute name="id" required="false" type="java.lang.String"
         %><%@
         attribute name="onblur" required="false" type="java.lang.String"

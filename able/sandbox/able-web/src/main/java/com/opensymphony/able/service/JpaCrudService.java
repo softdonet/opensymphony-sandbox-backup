@@ -83,6 +83,7 @@ public class JpaCrudService<E> implements CrudService<E> {
     }
 
     public void update(E entity) {
+        getJpaTemplate().persist(entity);
     }
 
     public void delete(E entity) {

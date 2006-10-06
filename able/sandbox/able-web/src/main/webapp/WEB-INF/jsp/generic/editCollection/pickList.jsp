@@ -16,7 +16,7 @@
     <tr>
     <c:forEach items="${actionBean.entityInfo.nameProperties}" var="property">
         <td>
-            <able:viewField entity="${row}" name="${property.name}"/>
+            <a:displayPropertyValue entity="${row}" property="${property}"/>
         </td>
     </c:forEach>
         <td>
@@ -51,7 +51,7 @@
       <tr>
       <c:forEach items="${actionBean.entityInfo.nameProperties}" var="property">
           <td>
-              <able:viewField entity="${row}" name="${property.name}"/>
+              <a:displayPropertyValue entity="${row}" property="${property}"/>
           </td>
       </c:forEach>
           <td>

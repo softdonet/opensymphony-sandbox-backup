@@ -3,20 +3,18 @@
         %><%@
         tag body-content="scriptless"
         %><%@
-        include file="form-field-common-attrs.tag"
-        %><%@
-        attribute name="multiple" required="false" type="java.lang.Boolean"
+        include file="formFieldCommonAttrs.tag"
         %><%@
         attribute name="size" required="false" type="java.lang.Integer"
         %><%@
         attribute name="collection" required="true" type="java.util.Collection"
         %><%@
-        attribute name="listValue" required="true" type="java.lang.String"
+        attribute name="listValue" required="false" type="java.lang.String"
         %><%@
-        attribute name="listLabel" required="true" type="java.lang.String"
+        attribute name="listLabel" required="false" type="java.lang.String"
         %><%@
-        include file="form-field-header.jsp"
-        %><s:select name="${name}" multiple="${multiple}" size="${size}"
+        include file="formFieldHeader.jsp"
+        %><s:select name="${name}" value="${value}" size="${size}"
           id="${id}"
           onblur="${onblur}"
           onchange="${onchange}"
@@ -34,5 +32,5 @@
           onselect="${onselect}">
     <s:options-collection collection="${collection}" value="${listValue}" label="${listLabel}"/>
 </s:select><%@
-        include file="form-field-footer.jsp"
+        include file="formFieldFooter.jsp"
         %>

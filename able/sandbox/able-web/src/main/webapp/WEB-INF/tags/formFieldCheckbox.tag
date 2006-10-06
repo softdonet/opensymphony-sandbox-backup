@@ -3,9 +3,9 @@
         %><%@
         tag body-content="scriptless"
         %><%@
-        include file="form-field-common-attrs.tag"
+        include file="formFieldCommonAttrs.tag"
         %><%@
-        include file="form-field-header.jsp"
+        include file="formFieldHeader.jsp"
         %><s:checkbox name="${name}"
             id="${id}"
             onblur="${onblur}"
@@ -23,5 +23,5 @@
             onmouseup="${onmouseup}"
             onselect="${onselect}"
         /><%@
-        include file="form-field-footer.jsp"
+        include file="formFieldFooter.jsp"
         %>

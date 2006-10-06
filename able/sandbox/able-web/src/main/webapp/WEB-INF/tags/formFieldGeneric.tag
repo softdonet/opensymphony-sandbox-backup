@@ -1,6 +1,8 @@
+<%@ include file="/WEB-INF/jsp/include/taglibs.jspf" %>
 <%@ tag import="com.opensymphony.able.entity.PropertyInfo" %>
 <%@ tag import="com.opensymphony.able.view.Input" %>
 <%@ tag import="com.opensymphony.able.view.InputType" %>
+<%@ tag import="java.util.List" %>
 <%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
 <%@ taglib prefix="able" tagdir="/WEB-INF/tags/able" %>
 <%@ attribute name="entity" type="java.lang.Object" required="true" %>
@@ -31,37 +33,37 @@
             switch (type) {
             case Checkbox:
 %>
-<stripes:checkbox name="<%=fieldName%>"/>
+<a:formFieldCheckbox name="<%=fieldName%>"/>
 <%
         break;
 
     case Combo:
 %>
-<able:selectField entity="${entity}" name="${name}"/>
+<a:formFieldSelect collection="${actionBean.allValues[name]}" name="entity.${name}"/>
 <%
         break;
 
     case Password:
 %>
-<stripes:password name="<%=fieldName%>"/>
+<a:formFieldPassword name="<%=fieldName%>"/>
 <%
         break;
 
     case Radio:
 %>
-<able:radioField entity="${entity}" name="${name}"/>
+<a:formFieldRadio collection="${actionBean.allValues[name]}" name="<%= fieldName %>" isEnum="<%= propertyInfo.isEnum() %>"/>
 <%
         break;
 
     case Text:
 %>
-<stripes:text name="<%=fieldName%>"/>
+<a:formFieldText name="<%=fieldName%>"/>
 <%
         break;
 
     case TextArea:
 %>
-<stripes:textarea name="<%=fieldName%>" formatPattern="medium"/>
+<a:formFieldTextArea name="<%=fieldName%>" rows="3" cols="50"/>
 <%
                 break;
             default:
@@ -73,27 +75,38 @@
 %>
 <%-- TODO - what to do here - link to the edit page? --%>
 <%
-        }
-        else if (propertyInfo.isPersistent() || propertyInfo.isEnum()) {
+} else if (propertyInfo.isPersistent() || propertyInfo.isEnum()) {
+    String label = "";
+    List<PropertyInfo> list = propertyInfo.getPropertyEntityInfo().getNameProperties();
+    if (!list.isEmpty()) {
+        label = list.get(0).getName();
+    }
+
+    if (propertyInfo.isEnum()) {
 %>
-<able:selectField entity="${entity}" name="${name}"/>
+<a:formFieldSelect collection="${actionBean.allValues[name]}" name="entity.${name}"/>
 <%
+    } else {
+%>
+<a:formFieldSelect collection="${actionBean.allValues[name]}" value="${actionBean.entity[name].id}" listValue="id" listLabel="<%= label %>" name="entity.${name}"/>
+<%
+    }
 }
 else if (propertyInfo.isDate()) {
 %>
-<able:dateField entity="${entity}" name="${name}"/>
+<a:formFieldDate name="entity.${name}"/>
 <%
 }
 else {
 %>
-<stripes:text name="<%=fieldName%>"/>
+<a:formFieldText name="<%=fieldName%>"/>
 <%
             }
         }
     }
     else {
 %>
-No Property Info for <%=fieldName%>
+<a:formFieldLabel label="unknown" value="No Property Info for <%=fieldName%>"/>
 <%
     }
 %>

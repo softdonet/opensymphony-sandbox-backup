@@ -1,39 +1,33 @@
 <%@ include file="/WEB-INF/jsp/include/taglibs.jspf" %>
 <html>
 <head>
-<title>View ${actionBean.entityInfo.entityName}</title>
+    <title><a:text key="viewTitle" defaultValue="View ${actionBean.entityInfo.entityName}"/></title>
 </head>
 
 <body>
 
-<h1>View ${actionBean.entityInfo.entityName}</h1>
+<%--
+We set these attributes rather than passing them through the tags because
+these are very specific to the generic forms and shouldn't really be exposed
+to the average user as attributes, as it will likely confuse them what they
+are for.
+--%>
+<c:set var="form.submit.defaultLabel" value="Edit" scope="request"/>
+<c:set var="form.cancel.defaultLabel" value="Back" scope="request"/>
+<c:set var="form.defaultTitle" value="View ${actionBean.entityInfo.entityName}" scope="request"/>
 
-<stripes:form action="${actionBean.actionUri}">
+<a:form beanclass="${actionBean.class.name}" title="viewTitle" submitEvent="edit" cancelEvent="cancel">
     <stripes:hidden name="entity"/>
 
-    <stripes:errors/>
-
-    <table class="display">
-
-        <c:forEach items="${actionBean.entityInfo.editProperties}" var="property">
-            <tr>
-                <th>
-                    <stripes:label for="entity.${property.name}">${property.displayName}</stripes:label>
-                    :
-                </th>
-                <td>
-                    <able:viewField entity="${actionBean.entity}" name="${property.name}"/>
-                </td>
-            </tr>
-        </c:forEach>
-
-    </table>
-
-    <div class="buttons">
-        <stripes:submit name="edit" value="Edit"/>
-        <stripes:submit name="cancel" value="Back"/>
-    </div>
-</stripes:form>
+    <c:forEach items="${actionBean.entityInfo.editProperties}" var="property">
+        <c:set var="form.field.defaultLabel" value="${property.displayName}" scope="request"/>
+        <a:formFieldLabel label="entity.${property.name}">
+            <jsp:attribute name="fragment">
+                <a:displayPropertyValue entity="${actionBean.entity}" property="${property}"/>
+            </jsp:attribute>
+        </a:formFieldLabel>
+    </c:forEach>
+</a:form>
 
 </body>
 </html>

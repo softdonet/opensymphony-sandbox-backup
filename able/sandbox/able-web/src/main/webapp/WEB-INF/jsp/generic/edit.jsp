@@ -1,39 +1,29 @@
 <%@ include file="/WEB-INF/jsp/include/taglibs.jspf" %>
 <html>
 <head>
-<title>Edit ${actionBean.entityInfo.entityName}</title>
+<title><a:text key="editTitle" defaultValue="Edit ${actionBean.entityInfo.entityName}"/></title>
 </head>
 
 <body>
 
-<h1>Edit ${actionBean.entityInfo.entityName}</h1>
+<%--
+We set these attributes rather than passing them through the tags because
+these are very specific to the generic forms and shouldn't really be exposed
+to the average user as attributes, as it will likely confuse them what they
+are for.
+--%>
+<c:set var="form.submit.defaultLabel" value="Save" scope="request"/>
+<c:set var="form.cancel.defaultLabel" value="Back" scope="request"/>
+<c:set var="form.defaultTitle" value="Edit ${actionBean.entityInfo.entityName}" scope="request"/>
 
-<stripes:form action="${actionBean.actionUri}">
-    <stripes:hidden name="entity" value="${actionBean.id}"/>
+<a:form beanclass="${actionBean.class.name}" title="viewTitle" submitEvent="save" cancelEvent="cancel">
+    <stripes:hidden name="entity"/>
 
-    <stripes:errors/>
-
-    <table class="display">
-
-        <c:forEach items="${actionBean.entityInfo.editProperties}" var="property">
-            <tr>
-                <th>
-                    <stripes:label for="entity.${property.name}">${property.displayName}</stripes:label>
-                    :
-                </th>
-                <td>
-                    <able:editField entity="${actionBean.entity}" name="${property.name}"/>
-                </td>
-            </tr>
-        </c:forEach>
-
-    </table>
-
-    <div class="buttons">
-        <stripes:submit name="save" value="Save"/>
-        <stripes:submit name="cancel" value="Cancel"/>
-    </div>
-</stripes:form>
+    <c:forEach items="${actionBean.entityInfo.editProperties}" var="property">
+        <c:set var="form.field.defaultLabel" value="${property.displayName}" scope="request"/>
+        <a:formFieldGeneric entity="${actionBean.entity}" name="${property.name}"/>
+    </c:forEach>
+</a:form>
 
 </body>
 </html>

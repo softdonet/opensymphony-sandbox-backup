@@ -5,11 +5,13 @@
         %><%@
         attribute name="label" required="true" type="java.lang.String"
         %><%@
-        attribute name="value" required="true" type="java.lang.String"
+        attribute name="value" required="false" type="java.lang.String"
+        %><%@
+        attribute name="fragment" required="false" fragment="true"
         %><%@
         attribute name="aftertag" required="false" fragment="true"
         %><c:set var="name" value="${label}"/><%@
-        include file="form-field-header.jsp"
-        %><a:text key="${value}"/><%@
-        include file="form-field-footer.jsp"
+        include file="formFieldHeader.jsp"
+        %><c:if test="${not empty value}"><a:text key="${value}"/></c:if><jsp:invoke fragment="fragment"/><%@
+        include file="formFieldFooter.jsp"
         %>
