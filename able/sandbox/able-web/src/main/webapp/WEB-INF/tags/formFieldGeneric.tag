@@ -4,10 +4,10 @@
 <%@ tag import="com.opensymphony.able.view.InputType" %>
 <%@ tag import="java.util.List" %>
 <%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
-<%@ taglib prefix="able" tagdir="/WEB-INF/tags/able" %>
 <%@ attribute name="entity" type="java.lang.Object" required="true" %>
 <%@ attribute name="name" type="java.lang.String" required="true" %>
 <%@ attribute name="entityName" type="java.lang.String" required="false" %>
+<%@ attribute name="defaultLabel" required="false" type="java.lang.String"%>
 
 <%
     if (entityName == null) {
@@ -33,37 +33,37 @@
             switch (type) {
             case Checkbox:
 %>
-<a:formFieldCheckbox name="<%=fieldName%>"/>
+<a:formFieldCheckbox name="<%=fieldName%>" defaultLabel="${defaultLabel}"/>
 <%
         break;
 
     case Combo:
 %>
-<a:formFieldSelect collection="${actionBean.allValues[name]}" name="entity.${name}"/>
+<a:formFieldSelect collection="${actionBean.allValues[name]}" name="entity.${name}" defaultLabel="${defaultLabel}"/>
 <%
         break;
 
     case Password:
 %>
-<a:formFieldPassword name="<%=fieldName%>"/>
+<a:formFieldPassword name="<%=fieldName%>" defaultLabel="${defaultLabel}"/>
 <%
         break;
 
     case Radio:
 %>
-<a:formFieldRadio collection="${actionBean.allValues[name]}" name="<%= fieldName %>" isEnum="<%= propertyInfo.isEnum() %>"/>
+<a:formFieldRadio collection="${actionBean.allValues[name]}" name="<%= fieldName %>" isEnum="<%= propertyInfo.isEnum() %>" defaultLabel="${defaultLabel}"/>
 <%
         break;
 
     case Text:
 %>
-<a:formFieldText name="<%=fieldName%>"/>
+<a:formFieldText name="<%=fieldName%>" defaultLabel="${defaultLabel}"/>
 <%
         break;
 
     case TextArea:
 %>
-<a:formFieldTextArea name="<%=fieldName%>" rows="3" cols="50"/>
+<a:formFieldTextArea name="<%=fieldName%>" rows="3" cols="50" defaultLabel="${defaultLabel}"/>
 <%
                 break;
             default:
@@ -84,29 +84,29 @@
 
     if (propertyInfo.isEnum()) {
 %>
-<a:formFieldSelect collection="${actionBean.allValues[name]}" name="entity.${name}"/>
+<a:formFieldSelect collection="${actionBean.allValues[name]}" name="entity.${name}" defaultLabel="${defaultLabel}"/>
 <%
     } else {
 %>
-<a:formFieldSelect collection="${actionBean.allValues[name]}" value="${actionBean.entity[name].id}" listValue="id" listLabel="<%= label %>" name="entity.${name}"/>
+<a:formFieldSelect collection="${actionBean.allValues[name]}" value="${actionBean.entity[name].id}" listValue="id" listLabel="<%= label %>" name="entity.${name}" defaultLabel="${defaultLabel}"/>
 <%
     }
 }
 else if (propertyInfo.isDate()) {
 %>
-<a:formFieldDate name="entity.${name}"/>
+<a:formFieldDate name="entity.${name}" defaultLabel="${defaultLabel}"/>
 <%
 }
 else {
 %>
-<a:formFieldText name="<%=fieldName%>"/>
+<a:formFieldText name="<%=fieldName%>" defaultLabel="${defaultLabel}"/>
 <%
             }
         }
     }
     else {
 %>
-<a:formFieldLabel label="unknown" value="No Property Info for <%=fieldName%>"/>
+<a:formFieldLabel label="unknown" value="No Property Info for <%=fieldName%>" defaultLabel="${defaultLabel}"/>
 <%
     }
 %>

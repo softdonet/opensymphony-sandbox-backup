@@ -6,16 +6,8 @@
 
 <body>
 
-<%--
-We set these attributes rather than passing them through the tags because
-these are very specific to the generic forms and shouldn't really be exposed
-to the average user as attributes, as it will likely confuse them what they
-are for.
---%>
-<c:set var="form.submit.defaultLabel" value="New" scope="request"/>
-<c:set var="form.defaultTitle" value="${actionBean.entityInfo.entityName} Browse" scope="request"/>
-
-<a:form beanclass="${actionBean.class.name}" title="listTitle" submitEvent="edit">
+<a:form beanclass="${actionBean.class.name}" title="listTitle" submitEvent="edit" 
+        submitDefaultLabel="New" defaultTitle="${actionBean.entityInfo.entityName} Browse">
     <jsp:attribute name="formBody">
         <p>
             Search:
@@ -42,20 +34,20 @@ are for.
                         </td>
                         <c:forEach items="${actionBean.entityInfo.listProperties}" var="property">
                             <td>
-                                <a:displayPropertyValue entity="${row}" property="${property}"/>
+                                <a:displayPropertyValue entity="${row}" propertyName="${property.name}"/>
                             </td>
                         </c:forEach>
 
                         <td>
-                            <stripes:link href="${actionBean.actionUri}" event="view">
+                            <stripes:link beanclass="${actionBean.class.name}" event="view">
                                 View
                                 <stripes:param name="entity" value="${row.id}"/>
                             </stripes:link>
-                            <stripes:link href="${actionBean.actionUri}" event="edit">
+                            <stripes:link beanclass="${actionBean.class.name}" event="edit">
                                 Edit
                                 <stripes:param name="entity" value="${row.id}"/>
                             </stripes:link>
-                            <stripes:link href="${actionBean.actionUri}" event="delete">
+                            <stripes:link beanclass="${actionBean.class.name}" event="delete">
                                 Delete
                                 <stripes:param name="entity" value="${row.id}"/>
                             </stripes:link>
@@ -70,6 +62,12 @@ are for.
         <stripes:submit name="delete" value="Delete"/>
     </jsp:attribute>
 </a:form>
+
+<div align="center">
+    <s:link beanclass="${actionBean.class.name}" event="generateList">Save this page to /WEB-INF/jsp${actionBean.actionUri}/list.jsp</s:link>
+    <br/>
+    <br/>
+</div>
 
 </body>
 </html>

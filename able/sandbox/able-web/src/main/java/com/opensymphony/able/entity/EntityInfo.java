@@ -120,27 +120,6 @@ public class EntityInfo {
         return entityUri;
     }
 
-    public String getListUri() {
-        //return uriPrefix + getEntityUri() + "/index.jsp";
-        return uriPrefix + "list.jsp";
-    }
-
-    public String getViewUri() {
-        //return uriPrefix + getEntityUri() + "/view.jsp?id=";
-        return uriPrefix + "view.jsp?entity=";
-    }
-
-    public String getEditUri() {
-        //return uriPrefix + getEntityUri() + "/edit.jsp?id=";
-        return uriPrefix + "edit.jsp?entity=";
-    }
-
-    public String getBulkEditUri() {
-        //return uriPrefix + getEntityUri() + "/editTable.jsp?id=";
-        return uriPrefix + "bulkEdit.jsp?entity=";
-    }
-
-
     public PropertyInfo getProperty(String name) {
         return propertyMap.get(name);
     }

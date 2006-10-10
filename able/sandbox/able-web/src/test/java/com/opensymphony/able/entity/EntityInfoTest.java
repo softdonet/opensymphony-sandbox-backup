@@ -51,10 +51,7 @@ public class EntityInfoTest {
         assertEquals(Integer.class, idClass);
 
         assertEquals(info.getActionUri(), "/bug");
-        assertEquals(info.getListUri(), "/WEB-INF/jsp/generic/list.jsp");
-        assertEquals(info.getViewUri(), "/WEB-INF/jsp/generic/view.jsp?entity=");
-        assertEquals(info.getEditUri(), "/WEB-INF/jsp/generic/edit.jsp?entity=");
-        
+
         PropertyInfo property = info.getProperty("openDate");
         assertNotNull(property);
         System.out.println("displayName: " + property.getDisplayName());

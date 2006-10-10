@@ -25,13 +25,10 @@ import com.opensymphony.able.service.JpaCrudService;
 import com.opensymphony.able.util.EnumHelper;
 import com.opensymphony.able.xml.JaxbResolution;
 import com.opensymphony.able.xml.JaxbTemplate;
-import net.sourceforge.stripes.action.ActionBean;
-import net.sourceforge.stripes.action.ActionBeanContext;
-import net.sourceforge.stripes.action.DefaultHandler;
-import net.sourceforge.stripes.action.DontValidate;
-import net.sourceforge.stripes.action.ForwardResolution;
-import net.sourceforge.stripes.action.RedirectResolution;
-import net.sourceforge.stripes.action.Resolution;
+import com.opensymphony.able.stripes.util.DefaultResolution;
+import com.opensymphony.able.stripes.util.Partial;
+import com.opensymphony.able.stripes.util.GenerateResolution;
+import net.sourceforge.stripes.action.*;
 import net.sourceforge.stripes.integration.spring.SpringBean;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,7 +45,7 @@ import java.util.Set;
  *
  * @version $Revision$
  */
-public class DefaultCrudActionBean<E> implements CrudActionBean {
+public class DefaultCrudActionBean<E> extends DefaultActionBean implements CrudActionBean {
     private static final Log log = LogFactory.getLog(DefaultCrudActionBean.class);
 
     private CrudService<E> service;
@@ -57,7 +54,6 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
     @SpringBean
     private QueryStrategy queryStrategy;
 
-    private ActionBeanContext context;
     private E entity;
     private Class<E> entityClass;
     private EntityInfo entityInfo;
@@ -92,21 +88,39 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
     @DontValidate
     @DefaultHandler
     public Resolution list() {
-        return new ForwardResolution(getEntityInfo().getListUri());
+        return new DefaultResolution(getClass(), getContext(), "/WEB-INF/jsp/generic/list.jsp");
+    }
+
+    @Partial
+    @DontValidate
+    public Resolution generateList() {
+        return new GenerateResolution(getClass(), getContext());
     }
 
     /**
      * Views a single entity in a read only form
      */
     public Resolution view() {
-        return new ForwardResolution(getEntityInfo().getViewUri());
+        return new DefaultResolution(getClass(), getContext(), "/WEB-INF/jsp/generic/view.jsp?entity=");
+    }
+
+    @Partial
+    @DontValidate
+    public Resolution generateView() {
+        return new GenerateResolution(getClass(), getContext());
     }
 
     /**
      * Views the edit form
      */
     public Resolution edit() {
-        return new ForwardResolution(getEntityInfo().getEditUri());
+        return new DefaultResolution(getClass(), getContext(), "/WEB-INF/jsp/generic/edit.jsp?entity=");
+    }
+
+    @Partial
+    @DontValidate
+    public Resolution generateEdit() {
+        return new GenerateResolution(getClass(), getContext());
     }
 
     /**
@@ -175,16 +189,6 @@ public class DefaultCrudActionBean<E> implements CrudActionBean {
         return new JaxbResolution(new JaxbTemplate(entityClass), getEntity());
     }
 
-
-    // Properties
-    // -------------------------------------------------------------------------
-    public ActionBeanContext getContext() {
-        return context;
-    }
-
-    public void setContext(ActionBeanContext context) {
-        this.context = context;
-    }
 
     /**
      * The current entity

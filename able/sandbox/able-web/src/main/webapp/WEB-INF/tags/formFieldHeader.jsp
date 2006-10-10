@@ -13,7 +13,7 @@
 </s:errors><tr id="${id}_row">
     <th valign="top"><s:label for="${name}"
             ><c:choose>
-                <c:when test="${empty label}"><a:text key="${name}" defaultValue="${requestScope['form.field.defaultLabel']}"/></c:when>
-                <c:otherwise><a:text key="${label}" defaultValue="${requestScope['form.field.defaultLabel']}"/></c:otherwise>
+                <c:when test="${empty label}"><a:text key="${name}" defaultValue="${defaultLabel}"/></c:when>
+                <c:otherwise><a:text key="${label}" defaultValue="${defaultLabel}"/></c:otherwise>
             </c:choose></s:label></th>
     <td>

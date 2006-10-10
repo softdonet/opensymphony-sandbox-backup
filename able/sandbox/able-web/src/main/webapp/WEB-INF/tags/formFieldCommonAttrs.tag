@@ -5,6 +5,8 @@
         %><%@
         attribute name="label" required="false" type="java.lang.String"
         %><%@
+        attribute name="defaultLabel" required="false" type="java.lang.String"
+        %><%@
         attribute name="id" required="false" type="java.lang.String"
         %><%@
         attribute name="onblur" required="false" type="java.lang.String"

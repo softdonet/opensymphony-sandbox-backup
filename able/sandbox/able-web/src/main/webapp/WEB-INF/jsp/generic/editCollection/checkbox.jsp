@@ -16,7 +16,7 @@
       </td>
     <c:forEach items="${actionBean.entityInfo.nameProperties}" var="property">
         <td>
-            <a:displayPropertyValue entity="${row.entity}" property="${property}"/>
+            <a:displayPropertyValue entity="${row.entity}" propertyName="${property.name}"/>
         </td>
     </c:forEach>
     </tr>

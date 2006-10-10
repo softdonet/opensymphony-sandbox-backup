@@ -21,7 +21,7 @@ public class LoginActionBean extends AbstractActionBean {
     @DefaultHandler
     @DontValidate
     public Resolution prompt() {
-        return new ForwardResolution("/WEB-INF/jsp/login.jsp");
+        return forward();
     }
 
     @ValidationMethod(on = "login")

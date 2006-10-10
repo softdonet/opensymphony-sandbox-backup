@@ -6,24 +6,20 @@
 
 <body>
 
-<%--
-We set these attributes rather than passing them through the tags because
-these are very specific to the generic forms and shouldn't really be exposed
-to the average user as attributes, as it will likely confuse them what they
-are for.
---%>
-<c:set var="form.submit.defaultLabel" value="Save" scope="request"/>
-<c:set var="form.cancel.defaultLabel" value="Back" scope="request"/>
-<c:set var="form.defaultTitle" value="Edit ${actionBean.entityInfo.entityName}" scope="request"/>
-
-<a:form beanclass="${actionBean.class.name}" title="viewTitle" submitEvent="save" cancelEvent="cancel">
+<a:form beanclass="${actionBean.class.name}" title="viewTitle" submitEvent="save" cancelEvent="cancel"
+        defaultTitle="Edit ${actionBean.entityInfo.entityName}" submitDefaultLabel="Save" cancelDefaultLabel="Back">
     <stripes:hidden name="entity"/>
 
     <c:forEach items="${actionBean.entityInfo.editProperties}" var="property">
-        <c:set var="form.field.defaultLabel" value="${property.displayName}" scope="request"/>
-        <a:formFieldGeneric entity="${actionBean.entity}" name="${property.name}"/>
+        <a:formFieldGeneric entity="${actionBean.entity}" name="${property.name}" defaultLabel="${property.displayName}"/>
     </c:forEach>
 </a:form>
+
+<div align="center">
+    <s:link beanclass="${actionBean.class.name}" event="generateEdit">Save this page to /WEB-INF/jsp${actionBean.actionUri}/edit.jsp</s:link>
+    <br/>
+    <br/>
+</div>
 
 </body>
 </html>

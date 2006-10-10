@@ -20,7 +20,7 @@ public class UserSettingsActionBean extends AbstractUserActionBean {
     public Resolution execute() {
         user = getCurrentUser();
 
-        return new ForwardResolution("/WEB-INF/jsp/userSettings.jsp");
+        return forward();
     }
 
     @Before

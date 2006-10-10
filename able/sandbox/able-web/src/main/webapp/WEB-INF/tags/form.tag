@@ -4,15 +4,18 @@
 <%@ attribute name="name" required="false" type="java.lang.String" %>
 <%@ attribute name="id" required="false" type="java.lang.String" %>
 <%@ attribute name="title" required="true" type="java.lang.String" %>
+<%@ attribute name="defaultTitle" required="false" type="java.lang.String" %>
 <%@ attribute name="description" required="false" type="java.lang.String" %>
 <%@ attribute name="submitEvent" required="true" type="java.lang.String" %>
+<%@ attribute name="submitDefaultLabel" required="false" type="java.lang.String" %>
 <%@ attribute name="cancelEvent" required="false" type="java.lang.String" %>
+<%@ attribute name="cancelDefaultLabel" required="false" type="java.lang.String" %>
 <%@ attribute name="formBody" required="false" fragment="true" %>
 <%@ attribute name="extraButtons" required="false" fragment="true" %>
 <c:if test="${empty name}"><c:set var="name" value="${af:extractFormName(beanclass, submitEvent)}"/></c:if>
 <c:if test="${empty id}"><c:set var="id" value="${name}"/></c:if>
 <div>
-    <h1><a:text key="${title}" defaultValue="${requestScope['form.defaultTitle']}"/></h1>
+    <h1><a:text key="${title}" defaultValue="${defaultTitle}"/></h1>
     <c:if test="${description ne null}">
         <b><a:text key="${description}"/></b>
     </c:if>
@@ -34,11 +37,11 @@
 
         <div class="buttons">
             <s:submit name="${submitEvent}">
-                ${requestScope['form.submit.defaultLabel'] != null ? requestScope['form.submit.defaultLabel'] : "Submit"}
+                ${submitDefaultLabel != null ? submitDefaultLabel : "Submit"}
             </s:submit>
             <c:if test="${not empty cancelEvent}">
                 <s:submit name="${cancelEvent}">
-                    ${requestScope['form.cancel.defaultLabel'] != null ? requestScope['form.cancel.defaultLabel'] : "Submit"}
+                    ${cancelDefaultLabel != null ? cancelDefaultLabel : "Cancel"}
                 </s:submit>
             </c:if>
             <jsp:invoke fragment="extraButtons"/>

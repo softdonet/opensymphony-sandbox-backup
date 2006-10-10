@@ -2,14 +2,16 @@ package com.opensymphony.able.stripes;
 
 import com.opensymphony.able.model.User;
 import com.opensymphony.able.stripes.util.AbleActionBeanContext;
+import com.opensymphony.able.action.DefaultActionBean;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.validation.LocalizableError;
 
-public abstract class AbstractActionBean implements ActionBean {
+public abstract class AbstractActionBean extends DefaultActionBean implements ActionBean {
     protected AbleActionBeanContext ctx;
 
     public void setContext(ActionBeanContext ctx) {
+        super.setContext(ctx);
         this.ctx = (AbleActionBeanContext) ctx;
     }
 

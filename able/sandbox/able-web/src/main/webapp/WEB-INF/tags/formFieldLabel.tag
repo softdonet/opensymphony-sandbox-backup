@@ -5,6 +5,8 @@
         %><%@
         attribute name="label" required="true" type="java.lang.String"
         %><%@
+        attribute name="defaultLabel" required="false" type="java.lang.String"
+        %><%@
         attribute name="value" required="false" type="java.lang.String"
         %><%@
         attribute name="fragment" required="false" fragment="true"

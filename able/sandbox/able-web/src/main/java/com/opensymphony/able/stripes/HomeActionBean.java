@@ -21,7 +21,7 @@ public class HomeActionBean extends AbstractActionBean {
     public Resolution home() {
         users = userService.findAll();
 
-        return new ForwardResolution("/WEB-INF/jsp/home.jsp");
+        return forward();
     }
 
     public List<User> getUsers() {

@@ -23,7 +23,7 @@ public class RegisterActionBean extends AbstractUserActionBean {
     @DefaultHandler
     @DontValidate
     public Resolution prompt() {
-        return new ForwardResolution("/WEB-INF/jsp/register.jsp");
+        return forward();
     }
 
     @ValidationMethod(on = "register")
