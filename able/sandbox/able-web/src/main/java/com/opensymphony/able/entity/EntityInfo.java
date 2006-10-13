@@ -29,7 +29,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class EntityInfo {
-    private Class<Object> entityClass;
+    private Class<? extends Object> entityClass;
     private String entityName;
     private String entityUri;
     private String actionUri;
@@ -52,10 +52,8 @@ public class EntityInfo {
         return Entities.getInstance().getEntityByClass(type);
     }
 
-    public EntityInfo(Class entityClass) {
-        //noinspection unchecked
+    public EntityInfo(Class<? extends Object> entityClass) {
         this.entityClass = entityClass;
-        //noinspection unchecked
         introspect(entityClass);
     }
 
@@ -196,7 +194,7 @@ public class EntityInfo {
     /**
      * Lets introspect all the properties
      */
-    protected void introspect(Class<Object> type) {
+    protected void introspect(Class<? extends Object> type) {
         PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(entityClass);
         for (PropertyDescriptor descriptor : propertyDescriptors) {
             String name = descriptor.getName();
@@ -409,8 +407,8 @@ public class EntityInfo {
         return answer;
     }
 
-    protected void appendDefaultPropertyList(Class<Object> type, List<PropertyInfo> list, Map<String, PropertyInfo> map) {
-        Class superclass = type.getSuperclass();
+    protected void appendDefaultPropertyList(Class<? extends Object> type, List<PropertyInfo> list, Map<String, PropertyInfo> map) {
+        Class<?> superclass = type.getSuperclass();
         if (superclass != null && !superclass.equals(Object.class)) {
             //noinspection unchecked
             appendDefaultPropertyList(superclass, list, map);
