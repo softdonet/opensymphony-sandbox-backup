@@ -16,12 +16,7 @@
  */
 package com.opensymphony.able.entity;
 
-import com.opensymphony.able.view.DisplayBulkEdit;
-import com.opensymphony.able.view.DisplayDefaults;
-import com.opensymphony.able.view.DisplayEdit;
-import com.opensymphony.able.view.DisplayList;
-import com.opensymphony.able.view.DisplayView;
-import com.opensymphony.able.view.ViewField;
+import com.opensymphony.able.view.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.TypeConverter;
@@ -34,7 +29,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class EntityInfo {
-    private Class entityClass;
+    private Class<Object> entityClass;
     private String entityName;
     private String entityUri;
     private String actionUri;
@@ -47,8 +42,7 @@ public class EntityInfo {
     private List<PropertyInfo> bulkEditProperties;
     private PropertyInfo idProperty;
     private TypeConverter typeConverter = new BeanWrapperImpl();
-    private String[] defaultViewFieldPropertyNames = { "name", "shortDescription", "description", "code" };
-    private String uriPrefix = "/WEB-INF/jsp/generic/";
+    private String[] defaultViewFieldPropertyNames = {"name", "shortDescription", "description", "code"};
 
 
     /**
@@ -58,7 +52,7 @@ public class EntityInfo {
         return Entities.getInstance().getEntityByClass(type);
     }
 
-    public EntityInfo(Class entityClass) {
+    public EntityInfo(Class<Object> entityClass) {
         this.entityClass = entityClass;
         introspect(entityClass);
     }
@@ -157,7 +151,7 @@ public class EntityInfo {
      * Returns the list of properties to display in a field view or pick list, combo box, radio selection etc
      */
     public List<PropertyInfo> getNameProperties() {
-    	return Collections.unmodifiableList(nameProperties);
+        return Collections.unmodifiableList(nameProperties);
     }
 
     /**
@@ -200,7 +194,7 @@ public class EntityInfo {
     /**
      * Lets introspect all the properties
      */
-    protected void introspect(Class type) {
+    protected void introspect(Class<Object> type) {
         PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(entityClass);
         for (PropertyDescriptor descriptor : propertyDescriptors) {
             String name = descriptor.getName();
@@ -208,7 +202,7 @@ public class EntityInfo {
                 continue;
             }
 
-            PropertyInfo propertyInfo = new PropertyInfo(this, descriptor);
+            PropertyInfo propertyInfo = new PropertyInfo(this, descriptor, entityClass);
             propertyMap.put(name, propertyInfo);
             if (propertyInfo.isIdProperty()) {
                 if (idProperty != null) {
@@ -231,7 +225,7 @@ public class EntityInfo {
         String[] sortOrder = null;
         String[] includes = null;
         String[] excludes = null;
-        DisplayDefaults annotation = (DisplayDefaults) entityClass.getAnnotation(DisplayDefaults.class);
+        DisplayDefaults annotation = entityClass.getAnnotation(DisplayDefaults.class);
         if (annotation != null) {
             sortOrder = annotation.sortOrder();
             includes = annotation.includes();
@@ -245,7 +239,7 @@ public class EntityInfo {
         String[] sortOrder = null;
         String[] includes = null;
         String[] excludes = null;
-        DisplayList annotation = (DisplayList) entityClass.getAnnotation(DisplayList.class);
+        DisplayList annotation = entityClass.getAnnotation(DisplayList.class);
         if (annotation != null) {
             sortOrder = annotation.sortOrder();
             includes = annotation.includes();
@@ -259,7 +253,7 @@ public class EntityInfo {
         String[] sortOrder = null;
         String[] includes = null;
         String[] excludes = getDefaultEditExcludes();
-        DisplayBulkEdit annotation = (DisplayBulkEdit) entityClass.getAnnotation(DisplayBulkEdit.class);
+        DisplayBulkEdit annotation = entityClass.getAnnotation(DisplayBulkEdit.class);
         if (annotation != null) {
             sortOrder = annotation.sortOrder();
             includes = annotation.includes();
@@ -273,7 +267,7 @@ public class EntityInfo {
         String[] sortOrder = null;
         String[] includes = null;
         String[] excludes = null;
-        DisplayView annotation = (DisplayView) entityClass.getAnnotation(DisplayView.class);
+        DisplayView annotation = entityClass.getAnnotation(DisplayView.class);
         if (annotation != null) {
             sortOrder = annotation.sortOrder();
             includes = annotation.includes();
@@ -287,7 +281,7 @@ public class EntityInfo {
         String[] sortOrder = null;
         String[] includes = null;
         String[] excludes = getDefaultEditExcludes();
-        DisplayEdit annotation = (DisplayEdit) entityClass.getAnnotation(DisplayEdit.class);
+        DisplayEdit annotation = entityClass.getAnnotation(DisplayEdit.class);
         if (annotation != null) {
             sortOrder = annotation.sortOrder();
             includes = annotation.includes();
@@ -309,23 +303,22 @@ public class EntityInfo {
     protected String[] getDefaultEditExcludes() {
         String[] excludes = null;
         if (idProperty != null) {
-            excludes = new String[] { idProperty.getName() };
+            excludes = new String[]{idProperty.getName()};
         }
         return excludes;
     }
 
     protected void configureViewField() {
-        String[] sortOrder = null;
-        String[] includes = null;
-        String[] excludes = null;
-        ViewField annotation = (ViewField) entityClass.getAnnotation(ViewField.class);
+        String[] sortOrder;
+        String[] includes;
+        String[] excludes;
+        ViewField annotation = entityClass.getAnnotation(ViewField.class);
         if (annotation != null) {
             sortOrder = annotation.sortOrder();
             includes = annotation.includes();
             excludes = annotation.excludes();
             nameProperties = createOrderedList(properties, sortOrder, includes, excludes);
-        }
-        else {
+        } else {
             nameProperties = findDefaultViewFields(properties);
         }
     }
@@ -377,8 +370,7 @@ public class EntityInfo {
                 }
             }
 
-        }
-        else {
+        } else {
             if (!empty(excludes)) {
                 for (String name : excludes) {
                     map.remove(name);
@@ -402,7 +394,7 @@ public class EntityInfo {
      * this will not work for properties which do not have a matching field; but
      * then folks can use the {@link DisplayDefaults} annotation to fix those
      * cases.
-     * 
+     *
      * @return
      */
     protected List<PropertyInfo> createDefaultOrderList() {
@@ -415,9 +407,10 @@ public class EntityInfo {
         return answer;
     }
 
-    protected void appendDefaultPropertyList(Class type, List<PropertyInfo> list, Map<String, PropertyInfo> map) {
+    protected void appendDefaultPropertyList(Class<Object> type, List<PropertyInfo> list, Map<String, PropertyInfo> map) {
         Class superclass = type.getSuperclass();
         if (superclass != null && !superclass.equals(Object.class)) {
+            //noinspection unchecked
             appendDefaultPropertyList(superclass, list, map);
         }
         Field[] fields = type.getDeclaredFields();
@@ -435,6 +428,7 @@ public class EntityInfo {
 
     /**
      * Creates a new QName for this entity type
+     *
      * @return
      */
     public QName getQName() {

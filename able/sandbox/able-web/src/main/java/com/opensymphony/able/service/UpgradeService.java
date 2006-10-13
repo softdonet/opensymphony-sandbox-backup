@@ -14,6 +14,7 @@ import java.sql.SQLException;
 
 public class UpgradeService extends Service implements BeanFactoryAware {
     private DataSource dataSource;
+    private String basePackage;
     private BeanFactory beanFactory;
     private static long buildNumber;
 
@@ -96,7 +97,7 @@ public class UpgradeService extends Service implements BeanFactoryAware {
 
     private Class<? extends UpgradeTask> getUpgradeTaskClass(Build build) {
         try {
-            String className = "com.cparty.upgrade.UpgradeToBuild" + (build.getBuild() + 1);
+            String className = basePackage + ".UpgradeToBuild" + (build.getBuild() + 1);
             log.info("Looking up upgrade class " + className);
             return (Class<UpgradeTask>) getClass().getClassLoader().loadClass(className);
         } catch (ClassNotFoundException e) {
@@ -110,5 +111,9 @@ public class UpgradeService extends Service implements BeanFactoryAware {
 
     public void setBeanFactory(BeanFactory factory) {
         this.beanFactory = factory;
+    }
+
+    public void setBasePackage(String basePackage) {
+        this.basePackage = basePackage;
     }
 }

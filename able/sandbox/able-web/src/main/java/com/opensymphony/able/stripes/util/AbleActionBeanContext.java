@@ -19,6 +19,7 @@ public class AbleActionBeanContext extends ActionBeanContext {
 
     public static final String USER_KEY = "__userId";
     public static final String AFTER_LOGIN = "__afterLogin";
+    private static final String AUTH_TOKEN = "able.auth";
 
     @SpringBean
     private UserService userService;
@@ -27,6 +28,7 @@ public class AbleActionBeanContext extends ActionBeanContext {
 
     /**
      * helper method to indicate if the current user is logged in.
+     *
      * @return true if logged in
      */
     public boolean isUserLoggedIn() {
@@ -81,7 +83,7 @@ public class AbleActionBeanContext extends ActionBeanContext {
             Cookie[] cookies = getRequest().getCookies();
             if (cookies != null) {
                 for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("able.auth")) {
+                    if (cookie.getName().equals(AUTH_TOKEN)) {
                         String value = cookie.getValue();
                         String[] usernameAndPassword = userService.decryptAuthInfo(value);
                         if (usernameAndPassword != null) {
@@ -108,7 +110,7 @@ public class AbleActionBeanContext extends ActionBeanContext {
     }
 
     private void removeCookie() {
-        Cookie cookie = new Cookie("cparty.auth", "");
+        Cookie cookie = new Cookie(AUTH_TOKEN, "");
         cookie.setPath("/");
         cookie.setMaxAge(0); // remove now
         getResponse().addCookie(cookie);
@@ -116,7 +118,7 @@ public class AbleActionBeanContext extends ActionBeanContext {
 
     public void remember(String username, String password) {
         String value = userService.encryptAuthInfo(username, password);
-        Cookie cookie = new Cookie("able.auth", value);
+        Cookie cookie = new Cookie(AUTH_TOKEN, value);
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60 * 24 * 365); // 1 year
         getResponse().addCookie(cookie);

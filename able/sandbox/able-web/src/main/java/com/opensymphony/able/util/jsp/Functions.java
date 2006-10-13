@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 public class Functions {
-    public static boolean contains(Object o1 , Object o2) {
+    public static boolean contains(Object o1, Object o2) {
         if (o1 instanceof Collection) {
             return ((Collection) o1).contains(o2);
         }
@@ -23,7 +23,7 @@ public class Functions {
     }
 
     public static String extractFormName(String className, String eventName) {
-        String name = className.substring("com.cparty.stripes.".length());
+        String name = className.substring(className.lastIndexOf(".") + 1);
         if (name.endsWith("ActionBean")) {
             name = name.substring(0, name.length() - "ActionBean".length());
         } else if (name.endsWith("Action")) {

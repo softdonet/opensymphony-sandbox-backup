@@ -4,41 +4,42 @@ import com.opensymphony.able.view.DisplayEdit;
 import com.opensymphony.able.view.DisplayList;
 import com.opensymphony.able.view.Input;
 import com.opensymphony.able.view.InputType;
-import com.opensymphony.able.view.Label;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Represents a bug in the bug database.
- * 
+ *
  * @author Tim Fennell
  */
 @Entity
-@DisplayList(excludes = { "longDescription", "attachments" })
-@DisplayEdit(excludes = { "id", "attachments" })
+@DisplayList(excludes = {"longDescription", "attachments"})
+@DisplayEdit(excludes = {"id", "attachments"})
 public class Bug {
+    @Id
+    @GeneratedValue
+    @Input(label = "ID")
     private Integer id;
     private Date openDate;
+    @Input(label = "Description")
     private String shortDescription;
+    @Input(type = InputType.TextArea)
     private String longDescription;
+    @ManyToOne
     private Component component;
     private Priority priority;
+    @Input(type = InputType.Radio)
     private Status status;
+    @ManyToOne
     private Person owner;
     private Date dueDate;
     private Float percentComplete;
+    @OneToMany
     private List<Attachment> attachments;
 
-    @Id
-    @GeneratedValue
-    @Label("ID")
     public Integer getId() {
         return id;
     }
@@ -55,7 +56,6 @@ public class Bug {
         this.openDate = openDate;
     }
 
-    @Input(label = "Description")
     public String getShortDescription() {
         return shortDescription;
     }
@@ -64,7 +64,6 @@ public class Bug {
         this.shortDescription = shortDescription;
     }
 
-    @Input(type=InputType.TextArea)
     public String getLongDescription() {
         return longDescription;
     }
@@ -73,7 +72,6 @@ public class Bug {
         this.longDescription = longDescription;
     }
 
-    @ManyToOne
     public Component getComponent() {
         return component;
     }
@@ -90,7 +88,6 @@ public class Bug {
         this.priority = priority;
     }
 
-    @Input(type=InputType.Radio)
     public Status getStatus() {
         return status;
     }
@@ -99,7 +96,6 @@ public class Bug {
         this.status = status;
     }
 
-    @ManyToOne
     public Person getOwner() {
         return owner;
     }
@@ -124,7 +120,6 @@ public class Bug {
         this.percentComplete = percentComplete;
     }
 
-    @OneToMany
     public List<Attachment> getAttachments() {
         return attachments;
     }

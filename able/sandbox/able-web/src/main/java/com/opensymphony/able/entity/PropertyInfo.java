@@ -23,6 +23,8 @@ import com.opensymphony.able.view.Input;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.beans.PropertyDescriptor;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -36,6 +38,7 @@ public class PropertyInfo {
 
     private final EntityInfo entity;
     private final PropertyDescriptor descriptor;
+    private Class entityClass;
     private boolean idProperty;
     private String displayName;
 
@@ -47,12 +50,31 @@ public class PropertyInfo {
         return null;
     }
 
-    public PropertyInfo(EntityInfo entity, PropertyDescriptor descriptor) {
+    public PropertyInfo(EntityInfo entity, PropertyDescriptor descriptor, Class entityClass) {
         this.entity = entity;
         this.descriptor = descriptor;
+        this.entityClass = entityClass;
+        idProperty = findAnnotation(Id.class) != null;
+    }
+
+    private <T extends Annotation> T findAnnotation(Class<T> clazz) {
+        String name = descriptor.getName();
+        try {
+            Field field = entityClass.getDeclaredField(name);
+            T a = field.getAnnotation(clazz);
+            if (a != null) {
+                return a;
+            }
+        } catch (NoSuchFieldException e) {
+            // this should generally never happen...
+        }
+
         Method readMethod = descriptor.getReadMethod();
-        idProperty = (readMethod != null)
-                && (readMethod.getAnnotation(Id.class) != null);
+        if (readMethod != null) {
+            return readMethod.getAnnotation(clazz);
+        }
+
+        return null;
     }
 
     @Override
@@ -140,7 +162,7 @@ public class PropertyInfo {
 
     public boolean isFormProperty() {
         if (isWritable() && isReadable()) {
-            if (descriptor.getReadMethod().getAnnotation(Transient.class) != null) {
+            if (findAnnotation(Transient.class) != null) {
                 return false;
             }
             // TODO use an annotation to exclude from forms?
@@ -201,8 +223,7 @@ public class PropertyInfo {
                 Type[] typeArguments = genericSuperclass
                         .getActualTypeArguments();
                 return (Class) typeArguments[0];
-            }
-            else {
+            } else {
                 // no idea what the type is
                 // TODO do we have an annotation?
                 return Object.class;
@@ -216,19 +237,14 @@ public class PropertyInfo {
     }
 
     public Input getInput() {
-        Input answer = null;
-        Method method = descriptor.getReadMethod();
-        if (method != null) {
-            answer = method.getAnnotation(Input.class);
-        }
-        return answer;
+        return findAnnotation(Input.class);
     }
 
     protected String createDisplayName() {
         String name = descriptor.getDisplayName();
         if (name.equals(getName())) {
             // lets see if we have an annotation
-            Input input = descriptor.getReadMethod().getAnnotation(Input.class);
+            Input input = findAnnotation(Input.class);
             if (input != null) {
                 String label = input.label();
                 if (label != null && label.length() > 0) {
