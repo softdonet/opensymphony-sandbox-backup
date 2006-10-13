@@ -52,8 +52,10 @@ public class EntityInfo {
         return Entities.getInstance().getEntityByClass(type);
     }
 
-    public EntityInfo(Class<Object> entityClass) {
+    public EntityInfo(Class entityClass) {
+        //noinspection unchecked
         this.entityClass = entityClass;
+        //noinspection unchecked
         introspect(entityClass);
     }
 
