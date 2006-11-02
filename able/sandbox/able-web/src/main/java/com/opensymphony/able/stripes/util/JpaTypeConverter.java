@@ -47,7 +47,7 @@ public class JpaTypeConverter<T> implements TypeConverter<T> {
         Object primaryKey = null;
         if (input != null && input.length() > 0) {
             try {
-                primaryKey = entityInfo.convertToPrimaryKeyValkue(input);
+                primaryKey = entityInfo.convertToPrimaryKeyValue(input);
             }
             catch (NumberFormatException e) {
                 errors.add(new ScopedLocalizableError("converter.primaryKey", "invalidPrimaryKey"));

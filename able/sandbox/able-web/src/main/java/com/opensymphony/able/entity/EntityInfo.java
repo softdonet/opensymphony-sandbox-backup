@@ -164,7 +164,7 @@ public class EntityInfo {
         return nameProperties.get(0);
     }
 
-    public Object convertToPrimaryKeyValkue(String value) {
+    public Object convertToPrimaryKeyValue(String value) {
         if (value != null && value.length() > 0) {
             Class idClass = getIdClass();
             return typeConverter.convertIfNecessary(value, idClass);
