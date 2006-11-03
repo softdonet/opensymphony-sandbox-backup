@@ -1,4 +1,4 @@
-// ** I18N
+﻿// ** I18N
 
 // Calendar NO language
 // Author: Daniel Holmen, <daniel.holmen@ciber.no>
@@ -11,14 +11,18 @@
 
 // full day names
 Calendar._DN = new Array
-("Søndag",
- "Mandag",
- "Tirsdag",
- "Onsdag",
- "Torsdag",
- "Fredag",
- "Lørdag",
- "Søndag");
+        ("Søndag",
+                "Mandag",
+                "Tirsdag",
+                "Onsdag",
+                "Torsdag",
+                "Fredag",
+                "Lørdag",
+                "Søndag");
+
+// First day of the week. "0" means display Sunday first, "1" means display
+// Monday first, etc.
+Calendar._FD = 1;
 
 // Please note that the following array of short day names (and the same goes
 // for short month names, _SMN) isn't absolutely necessary.  We give it here
@@ -34,44 +38,44 @@ Calendar._DN = new Array
 
 // short day names
 Calendar._SDN = new Array
-("Søn",
- "Man",
- "Tir",
- "Ons",
- "Tor",
- "Fre",
- "Lør",
- "Søn");
+        ("Søn",
+                "Man",
+                "Tir",
+                "Ons",
+                "Tor",
+                "Fre",
+                "Lør",
+                "Søn");
 
 // full month names
 Calendar._MN = new Array
-("Januar",
- "Februar",
- "Mars",
- "April",
- "Mai",
- "Juni",
- "Juli",
- "August",
- "September",
- "Oktober",
- "November",
- "Desember");
+        ("Januar",
+                "Februar",
+                "Mars",
+                "April",
+                "Mai",
+                "Juni",
+                "Juli",
+                "August",
+                "September",
+                "Oktober",
+                "November",
+                "Desember");
 
 // short month names
 Calendar._SMN = new Array
-("Jan",
- "Feb",
- "Mar",
- "Apr",
- "Mai",
- "Jun",
- "Jul",
- "Aug",
- "Sep",
- "Okt",
- "Nov",
- "Des");
+        ("Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "Mai",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Okt",
+                "Nov",
+                "Des");
 
 // tooltips
 Calendar._TT = {};
@@ -88,10 +92,10 @@ Calendar._TT["ABOUT"] =
 "- Bruk knappene " + String.fromCharCode(0x2039) + " og " + String.fromCharCode(0x203a) + " for å velge måned\n" +
 "- Hold inne musknappen eller knappene over for raskere valg.";
 Calendar._TT["ABOUT_TIME"] = "\n\n" +
-"Tidsvalg:\n" +
-"- Klikk på en av tidsdelene for å øke den\n" +
-"- eller Shift-klikk for å senke verdien\n" +
-"- eller klikk-og-dra for raskere valg..";
+                             "Tidsvalg:\n" +
+                             "- Klikk på en av tidsdelene for å øke den\n" +
+                             "- eller Shift-klikk for å senke verdien\n" +
+                             "- eller klikk-og-dra for raskere valg..";
 
 Calendar._TT["PREV_YEAR"] = "Forrige. år (hold for meny)";
 Calendar._TT["PREV_MONTH"] = "Forrige. måned (hold for meny)";
@@ -101,8 +105,16 @@ Calendar._TT["NEXT_YEAR"] = "Neste år (hold for meny)";
 Calendar._TT["SEL_DATE"] = "Velg dato";
 Calendar._TT["DRAG_TO_MOVE"] = "Dra for å flytte";
 Calendar._TT["PART_TODAY"] = " (idag)";
+
 Calendar._TT["MON_FIRST"] = "Vis mandag først";
 Calendar._TT["SUN_FIRST"] = "Vis søndag først";
+
+// the following is to inform that "%s" is to be the first day of week
+// %s will be replaced with the day name.
+Calendar._TT["DAY_FIRST"] = "Display %s first";
+
+Calendar._TT["WEEKEND"] = "0,6";
+
 Calendar._TT["CLOSE"] = "Lukk";
 Calendar._TT["TODAY"] = "Idag";
 Calendar._TT["TIME_PART"] = "(Shift-)Klikk eller dra for å endre verdi";
