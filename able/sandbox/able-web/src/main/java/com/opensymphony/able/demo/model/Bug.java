@@ -1,18 +1,19 @@
-package com.opensymphony.able.demo.model;
+package com.opensymphony.able.model;
 
-import com.opensymphony.able.annotations.DisplayEdit;
-import com.opensymphony.able.annotations.DisplayList;
-import com.opensymphony.able.annotations.Input;
-import com.opensymphony.able.annotations.InputType;
+import com.opensymphony.able.view.DisplayEdit;
+import com.opensymphony.able.view.DisplayList;
+import com.opensymphony.able.view.Input;
+import com.opensymphony.able.view.InputType;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableId;
+import org.compass.annotations.SearchableProperty;
+import org.compass.annotations.SearchableMetaData;
 
 /**
  * Represents a bug in the bug database.
@@ -22,12 +23,16 @@ import java.util.List;
 @Entity
 @DisplayList(excludes = {"longDescription", "attachments"})
 @DisplayEdit(excludes = {"id", "attachments"})
+@Searchable
 public class Bug {
     @Id
     @GeneratedValue
     @Input(label = "ID")
+    @SearchableId
     private Integer id;
     private Date openDate;
+    @SearchableProperty
+    @SearchableMetaData(name="shortDescription")
     @Input(label = "Description")
     private String shortDescription;
     @Input(type = InputType.TextArea)
