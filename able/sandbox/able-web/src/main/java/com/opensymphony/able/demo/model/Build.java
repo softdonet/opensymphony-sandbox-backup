@@ -17,6 +17,8 @@ public class Build {
     private Long id;
     private long build;
     @SearchableProperty
+    private String tag;
+    @SearchableProperty
     private String description;
         
     public Build() {
@@ -52,6 +54,15 @@ public class Build {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public String toString() {
