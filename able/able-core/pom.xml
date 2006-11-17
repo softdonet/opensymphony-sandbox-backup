@@ -162,11 +162,31 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate</artifactId>
             <version>3.2.0.ga</version>
+          <exclusions>
+              <exclusion>
+                  <groupId>javax.persistence</groupId>
+                  <artifactId>ejb</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>javax.transaction</groupId>
+                  <artifactId>jta</artifactId>
+              </exclusion>
+          </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-annotations</artifactId>
             <version>3.2.0.ga</version>
+          <exclusions>
+              <exclusion>
+                  <groupId>javax.persistence</groupId>
+                  <artifactId>ejb</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>javax.transaction</groupId>
+                  <artifactId>jta</artifactId>
+              </exclusion>
+          </exclusions>
         </dependency>
 
         <!-- compass dependencies -->
