@@ -1,5 +1,4 @@
 <%@ include file="/WEB-INF/header.jsp"%>
-<%@ taglib prefix="${entityInfo.entityUri}" tagdir="/WEB-INF/tags/entity/${entityInfo.entityUri}"%>
 <html>
 <body>
 
@@ -12,16 +11,16 @@
 
 #foreach( $property in $entityInfo.editFormProperties )
 #if( !$property.collection )
-#set( $name = "entity.${property.name}")
+#set( $name = "${property.name}")
 #if( $property.persistent ) 
  #set( $name = "${name}.id" )
 #end
     <tr>
       <th><stripes:label for="$name">${property.displayName}</stripes:label>:</th>
  #if( $property.writable )
-      <td><${entityInfo.entityUri}:${property.name}EditField name="$name"/></td>
+      <td><able:field entity="${actionBean.entity}" name="$name"/></td>
  #else
-      <td><${entityInfo.entityUri}:${property.name}ViewField entity="${actionBean.entity}"/></td>
+      <td><able:viewField entity="${actionBean.entity}" name="$name"/></td>
  #end
     </tr>
 #end

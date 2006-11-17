@@ -10,6 +10,7 @@
 
     <packaging>pom</packaging>
     <modules>
+        <module>able-core</module>
         <module>able-web</module>
     </modules>
 
