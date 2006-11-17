@@ -9,7 +9,7 @@
 <a:form beanclass="${actionBean.class.name}" title="viewTitle" submitEvent="edit" cancelEvent="cancel"
         defaultTitle="View ${actionBean.entityInfo.entityName}" submitDefaultLabel="Edit" cancelDefaultLabel="Back">
     <stripes:hidden name="entity"/>
-
+     <br>
     <c:forEach items="${actionBean.entityInfo.editProperties}" var="property">
         <a:formFieldLabel label="entity.${property.name}" defaultLabel="${property.displayName}">
             <jsp:attribute name="fragment">
@@ -17,12 +17,14 @@
             </jsp:attribute>
         </a:formFieldLabel>
     </c:forEach>
+    <br>
+    <br>
 </a:form>
 
-<div align="center">
-    <s:link beanclass="${actionBean.class.name}" event="generateView">Save this page to /WEB-INF/jsp${actionBean.actionUri}/view.jsp</s:link>
-    <br/>
-    <br/>
+<div id="savepage">
+    <s:link beanclass="${actionBean.class.name}" event="generateView"><img style="border: none; vertical-align: middle;" src="${reguest.contextPath}/gfx/save.gif"/>this page to
+        /WEB-INF/jsp${actionBean.actionUri}/list.jsp
+    </s:link>
 </div>
 
 </body>

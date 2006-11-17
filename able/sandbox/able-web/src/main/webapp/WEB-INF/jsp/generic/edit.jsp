@@ -15,10 +15,10 @@
     </c:forEach>
 </a:form>
 
-<div align="center">
-    <s:link beanclass="${actionBean.class.name}" event="generateEdit">Save this page to /WEB-INF/jsp${actionBean.actionUri}/edit.jsp</s:link>
-    <br/>
-    <br/>
+<div id="savepage">
+    <s:link beanclass="${actionBean.class.name}" event="generateEdit"><img style="border: none; vertical-align: middle;" src="${reguest.contextPath}/gfx/save.gif"/>this page to
+        /WEB-INF/jsp${actionBean.actionUri}/list.jsp
+    </s:link>
 </div>
 
 </body>
