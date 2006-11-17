@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.opensymphony.able.service;
+package com.opensymphony.able.demo.service;
 
 import com.opensymphony.able.demo.model.*;
 import org.springframework.beans.factory.InitializingBean;

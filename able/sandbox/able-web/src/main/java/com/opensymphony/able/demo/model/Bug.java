@@ -1,9 +1,4 @@
-package com.opensymphony.able.model;
-
-import com.opensymphony.able.view.DisplayEdit;
-import com.opensymphony.able.view.DisplayList;
-import com.opensymphony.able.view.Input;
-import com.opensymphony.able.view.InputType;
+package com.opensymphony.able.demo.model;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +9,10 @@ import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableId;
 import org.compass.annotations.SearchableProperty;
 import org.compass.annotations.SearchableMetaData;
+import com.opensymphony.able.annotations.DisplayList;
+import com.opensymphony.able.annotations.DisplayEdit;
+import com.opensymphony.able.annotations.Input;
+import com.opensymphony.able.annotations.InputType;
 
 /**
  * Represents a bug in the bug database.
