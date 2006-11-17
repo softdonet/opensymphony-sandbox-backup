@@ -17,7 +17,7 @@
  */
 package com.opensymphony.able.service;
 
-import com.opensymphony.able.entity.Entities;
+import com.opensymphony.able.introspect.Entities;
 import org.hibernate.ejb.HibernateEntityManagerFactory;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
 
@@ -26,7 +26,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A helper class which uses the Spring entity manager factory bean to load the entities.
+ * A helper class which uses the Spring entity manager factory bean to load the entities
+ * so that we can pre-populate the introspector so that the available entities can be browsed
+ * on a UI such as for administration consoles and so forth.
  *
  * @version $Revision$
  */

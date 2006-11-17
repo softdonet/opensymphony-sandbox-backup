@@ -17,7 +17,7 @@
  */
 package com.opensymphony.able.stripes;
 
-import com.opensymphony.able.entity.EntityInfo;
+import com.opensymphony.able.introspect.EntityInfo;
 import net.sourceforge.stripes.integration.spring.SpringHelper;
 import net.sourceforge.stripes.validation.TypeConverter;
 

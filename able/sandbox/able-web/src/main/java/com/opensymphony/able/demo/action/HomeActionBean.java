@@ -2,8 +2,8 @@ package com.opensymphony.able.demo.action;
 
 import com.opensymphony.able.demo.model.User;
 import com.opensymphony.able.demo.service.UserService;
-import com.opensymphony.able.entity.Entities;
-import com.opensymphony.able.entity.EntityInfo;
+import com.opensymphony.able.introspect.Entities;
+import com.opensymphony.able.introspect.EntityInfo;
 import net.sourceforge.stripes.action.DefaultHandler;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.integration.spring.SpringBean;

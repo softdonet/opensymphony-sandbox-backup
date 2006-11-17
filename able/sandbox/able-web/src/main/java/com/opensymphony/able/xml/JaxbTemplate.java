@@ -16,7 +16,7 @@
  */
 package com.opensymphony.able.xml;
 
-import com.opensymphony.able.entity.EntityInfo;
+import com.opensymphony.able.introspect.EntityInfo;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;

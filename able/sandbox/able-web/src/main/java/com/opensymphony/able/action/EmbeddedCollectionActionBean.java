@@ -19,10 +19,10 @@ package com.opensymphony.able.action;
 
 import com.opensymphony.able.annotations.Input;
 import com.opensymphony.able.annotations.InputType;
-import com.opensymphony.able.entity.EntityInfo;
-import com.opensymphony.able.entity.Option;
-import com.opensymphony.able.entity.PropertyInfo;
 import com.opensymphony.able.filter.TransactionOutcome;
+import com.opensymphony.able.introspect.EntityInfo;
+import com.opensymphony.able.introspect.Option;
+import com.opensymphony.able.introspect.PropertyInfo;
 import com.opensymphony.able.xml.JaxbResolution;
 import com.opensymphony.able.xml.JaxbTemplate;
 import net.sourceforge.stripes.action.ActionBean;

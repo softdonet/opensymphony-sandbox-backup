@@ -1,4 +1,4 @@
-<%@ tag import="com.opensymphony.able.entity.PropertyInfo" %>
+<%@ tag import="com.opensymphony.able.introspect.PropertyInfo" %>
 <%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="a" tagdir="/WEB-INF/tags" %>

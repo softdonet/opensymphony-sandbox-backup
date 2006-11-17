@@ -1,6 +1,6 @@
-<%@ tag import="com.opensymphony.able.entity.Entities" %>
-<%@ tag import="com.opensymphony.able.entity.EntityInfo" %>
-<%@ tag import="com.opensymphony.able.entity.PropertyInfo" %>
+<%@ tag import="com.opensymphony.able.introspect.Entities" %>
+<%@ tag import="com.opensymphony.able.introspect.EntityInfo" %>
+<%@ tag import="com.opensymphony.able.introspect.PropertyInfo" %>
 <%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
 <%@ attribute name="entity" type="java.lang.Object" required="true" %>
 <%

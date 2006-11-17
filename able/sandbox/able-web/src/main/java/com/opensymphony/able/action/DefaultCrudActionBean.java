@@ -18,9 +18,9 @@
 package com.opensymphony.able.action;
 
 import com.opensymphony.able.annotations.Partial;
-import com.opensymphony.able.entity.EntityInfo;
-import com.opensymphony.able.entity.PropertyInfo;
 import com.opensymphony.able.filter.TransactionOutcome;
+import com.opensymphony.able.introspect.EntityInfo;
+import com.opensymphony.able.introspect.PropertyInfo;
 import com.opensymphony.able.service.CrudService;
 import com.opensymphony.able.service.JpaCrudService;
 import com.opensymphony.able.stripes.DefaultResolution;

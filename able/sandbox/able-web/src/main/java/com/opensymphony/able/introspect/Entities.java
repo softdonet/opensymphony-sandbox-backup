@@ -14,9 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.opensymphony.able.entity;
+package com.opensymphony.able.introspect;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class Entities {
     private static final Entities instance = new Entities();
