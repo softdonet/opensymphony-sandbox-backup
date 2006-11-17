@@ -21,15 +21,14 @@
 
 
 <h2>Current users</h2>
-These other users are also enjoying Able:
+
+<p>These other users are also enjoying Able:</p>
 
 <ul>
     <c:forEach items="${actionBean.users}" var="user">
         <li>${user.name} (${user.email})</li>
     </c:forEach>
 </ul>
-
-<hr/>
 
 <s:link beanclass="com.opensymphony.able.demo.action.RegisterActionBean">Register</s:link> an account to be added to the list!
 
