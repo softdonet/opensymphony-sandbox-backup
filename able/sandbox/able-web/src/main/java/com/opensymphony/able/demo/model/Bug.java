@@ -1,18 +1,22 @@
 package com.opensymphony.able.demo.model;
 
-import javax.persistence.*;
+import com.opensymphony.able.annotations.DisplayEdit;
+import com.opensymphony.able.annotations.DisplayList;
+import com.opensymphony.able.annotations.Input;
+import com.opensymphony.able.annotations.InputType;
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableId;
+import org.compass.annotations.SearchableMetaData;
+import org.compass.annotations.SearchableProperty;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.compass.annotations.Searchable;
-import org.compass.annotations.SearchableId;
-import org.compass.annotations.SearchableProperty;
-import org.compass.annotations.SearchableMetaData;
-import com.opensymphony.able.annotations.DisplayList;
-import com.opensymphony.able.annotations.DisplayEdit;
-import com.opensymphony.able.annotations.Input;
-import com.opensymphony.able.annotations.InputType;
 
 /**
  * Represents a bug in the bug database.
@@ -35,6 +39,8 @@ public class Bug {
     @Input(label = "Description")
     private String shortDescription;
     @Input(type = InputType.TextArea)
+    @SearchableProperty
+    @SearchableMetaData(name="longDescription")
     private String longDescription;
     @ManyToOne
     private Component component;
