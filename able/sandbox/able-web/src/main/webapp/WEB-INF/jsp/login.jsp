@@ -6,7 +6,7 @@
 
 <body>
 
-<a:form beanclass="com.opensymphony.able.stripes.LoginActionBean"
+<a:form beanclass="com.opensymphony.able.demo.action.LoginActionBean"
          title="title" description="description" submitEvent="login">
     <a:formFieldText name="username"/>
     <a:formFieldPassword name="password"/>

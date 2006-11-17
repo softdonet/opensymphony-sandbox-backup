@@ -20,7 +20,7 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="loadStaticData" class="com.opensymphony.able.service.LoadDatabaseService" lazy-init="false"
+    <bean id="loadStaticData" class="com.opensymphony.able.demo.service.LoadDatabaseService" lazy-init="false"
           autowire="constructor" depends-on="sample,upgrade"/>
 
     <bean id="mailService" class="com.opensymphony.able.mail.MockMailService"/>

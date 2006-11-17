@@ -15,22 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.opensymphony.able.service;
+package com.opensymphony.able.demo.action;
 
+import com.opensymphony.able.action.JpaCrudActionBean;
 import com.opensymphony.able.demo.model.Person;
 
-import java.util.List;
-
 /**
+ * TODO code generate or create dynamically at runtime?
+ *
  * @version $Revision$
-*/
-public class PersonService extends JpaCrudService<Person> {
-
-    public List<Person> findPersonViaName(String userName) {
-        return findUsingSql("select * from Person where username = 'james'");
-    }
-
-    public List<Person> findPersonViaNameUsingParameter(String userName) {
-        return findUsingSql("select * from Person where username = ?", userName);
+ */
+public class PersonActionBean extends JpaCrudActionBean<Person> {
+    public PersonActionBean() {
+        super(Person.class);
     }
 }

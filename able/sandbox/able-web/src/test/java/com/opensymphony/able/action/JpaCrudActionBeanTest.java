@@ -16,9 +16,9 @@
  */
 package com.opensymphony.able.action;
 
-import com.opensymphony.able.model.Bug;
-import com.opensymphony.able.model.Status;
-import com.opensymphony.able.stripes.BugActionBean;
+import com.opensymphony.able.demo.action.BugActionBean;
+import com.opensymphony.able.demo.model.Bug;
+import com.opensymphony.able.demo.model.Status;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.TypeConverter;

@@ -16,7 +16,7 @@
  */
 package com.opensymphony.able.action;
 
-import com.opensymphony.able.stripes.PersonActionBean;
+import com.opensymphony.able.demo.action.PersonActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.Resolution;

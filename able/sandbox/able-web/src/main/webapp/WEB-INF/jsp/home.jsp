@@ -31,7 +31,7 @@ These other users are also enjoying Able:
 
 <hr/>
 
-<s:link beanclass="com.opensymphony.able.stripes.RegisterActionBean">Register</s:link> an account to be added to the list!
+<s:link beanclass="com.opensymphony.able.demo.action.RegisterActionBean">Register</s:link> an account to be added to the list!
 
 </body>
 </html>

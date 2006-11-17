@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<a:form beanclass="com.opensymphony.able.stripes.RegisterActionBean"
+<a:form beanclass="com.opensymphony.able.demo.action.RegisterActionBean"
          title="title" description="description"
          submitEvent="register">
     <a:formFieldText name="user.username"/>

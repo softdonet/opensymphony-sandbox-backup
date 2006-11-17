@@ -6,7 +6,7 @@
 
 <body>
 
-<a:form beanclass="com.opensymphony.able.stripes.UserSettingsActionBean"
+<a:form beanclass="com.opensymphony.able.demo.action.UserSettingsActionBean"
          title="updateTitle"
          submitEvent="update">
     <input type="hidden" name="user" value="${actionBean.userId}"/>

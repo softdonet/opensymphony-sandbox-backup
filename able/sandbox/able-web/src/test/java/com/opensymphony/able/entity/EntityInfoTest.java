@@ -16,8 +16,8 @@
  */
 package com.opensymphony.able.entity;
 
-import com.opensymphony.able.model.Attachment;
-import com.opensymphony.able.model.Bug;
+import com.opensymphony.able.demo.model.Attachment;
+import com.opensymphony.able.demo.model.Bug;
 import com.opensymphony.able.view.DisplayBulkEdit;
 import com.opensymphony.able.view.DisplayList;
 import com.opensymphony.able.view.Input;

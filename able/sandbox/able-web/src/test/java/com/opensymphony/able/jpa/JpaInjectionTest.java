@@ -16,9 +16,9 @@
  */
 package com.opensymphony.able.jpa;
 
-import com.opensymphony.able.model.Person;
+import com.opensymphony.able.demo.action.PersonActionBean;
+import com.opensymphony.able.demo.model.Person;
 import com.opensymphony.able.service.JpaCrudService;
-import com.opensymphony.able.stripes.PersonActionBean;
 import net.sourceforge.stripes.integration.spring.SpringHelper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.jpa.JpaCallback;

@@ -3,7 +3,7 @@
     "-//Compass/Compass Core Mapping DTD 1.0//EN"
     "http://www.opensymphony.com/compass/dtd/compass-core-mapping.dtd">
 
-<compass-core-mapping package="com.opensymphony.able.model">
+<compass-core-mapping package="com.opensymphony.able.demo.model">
 
     <contract alias="entity">
         <id name="id" />

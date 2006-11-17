@@ -15,22 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.opensymphony.able.service;
+package com.opensymphony.able.demo.action;
 
+import com.opensymphony.able.action.JpaEmbeddedCollectionActionBean;
+import com.opensymphony.able.demo.model.Component;
 import com.opensymphony.able.demo.model.Person;
 
-import java.util.List;
-
 /**
+ * TODO code generate or create dynamically at runtime?
+ *
+ * This action bean is used to view/edit the {@link Person#getLeads()} collection
+ *
  * @version $Revision$
-*/
-public class PersonService extends JpaCrudService<Person> {
+ */
+public class Person_leadsActionBean extends JpaEmbeddedCollectionActionBean<Person, Component> {
 
-    public List<Person> findPersonViaName(String userName) {
-        return findUsingSql("select * from Person where username = 'james'");
-    }
-
-    public List<Person> findPersonViaNameUsingParameter(String userName) {
-        return findUsingSql("select * from Person where username = ?", userName);
+    public Person_leadsActionBean() {
+        super("leads", Person.class, Component.class);
     }
 }

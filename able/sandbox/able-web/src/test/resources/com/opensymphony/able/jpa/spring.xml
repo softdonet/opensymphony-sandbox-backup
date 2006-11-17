@@ -11,7 +11,7 @@
 
   <bean id="mailService" class="com.opensymphony.able.mail.MockMailService"/>
 
-  <bean id="userService" class="com.opensymphony.able.service.UserService" autowire="constructor"/>
+  <bean id="userService" class="com.opensymphony.able.demo.service.UserService" autowire="constructor"/>
 
   <bean id="queryStrategy" class="com.opensymphony.able.action.StubQueryStrategy" autowire="constructor"/>
 
