@@ -32,9 +32,8 @@
     <h2>Add new values</h2>
 
     <p>
-        Search:
         <stripes:text name="query"/>
-        <stripes:submit name="search" value="Go"/>
+        <s:image name="search" src="/gfx/search.gif" style="vertical-align: bottom;"/>
     </p>
 
     <table id="entities" class="display sortable autostripe">
