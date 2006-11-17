@@ -11,6 +11,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.List;
 
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableId;
+import org.compass.annotations.SearchableProperty;
+
 /**
  * Represents a person to whom bugs can be assigned.
  *
@@ -18,13 +22,19 @@ import java.util.List;
  */
 @Entity
 @ViewField(includes = {"firstName", "lastName"})
+@Searchable
 public class Person {
     @Id
     @GeneratedValue
+    @SearchableId
     private Integer id;
+    @SearchableProperty
     private String username;
+    @SearchableProperty
     private String firstName;
+    @SearchableProperty
     private String lastName;
+    @SearchableProperty
     private String email;
     private String password;
     @Input(type = InputType.PickList)

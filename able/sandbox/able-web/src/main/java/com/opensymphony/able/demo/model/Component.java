@@ -1,5 +1,9 @@
 package com.opensymphony.able.demo.model;
 
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableId;
+import org.compass.annotations.SearchableProperty;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,11 +16,14 @@ import javax.persistence.ManyToOne;
  * @author Tim Fennell
  */
 @Entity
+@Searchable
 public class Component {
 
     @Id
     @GeneratedValue
+    @SearchableId
     private Integer id;
+    @SearchableProperty
     private String name;
     @ManyToOne
     private Person lead;

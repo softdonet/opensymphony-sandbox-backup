@@ -2,6 +2,9 @@ package com.opensymphony.able.demo.model;
 
 import org.hibernate.validator.Email;
 import org.hibernate.validator.NotNull;
+import org.compass.annotations.SearchableProperty;
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableId;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,14 +16,19 @@ import javax.persistence.Id;
  * @author <a href="mailto:jhouse@revolition.net">James House</a>
  */
 @Entity
+@Searchable
 public class User {
     @Id
     @GeneratedValue
+    @SearchableId
     private Long id;
     @NotNull
+    @SearchableProperty
     private String username;
     @Email
+    @SearchableProperty
     private String email;
+    @SearchableProperty
     private String name;
     private String passwordHash;
 

@@ -1,6 +1,9 @@
 package com.opensymphony.able.demo.model;
 
 import org.hibernate.validator.NotNull;
+import org.compass.annotations.SearchableProperty;
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableId;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,11 +16,14 @@ import java.util.List;
  * A simple collection of people
  */
 @Entity
+@Searchable
 public class Team {
     @Id
     @GeneratedValue
+    @SearchableId
     private Integer id;
     @NotNull
+    @SearchableProperty
     private String name;
     @OneToMany()
     private List<Person> members = new ArrayList<Person>();
