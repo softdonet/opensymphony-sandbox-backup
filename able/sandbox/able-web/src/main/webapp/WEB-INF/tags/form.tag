@@ -36,13 +36,9 @@
         </c:choose>
 
         <div class="buttons">
-            <s:submit name="${submitEvent}">
-                ${submitDefaultLabel != null ? submitDefaultLabel : "Submit"}
-            </s:submit>
+            <s:submit name="${submitEvent}">${submitDefaultLabel != null ? submitDefaultLabel : "Submit"}</s:submit>
             <c:if test="${not empty cancelEvent}">
-                <s:submit name="${cancelEvent}">
-                    ${cancelDefaultLabel != null ? cancelDefaultLabel : "Cancel"}
-                </s:submit>
+                <s:submit name="${cancelEvent}">${cancelDefaultLabel != null ? cancelDefaultLabel : "Cancel"}</s:submit>
             </c:if>
             <jsp:invoke fragment="extraButtons"/>
         </div>
