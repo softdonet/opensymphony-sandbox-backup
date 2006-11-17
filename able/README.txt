@@ -3,24 +3,13 @@ Build instructions
 
 First of all make sure you have installed Maven 2.0.4 or later.
 
-The maven-apt-plugin is not yet released at the time of writing so build that first as follows.
-(As soon as this has been released via mojo.codehaus.org or maven.apache.org then we will zap it from here)
-
-	cd maven-apt-plugin
-	mvn install
-	cd ..
-	
-Then build the example web app module (able-web) via
+Then just type
 
 	mvn install
-	
-To run the example
+
+To run the example web application module (able-web)
 
 	cd able-web
 	mvn jetty:run
 
-Other modules
-=============
-
-able-apt = an APT processing tool for processing the @Entity objects (maybe ActionBeans too)
-	
+and point your browser at http://localhost:8080/able-web/
