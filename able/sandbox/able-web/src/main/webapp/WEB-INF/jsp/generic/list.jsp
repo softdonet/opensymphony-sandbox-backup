@@ -13,8 +13,7 @@
             <s:text name="query"/>
             <s:image name="search" src="/gfx/search.gif" style="vertical-align: bottom;"/>
         </p>
-
-        <table id="entities" class="display sortable autostripe">
+       <table id="entities" class="display sortable autostripe">
             <thead>
                 <tr>
                     <th></th>
@@ -46,15 +45,15 @@
 
                         <td class="buttons">
                             <s:link beanclass="${actionBean.class.name}" event="view">
-                                <img src="${request.contextPath}/gfx/view.gif" alt="view" style="border:none;"/>
+                                <img src="${pageContext.request.contextPath}/gfx/view.gif" alt="view" style="border:none;"/>
                                 <s:param name="entity" value="${row.id}"/>
                             </s:link>
                             <s:link beanclass="${actionBean.class.name}" event="edit">
-                                <img src="${request.contextPath}/gfx/edit.gif" alt="edit" style="border:none;"/>
+                                <img src="${pageContext.request.contextPath}/gfx/edit.gif" alt="edit" style="border:none;"/>
                                 <s:param name="entity" value="${row.id}"/>
                             </s:link>
                             <s:link beanclass="${actionBean.class.name}" event="delete">
-                                <img src="${request.contextPath}/gfx/delete.gif" alt="delete" style="border:none;"/> 
+                                <img src="${pageContext.request.contextPath}/gfx/delete.gif" alt="delete" style="border:none;"/>
                                 <s:param name="entity" value="${row.id}"/>
                             </s:link>
                         </td>
@@ -70,7 +69,7 @@
 </a:form>
 
 <div id="savepage">
-    <s:link beanclass="${actionBean.class.name}" event="generateList"><img style="border: none; vertical-align: middle;" src="${reguest.contextPath}/gfx/save.gif"/>this page to
+    <s:link beanclass="${actionBean.class.name}" event="generateList"><img style="border: none; vertical-align: middle;" src="${pageContext.request.contextPath}/gfx/save.gif"/>this page to
         /WEB-INF/jsp${actionBean.actionUri}/list.jsp
     </s:link>
 </div>

@@ -16,7 +16,7 @@
 </a:form>
 
 <div id="savepage">
-    <s:link beanclass="${actionBean.class.name}" event="generateEdit"><img style="border: none; vertical-align: middle;" src="${reguest.contextPath}/gfx/save.gif"/>this page to
+    <s:link beanclass="${actionBean.class.name}" event="generateEdit"><img style="border: none; vertical-align: middle;" src="${pageContext.request.contextPath}/gfx/save.gif"/>this page to
         /WEB-INF/jsp${actionBean.actionUri}/list.jsp
     </s:link>
 </div>
