@@ -1,7 +1,7 @@
 package com.opensymphony.able.demo.action.util;
 
 import com.opensymphony.able.demo.model.User;
-import com.opensymphony.able.stripes.util.JpaTypeConverterFactory;
+import com.opensymphony.able.stripes.JpaTypeConverterFactory;
 import net.sourceforge.stripes.config.Configuration;
 
 public class AbleTypeConverterFactory extends JpaTypeConverterFactory {

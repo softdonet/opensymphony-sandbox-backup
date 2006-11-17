@@ -1,8 +1,8 @@
 package com.opensymphony.able.action;
 
+import com.opensymphony.able.stripes.DefaultResolution;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
-import com.opensymphony.able.stripes.util.DefaultResolution;
 
 public class DefaultActionBean implements ActionBean {
     protected ActionBeanContext context;

@@ -1,9 +1,9 @@
 package com.opensymphony.able.demo.model;
 
-import com.opensymphony.able.view.DisplayEdit;
-import com.opensymphony.able.view.DisplayList;
-import com.opensymphony.able.view.Input;
-import com.opensymphony.able.view.InputType;
+import com.opensymphony.able.annotations.DisplayEdit;
+import com.opensymphony.able.annotations.DisplayList;
+import com.opensymphony.able.annotations.Input;
+import com.opensymphony.able.annotations.InputType;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

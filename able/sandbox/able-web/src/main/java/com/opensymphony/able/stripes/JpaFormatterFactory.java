@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.opensymphony.able.stripes.util;
+package com.opensymphony.able.stripes;
 
 import net.sourceforge.stripes.format.DefaultFormatterFactory;
 import net.sourceforge.stripes.format.Formatter;

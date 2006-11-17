@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/jsp/include/taglibs.jspf" %>
+<%@ tag import="com.opensymphony.able.annotations.Input" %>
+<%@ tag import="com.opensymphony.able.annotations.InputType" %>
 <%@ tag import="com.opensymphony.able.entity.PropertyInfo" %>
-<%@ tag import="com.opensymphony.able.view.Input" %>
-<%@ tag import="com.opensymphony.able.view.InputType" %>
 <%@ tag import="java.util.List" %>
 <%@ taglib prefix="stripes" uri="http://stripes.sourceforge.net/stripes.tld" %>
 <%@ attribute name="entity" type="java.lang.Object" required="true" %>
@@ -31,7 +31,7 @@
             }
             InputType type = input.type();
             switch (type) {
-            case Checkbox:
+                case Checkbox:
 %>
 <a:formFieldCheckbox name="<%=fieldName%>" defaultLabel="${defaultLabel}"/>
 <%

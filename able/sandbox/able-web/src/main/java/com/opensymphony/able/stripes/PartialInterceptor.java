@@ -1,5 +1,6 @@
-package com.opensymphony.able.stripes.util;
+package com.opensymphony.able.stripes;
 
+import com.opensymphony.able.annotations.Partial;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.controller.ExecutionContext;
 import net.sourceforge.stripes.controller.Interceptor;

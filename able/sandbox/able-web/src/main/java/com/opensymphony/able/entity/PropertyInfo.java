@@ -16,9 +16,9 @@
  */
 package com.opensymphony.able.entity;
 
+import com.opensymphony.able.annotations.Input;
 import com.opensymphony.able.util.CollectionHelper;
 import com.opensymphony.able.util.StringHelper;
-import com.opensymphony.able.view.Input;
 
 import javax.persistence.Id;
 import javax.persistence.Transient;

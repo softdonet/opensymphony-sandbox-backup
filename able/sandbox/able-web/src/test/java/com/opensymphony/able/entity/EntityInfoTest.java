@@ -16,12 +16,12 @@
  */
 package com.opensymphony.able.entity;
 
+import com.opensymphony.able.annotations.DisplayBulkEdit;
+import com.opensymphony.able.annotations.DisplayList;
+import com.opensymphony.able.annotations.Input;
+import com.opensymphony.able.annotations.ViewField;
 import com.opensymphony.able.demo.model.Attachment;
 import com.opensymphony.able.demo.model.Bug;
-import com.opensymphony.able.view.DisplayBulkEdit;
-import com.opensymphony.able.view.DisplayList;
-import com.opensymphony.able.view.Input;
-import com.opensymphony.able.view.ViewField;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 

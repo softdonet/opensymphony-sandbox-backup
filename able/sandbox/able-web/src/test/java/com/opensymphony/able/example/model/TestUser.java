@@ -1,9 +1,9 @@
 package com.opensymphony.able.example.model;
 
-import com.opensymphony.able.view.DisplayBulkEdit;
-import com.opensymphony.able.view.DisplayDefaults;
-import com.opensymphony.able.view.DisplayView;
-import com.opensymphony.able.view.Input;
+import com.opensymphony.able.annotations.DisplayBulkEdit;
+import com.opensymphony.able.annotations.DisplayDefaults;
+import com.opensymphony.able.annotations.DisplayView;
+import com.opensymphony.able.annotations.Input;
 import org.hibernate.validator.NotNull;
 
 import javax.persistence.Entity;

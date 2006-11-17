@@ -1,8 +1,8 @@
 package com.opensymphony.able.demo.action;
 
+import com.opensymphony.able.annotations.Secure;
 import com.opensymphony.able.demo.model.User;
 import com.opensymphony.able.demo.service.UserService;
-import com.opensymphony.able.stripes.util.Secure;
 import net.sourceforge.stripes.action.Before;
 import net.sourceforge.stripes.action.DefaultHandler;
 import net.sourceforge.stripes.action.DontValidate;

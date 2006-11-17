@@ -17,18 +17,22 @@
  */
 package com.opensymphony.able.action;
 
+import com.opensymphony.able.annotations.Partial;
 import com.opensymphony.able.entity.EntityInfo;
 import com.opensymphony.able.entity.PropertyInfo;
 import com.opensymphony.able.filter.TransactionOutcome;
 import com.opensymphony.able.service.CrudService;
 import com.opensymphony.able.service.JpaCrudService;
+import com.opensymphony.able.stripes.DefaultResolution;
+import com.opensymphony.able.stripes.GenerateResolution;
 import com.opensymphony.able.util.EnumHelper;
 import com.opensymphony.able.xml.JaxbResolution;
 import com.opensymphony.able.xml.JaxbTemplate;
-import com.opensymphony.able.stripes.util.DefaultResolution;
-import com.opensymphony.able.stripes.util.Partial;
-import com.opensymphony.able.stripes.util.GenerateResolution;
-import net.sourceforge.stripes.action.*;
+import net.sourceforge.stripes.action.ActionBean;
+import net.sourceforge.stripes.action.DefaultHandler;
+import net.sourceforge.stripes.action.DontValidate;
+import net.sourceforge.stripes.action.RedirectResolution;
+import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.integration.spring.SpringBean;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

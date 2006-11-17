@@ -1,4 +1,4 @@
-package com.opensymphony.able.stripes.util;
+package com.opensymphony.able.stripes;
 
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.Resolution;

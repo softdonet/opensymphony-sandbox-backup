@@ -1,4 +1,4 @@
-package com.opensymphony.able.stripes.util;
+package com.opensymphony.able.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

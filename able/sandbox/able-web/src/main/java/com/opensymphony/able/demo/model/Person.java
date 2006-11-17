@@ -1,8 +1,8 @@
 package com.opensymphony.able.demo.model;
 
-import com.opensymphony.able.view.Input;
-import com.opensymphony.able.view.InputType;
-import com.opensymphony.able.view.ViewField;
+import com.opensymphony.able.annotations.Input;
+import com.opensymphony.able.annotations.InputType;
+import com.opensymphony.able.annotations.ViewField;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

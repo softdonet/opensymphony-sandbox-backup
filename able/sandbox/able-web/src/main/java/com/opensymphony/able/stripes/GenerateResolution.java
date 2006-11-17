@@ -1,19 +1,19 @@
-package com.opensymphony.able.stripes.util;
+package com.opensymphony.able.stripes;
 
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.controller.StripesConstants;
-import net.sourceforge.stripes.util.Log;
 import net.sourceforge.stripes.mock.MockHttpServletResponse;
+import net.sourceforge.stripes.util.Log;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.FileWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class GenerateResolution extends ForwardResolution {
     private static final Log log = Log.getInstance(ForwardResolution.class);

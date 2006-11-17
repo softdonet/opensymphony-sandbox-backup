@@ -16,7 +16,12 @@
  */
 package com.opensymphony.able.entity;
 
-import com.opensymphony.able.view.*;
+import com.opensymphony.able.annotations.DisplayBulkEdit;
+import com.opensymphony.able.annotations.DisplayDefaults;
+import com.opensymphony.able.annotations.DisplayEdit;
+import com.opensymphony.able.annotations.DisplayList;
+import com.opensymphony.able.annotations.DisplayView;
+import com.opensymphony.able.annotations.ViewField;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.TypeConverter;

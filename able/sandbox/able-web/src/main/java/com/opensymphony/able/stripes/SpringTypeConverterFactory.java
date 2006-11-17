@@ -1,8 +1,8 @@
-package com.opensymphony.able.stripes.util;
+package com.opensymphony.able.stripes;
 
+import net.sourceforge.stripes.integration.spring.SpringHelper;
 import net.sourceforge.stripes.validation.DefaultTypeConverterFactory;
 import net.sourceforge.stripes.validation.TypeConverter;
-import net.sourceforge.stripes.integration.spring.SpringHelper;
 
 import javax.servlet.ServletContext;
 import java.util.Locale;

@@ -1,7 +1,7 @@
 package com.opensymphony.able.demo.action.util;
 
+import com.opensymphony.able.annotations.Secure;
 import com.opensymphony.able.demo.action.LoginActionBean;
-import com.opensymphony.able.stripes.util.Secure;
 import net.sourceforge.stripes.action.RedirectResolution;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.controller.ExecutionContext;

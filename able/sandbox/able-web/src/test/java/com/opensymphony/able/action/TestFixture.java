@@ -36,7 +36,7 @@ public class TestFixture {
             Map<String, String> filterParams = new HashMap<String, String>();
             filterParams.put("ActionResolver.PackageFilters", "com.opensymphony.able.service.*");
             filterParams.put("Interceptor.Classes", "net.sourceforge.stripes.integration.spring.SpringInterceptor, net.sourceforge.stripes.controller.BeforeAfterMethodInterceptor");
-            filterParams.put("TypeConverterFactory.Class", "com.opensymphony.able.stripes.util.JpaTypeConverterFactory");
+            filterParams.put("TypeConverterFactory.Class", "com.opensymphony.able.stripes.JpaTypeConverterFactory");
 
             servletContext.addFilter(StripesFilter.class, "StripesFilter", filterParams);
 
