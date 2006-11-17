@@ -16,13 +16,7 @@
  */
 package com.opensymphony.able.service;
 
-import com.opensymphony.able.model.Bug;
-import com.opensymphony.able.model.Component;
-import com.opensymphony.able.model.Person;
-import com.opensymphony.able.model.Priority;
-import com.opensymphony.able.model.Status;
-import com.opensymphony.able.model.Team;
-import com.opensymphony.able.model.User;
+import com.opensymphony.able.demo.model.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.orm.jpa.JpaCallback;
 import org.springframework.orm.jpa.JpaTemplate;
@@ -78,7 +72,7 @@ public class LoadDatabaseService implements InitializingBean {
         User user = new User("plightbo", "plightbo@gmail.com", "Patrick Lightbody", "z8yZIIFLQ14VbFs5r8uHL5ecH5U=");
         persist(user);
 
-        user = new User("tfennel", "tim@fennel.com", "Tim Fennell", "z8yZIIFLQ14VbFs5r8uHL5ecH5U=" );
+        user = new User("tfennel", "tim@fennel.com", "Tim Fennell", "z8yZIIFLQ14VbFs5r8uHL5ecH5U=");
         persist(user);
 
         user = new User("jstrachan", "james@strachan.com", "James Strachan", "z8yZIIFLQ14VbFs5r8uHL5ecH5U=");
