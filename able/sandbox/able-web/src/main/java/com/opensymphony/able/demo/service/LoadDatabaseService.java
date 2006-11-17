@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.opensymphony.able.demo.service;
+package com.opensymphony.able.service;
 
-import com.opensymphony.able.demo.model.Bug;
-import com.opensymphony.able.demo.model.Component;
-import com.opensymphony.able.demo.model.Person;
-import com.opensymphony.able.demo.model.Priority;
-import com.opensymphony.able.demo.model.Status;
-import com.opensymphony.able.demo.model.Team;
-import com.opensymphony.able.demo.model.User;
+import com.opensymphony.able.model.Bug;
+import com.opensymphony.able.model.Component;
+import com.opensymphony.able.model.Person;
+import com.opensymphony.able.model.Priority;
+import com.opensymphony.able.model.Status;
+import com.opensymphony.able.model.Team;
+import com.opensymphony.able.model.User;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.orm.jpa.JpaCallback;
 import org.springframework.orm.jpa.JpaTemplate;
@@ -78,14 +78,13 @@ public class LoadDatabaseService implements InitializingBean {
         User user = new User("plightbo", "plightbo@gmail.com", "Patrick Lightbody", "z8yZIIFLQ14VbFs5r8uHL5ecH5U=");
         persist(user);
 
-        user = new User();
-        user.setName("Tim Fennell");
-        user.setUsername("tfennell");
+        user = new User("tfennel", "tim@fennel.com", "Tim Fennell", "z8yZIIFLQ14VbFs5r8uHL5ecH5U=" );
         persist(user);
 
-        user = new User();
-        user.setName("James Strachan");
-        user.setUsername("jstrachan");
+        user = new User("jstrachan", "james@strachan.com", "James Strachan", "z8yZIIFLQ14VbFs5r8uHL5ecH5U=");
+        persist(user);
+
+        user = new User("kjetilhp", "kjetil@java.no", "Kjetil H.Paulsen", "z8yZIIFLQ14VbFs5r8uHL5ecH5U=");
         persist(user);
     }
 
@@ -114,19 +113,19 @@ public class LoadDatabaseService implements InitializingBean {
                 "fred@mystery.machine.tv");
         persist(person5);
 
-        Component component0 = new Component("Component 0");
+        Component component0 = new Component("Core");
         persist(component0);
 
-        Component component1 = new Component("Component 1");
+        Component component1 = new Component("Common");
         persist(component1);
 
-        Component component2 = new Component("Component 2");
+        Component component2 = new Component("Hibernate");
         persist(component2);
 
-        Component component3 = new Component("Component 3");
+        Component component3 = new Component("Apache");
         persist(component3);
 
-        Component component4 = new Component("Component 4");
+        Component component4 = new Component("OpenSymphony");
         persist(component4);
 
         Bug bug = new Bug();
