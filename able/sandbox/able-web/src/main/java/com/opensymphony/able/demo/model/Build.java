@@ -6,9 +6,11 @@ import javax.persistence.Id;
 
 @Entity
 public class Build {
-    private long build;
+    @Id
+    @GeneratedValue
     private Long id;
-
+    private long build;
+        
     public Build() {
     }
 
@@ -16,8 +18,6 @@ public class Build {
         this.build = build;
     }
 
-    @Id
-    @GeneratedValue
     public Long getId() {
         return id;
     }

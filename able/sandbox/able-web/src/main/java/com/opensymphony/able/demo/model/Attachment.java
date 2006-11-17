@@ -14,14 +14,15 @@ import javax.persistence.Transient;
  */
 @Entity
 public class Attachment {
-	private Integer id;
+    @Id
+    @GeneratedValue
+    private Integer id;
     private String name;
+    @Lob
     private long size;
     private String data;
     private String contentType;
 
-    @Id
-    @GeneratedValue
     public Integer getId() {
         return id;
     }
@@ -33,7 +34,6 @@ public class Attachment {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    @Lob
     public long getSize() { return size; }
     public void setSize(long size) { this.size = size; }
 

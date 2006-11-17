@@ -14,45 +14,51 @@ import java.util.List;
  */
 @Entity
 public class Team {
-	private Integer id;
-	private String name;
-	private List<Person> members = new ArrayList<Person>();
-
-	public Team() {
-	}
-
-	/** Perform equality checks based on identity. */
-	public boolean equals(Object obj) {
-		return (obj instanceof Team) && this.id == ((Team) obj).id;
-	}
-
-	/** Gets the ID of the Component. */
-	@Id
-	@GeneratedValue
-	public Integer getId() {
-		return id;
-	}
-
-	/** Sets the ID of the Component. */
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
+    @Id
+    @GeneratedValue
+    private Integer id;
     @NotNull
+    private String name;
+    @OneToMany()
+    private List<Person> members = new ArrayList<Person>();
+
+    public Team() {
+    }
+
+    /**
+     * Perform equality checks based on identity.
+     */
+    public boolean equals(Object obj) {
+        return (obj instanceof Team) && this.id == ((Team) obj).id;
+    }
+
+    /**
+     * Gets the ID of the Component.
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * Sets the ID of the Component.
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
-		return name;
-	}
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@OneToMany()
-	public List<Person> getMembers() {
-		return members;
-	}
+    public List<Person> getMembers() {
+        return members;
+    }
 
-	public void setMembers(List<Person> members) {
-		this.members = members;
+    public void setMembers(List<Person> members) {
+        this.members = members;
 	}
 }

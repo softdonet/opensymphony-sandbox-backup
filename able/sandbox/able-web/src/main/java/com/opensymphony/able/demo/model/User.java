@@ -14,8 +14,12 @@ import javax.persistence.Id;
  */
 @Entity
 public class User {
+    @Id
+    @GeneratedValue
     private Long id;
+    @NotNull
     private String username;
+    @Email
     private String email;
     private String name;
     private String passwordHash;
@@ -51,8 +55,6 @@ public class User {
         return "User[id=" + id + ", username=" + username + ", name=" + name + "]";
     }
 
-    @Id
-    @GeneratedValue
     public Long getId() {
         return id;
     }
@@ -61,7 +63,6 @@ public class User {
         this.id = id;
     }
 
-    @NotNull
     public String getUsername() {
         return username;
     }
@@ -70,7 +71,6 @@ public class User {
         this.username = username;
     }
 
-    @Email
     public String getEmail() {
         return email;
     }
