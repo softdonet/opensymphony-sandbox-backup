@@ -119,6 +119,7 @@ public class EntityInfo {
         return entityUri;
     }
 
+    
     public PropertyInfo getProperty(String name) {
         return propertyMap.get(name);
     }
