@@ -16,9 +16,9 @@
  */
 package com.opensymphony.able.action;
 
-import com.opensymphony.able.demo.action.BugActionBean;
-import com.opensymphony.able.demo.model.Bug;
-import com.opensymphony.able.demo.model.Status;
+import com.opensymphony.able.demo.action.PersonActionBean;
+import com.opensymphony.able.demo.model.Person;
+import com.opensymphony.able.demo.model.Role;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.TypeConverter;
@@ -37,21 +37,21 @@ public class JpaCrudActionBeanTest {
     @Test
     public void testReflection() throws Exception {
 
-        BugActionBean action = new BugActionBean();
+        PersonActionBean action = new PersonActionBean();
 
         Class idClass = action.getIdClass();
         Assert.assertEquals(Integer.class, idClass);
 
-        Class<Bug> entityClass = action.getEntityClass();
-        Assert.assertEquals(Bug.class, entityClass);
+        Class<Person> entityClass = action.getEntityClass();
+        Assert.assertEquals(Person.class, entityClass);
         
         String entityName = action.getEntityInfo().getEntityName();
-        Assert.assertEquals("Bug", entityName);
+        Assert.assertEquals("Person", entityName);
 
         String entityUri = action.getEntityInfo().getEntityUri();
-        Assert.assertEquals("bug", entityUri);
+        Assert.assertEquals("person", entityUri);
         
-        Object values = action.getAllValues().get("status");
+        Object values = action.getAllValues().get("role");
         System.out.println("Values: " + values);
         
         Assert.assertTrue(values instanceof List, "values is an array");
@@ -61,18 +61,17 @@ public class JpaCrudActionBeanTest {
 			System.out.println("Found type value: " + object);
 		}
         
-        Assert.assertEquals(4, valueArray.size());
+        Assert.assertEquals(3, valueArray.size());
         System.out.println("found values: " + values);
         
-        Assert.assertEquals(Status.New, valueArray.get(0));
-        Assert.assertEquals(Status.Assigned, valueArray.get(1));
-        Assert.assertEquals(Status.Resolved, valueArray.get(2));
-        Assert.assertEquals(Status.Closed, valueArray.get(3));
+        Assert.assertEquals(Role.Employee, valueArray.get(0));
+        Assert.assertEquals(Role.Manager, valueArray.get(1));
+        Assert.assertEquals(Role.BigCheese, valueArray.get(2));
     }
 
     @Test
     public void testIntrospection() throws Exception {
-        Bug bug = new Bug();
+        Person bug = new Person();
 
         DataBinder binder = new DataBinder(bug);
         MutablePropertyValues propertyValues = new MutablePropertyValues();

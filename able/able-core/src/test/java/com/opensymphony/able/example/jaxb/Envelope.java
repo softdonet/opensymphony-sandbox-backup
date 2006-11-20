@@ -17,7 +17,7 @@
  */
 package com.opensymphony.able.example.jaxb;
 
-import com.opensymphony.able.demo.model.User;
+import com.opensymphony.able.demo.model.Person;
 
 import java.util.List;
 
@@ -25,13 +25,13 @@ import java.util.List;
  * @version $Revision$
  */
 public class Envelope {
-    private List<User> userList;
+    private List<Person> userList;
 
-    public void setUserList(List<User> userList) {
+    public void setPersonList(List<Person> userList) {
         this.userList = userList;
     }
 
-    public List<User> getUserList() {
+    public List<Person> getPersonList() {
         return userList;
     }
 }

@@ -20,8 +20,7 @@ import com.opensymphony.able.annotations.DisplayBulkEdit;
 import com.opensymphony.able.annotations.DisplayList;
 import com.opensymphony.able.annotations.Input;
 import com.opensymphony.able.annotations.ViewField;
-import com.opensymphony.able.demo.model.Attachment;
-import com.opensymphony.able.demo.model.Bug;
+import com.opensymphony.able.demo.model.Person;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
@@ -35,62 +34,65 @@ public class EntityInfoTest {
 
     @Test
     public void testAutoDiscoveredEntity() throws Exception {
-        EntityInfo info = Entities.getInstance().getEntity(Bug.class.getName());
+        EntityInfo info = Entities.getInstance().getEntity(Person.class.getName());
         assertNotNull(info);
 
         Class entityClass = info.getEntityClass();
-        assertEquals(Bug.class, entityClass);
+        assertEquals(Person.class, entityClass);
 
         String entityName = info.getEntityName();
-        assertEquals("Bug", entityName);
+        assertEquals("Person", entityName);
 
         String entityUri = info.getEntityUri();
-        assertEquals("bug", entityUri);
+        assertEquals("person", entityUri);
 
         Class idClass = info.getIdClass();
         assertEquals(Integer.class, idClass);
 
-        assertEquals(info.getActionUri(), "/bug");
+        assertEquals(info.getActionUri(), "/person");
 
-        PropertyInfo property = info.getProperty("openDate");
+        PropertyInfo property = info.getProperty("firstName");
         assertNotNull(property);
         System.out.println("displayName: " + property.getDisplayName());
         System.out.println("shortDescription: " + property.getShortDescription());
 
-        assertEquals(property.getDisplayName(), "Open Date");
+        assertEquals(property.getDisplayName(), "First Name");
 
-        property = info.getProperty("shortDescription");
+        property = info.getProperty("lastName");
         assertNotNull(property);
-        assertEquals(property.getDisplayName(), "Description");
+        assertEquals(property.getDisplayName(), "Surname");
         Input input = property.getInput();
         assertNotNull(input);
 
         List<PropertyInfo> viewFieldProperties = info.getNameProperties();
-        assertEquals(viewFieldProperties.size(), 1, "view field properties: " + viewFieldProperties);
-        assertProperty("shortDescription", viewFieldProperties, 0);
-        
-        property = info.getProperty("attachments");
-        assertNotNull(property);
-        assertTrue(property.isCollection(), "property should be a collection: " + property);
-        assertEquals(property.getPropertyComponentType(), Attachment.class);
+        assertEquals(viewFieldProperties.size(), 2, "view field properties: " + viewFieldProperties);
+        assertProperty("firstName", viewFieldProperties, 0);
+        assertProperty("lastName", viewFieldProperties, 1);
+
+        // TODO
+//
+//        property = info.getProperty("attachments");
+//        assertNotNull(property);
+//        assertTrue(property.isCollection(), "property should be a collection: " + property);
+//        assertEquals(property.getPropertyComponentType(), Attachment.class);
     }
 
     @Test
     public void testOrderOfPropertiesIsInFieldDeclarationOrder() throws Exception {
-        EntityInfo info = Entities.getInstance().getEntity(Bug.class.getName());
+        EntityInfo info = Entities.getInstance().getEntity(Person.class.getName());
         assertNotNull(info);
 
         List<PropertyInfo> properties = info.getProperties();
         assertProperty("id", properties, 0);
-        assertProperty("openDate", properties, 1);
-        assertProperty("shortDescription", properties, 2);
-        assertProperty("longDescription", properties, 3);
-        assertEquals(properties.size(), 11);
+        assertProperty("username", properties, 1);
+        assertProperty("firstName", properties, 2);
+        assertProperty("lastName", properties, 3);
+        assertEquals(properties.size(), 7);
     }
     
     @Test
     public void testDefaultSortOrder() throws Exception {
-        EntityInfo info = new EntityInfo(Bug.class);
+        EntityInfo info = new EntityInfo(Person.class);
 
         List<PropertyInfo> properties = info.getProperties();
         for (PropertyInfo property : properties) {
@@ -99,13 +101,13 @@ public class EntityInfoTest {
 
         // lets test the order of the properties
         assertProperty("id", properties, 0);
-        assertProperty("openDate", properties, 1);
-        assertProperty("shortDescription", properties, 2);
-        assertProperty("longDescription", properties, 3);
+        assertProperty("username", properties, 1);
+        assertProperty("firstName", properties, 2);
+        assertProperty("lastName", properties, 3);
 
         List<PropertyInfo> editTableProperties = info.getBulkEditProperties();
-        assertProperty("openDate", editTableProperties, 0);
-        assertProperty("shortDescription", editTableProperties, 1);
+        assertProperty("username", editTableProperties, 0);
+        assertProperty("firstName", editTableProperties, 1);
         /*
         assertExcludes(editTableProperties, "name");
         assertExcludes(editTableProperties, "email");
@@ -114,7 +116,7 @@ public class EntityInfoTest {
 
     @Test(enabled = false)
     public void testExcludedViewPropertiesAreExcludedFromEdit() throws Exception {
-        EntityInfo info = new EntityInfo(Bug.class);
+        EntityInfo info = new EntityInfo(Person.class);
 
         assertExcludes(info.getViewProperties(), "longDescription");
 
@@ -124,7 +126,7 @@ public class EntityInfoTest {
 
     @Test(enabled = false)
     public void testViewWithIncludesAndEditWithInheritedFilterAndExcludes() throws Exception {
-        EntityInfo info = new EntityInfo(BugWithViewWithIncludes.class);
+        EntityInfo info = new EntityInfo(PersonWithViewWithIncludes.class);
 
         List<PropertyInfo> viewTableProperties = info.getListProperties();
         assertProperty("name", viewTableProperties, 0);
@@ -138,12 +140,12 @@ public class EntityInfoTest {
 
     @DisplayList(includes = { "name", "email" })
     @DisplayBulkEdit(excludes = { "name" })
-    public static class BugWithViewWithIncludes extends Bug {
+    public static class PersonWithViewWithIncludes extends Person {
     }
 
     @Test(enabled = false)
     public void testEditWithOverloadedIncludes() throws Exception {
-        EntityInfo info = new EntityInfo(BugWithOverloadedIncludes.class);
+        EntityInfo info = new EntityInfo(PersonWithOverloadedIncludes.class);
 
         List<PropertyInfo> viewTableProperties = info.getListProperties();
         assertProperty("name", viewTableProperties, 0);
@@ -157,12 +159,12 @@ public class EntityInfoTest {
     }
 
     @DisplayBulkEdit(includes = { "id", "username" })
-    public static class BugWithOverloadedIncludes extends BugWithViewWithIncludes {
+    public static class PersonWithOverloadedIncludes extends PersonWithViewWithIncludes {
     }
 
     @Test(enabled = false)
     public void testViewFieldsDefinedViaAnnotation() throws Exception {
-        EntityInfo info = new EntityInfo(BugWithViewField.class);
+        EntityInfo info = new EntityInfo(PersonWithViewField.class);
 
         List<PropertyInfo> properties = info.getNameProperties();
         assertEquals(2, properties.size());
@@ -171,7 +173,7 @@ public class EntityInfoTest {
     }
 
     @ViewField(includes = { "id", "username" })
-    public static class BugWithViewField extends Bug {
+    public static class PersonWithViewField extends Person {
     }
 
     @Test(enabled = false)
