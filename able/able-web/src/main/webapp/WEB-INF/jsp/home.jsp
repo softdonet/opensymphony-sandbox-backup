@@ -6,7 +6,7 @@
 
 <body>
 
-<p>Welcome to the starter web application for Able</p>
+<p>Welcome to the starter web application for Able using language: <b><%=request.getLocale().getLanguage()%></b></p>
 
 <h2>Entity List</h2>
 
