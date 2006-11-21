@@ -17,21 +17,16 @@
  */
 package com.opensymphony.able.demo.model;
 
-import com.opensymphony.able.annotations.ViewField;
 import com.opensymphony.able.annotations.Input;
 import com.opensymphony.able.annotations.InputType;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.OneToMany;
-import javax.persistence.ManyToOne;
-
+import com.opensymphony.able.annotations.ViewField;
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableId;
 import org.compass.annotations.SearchableProperty;
 
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * Represents a person to whom bugs can be assigned.
@@ -56,6 +51,10 @@ public class Person {
     @SearchableProperty
     private String email;
     private String password;
+
+    @Input(type = InputType.TextArea)
+    @SearchableProperty
+    private String notes;
     private Role role;
 
     /**
