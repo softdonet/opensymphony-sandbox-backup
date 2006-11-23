@@ -64,7 +64,7 @@
         </table>
     </jsp:attribute>
     <jsp:attribute name="extraButtons">
-        <s:submit name="delete" value="Delete"/>
+        <s:submit class="btn" name="delete" value="Delete"/>
     </jsp:attribute>
 </a:form>
 

@@ -10,6 +10,7 @@
 <%@ attribute name="submitDefaultLabel" required="false" type="java.lang.String" %>
 <%@ attribute name="cancelEvent" required="false" type="java.lang.String" %>
 <%@ attribute name="cancelDefaultLabel" required="false" type="java.lang.String" %>
+<%@ attribute name="noButtons" required="false" type="java.lang.Boolean" %>
 <%@ attribute name="formBody" required="false" fragment="true" %>
 <%@ attribute name="extraButtons" required="false" fragment="true" %>
 <c:if test="${empty name}"><c:set var="name" value="${af:extractFormName(beanclass, submitEvent)}"/></c:if>
@@ -35,12 +36,14 @@
             </c:otherwise>
         </c:choose>
 
+        <c:if test="${not noButtons}">
         <div class="buttons">
-            <s:submit name="${submitEvent}">${submitDefaultLabel != null ? submitDefaultLabel : "Submit"}</s:submit>
+            <s:submit class="btn" name="${submitEvent}">${submitDefaultLabel != null ? submitDefaultLabel : "Submit"}</s:submit>
             <c:if test="${not empty cancelEvent}">
-                <s:submit name="${cancelEvent}">${cancelDefaultLabel != null ? cancelDefaultLabel : "Cancel"}</s:submit>
+                <s:submit class="btn" name="${cancelEvent}">${cancelDefaultLabel != null ? cancelDefaultLabel : "Cancel"}</s:submit>
             </c:if>
             <jsp:invoke fragment="extraButtons"/>
         </div>
+        </c:if>
     </s:form>
 </div>

@@ -22,6 +22,10 @@ a:active {
 	color: #6666FF;
 }
 
+img {
+    border: none;
+}
+
 #contentpanel h1 {
 	font-size: 12pt;
 	font-variant: small-caps;
@@ -269,4 +273,17 @@ button {
 	font-size: 6pt;
     background-color: #B0C4DE;
 	color: white;
+}
+
+input.btn{
+   color: cornflowerblue;
+   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+   font-size:84%;
+   font-weight: bold;
+   background-color: whitesmoke;
+   border:1px solid;
+   border-top-color: cornflowerblue;
+   border-left-color: cornflowerblue;
+   border-right-color: gray;
+   border-bottom-color: gray;
 }

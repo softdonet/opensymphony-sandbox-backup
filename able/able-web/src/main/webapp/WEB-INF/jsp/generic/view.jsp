@@ -23,7 +23,7 @@
 
 <div id="savepage">
     <s:link beanclass="${actionBean.class.name}" event="generateView"><img style="border: none; vertical-align: middle;" src="${pageContext.request.contextPath}/gfx/save.gif"/>this page to
-        /WEB-INF/jsp${actionBean.actionUri}/list.jsp
+        /WEB-INF/jsp${actionBean.actionUri}/view.jsp
     </s:link>
 </div>
 

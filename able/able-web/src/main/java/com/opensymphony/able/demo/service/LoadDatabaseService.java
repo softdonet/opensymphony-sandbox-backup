@@ -69,8 +69,11 @@ public class LoadDatabaseService implements InitializingBean {
     }
 
     protected void populateUsers() {
-        User user = new User("plightbo", "plightbo@gmail.com", "Patrick Lightbody", "z8yZIIFLQ14VbFs5r8uHL5ecH5U=");
-        persist(user);
+        User user;
+        /*
+        removed: will be insertet by SQL script..
+        user = new User("plightbo", "plightbo@gmail.com", "Patrick Lightbody", "z8yZIIFLQ14VbFs5r8uHL5ecH5U=");
+        persist(user);*/
 
         user = new User("tfennel", "tim@fennel.com", "Tim Fennell", "z8yZIIFLQ14VbFs5r8uHL5ecH5U=");
         persist(user);

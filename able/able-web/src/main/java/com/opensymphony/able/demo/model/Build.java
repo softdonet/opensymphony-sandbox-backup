@@ -3,6 +3,7 @@ package com.opensymphony.able.demo.model;
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableId;
 import org.compass.annotations.SearchableProperty;
+import org.hibernate.validator.NotNull;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +15,9 @@ public class Build {
     @Id
     @GeneratedValue
     @SearchableId
-    private Long id;
+    private long id;
+    @SearchableProperty
+    @NotNull
     private long build;
     @SearchableProperty
     private String tag;
@@ -28,11 +31,11 @@ public class Build {
         this.build = build;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

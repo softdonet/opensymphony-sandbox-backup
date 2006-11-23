@@ -17,7 +17,7 @@
 
 <div id="savepage">
     <s:link beanclass="${actionBean.class.name}" event="generateEdit"><img style="border: none; vertical-align: middle;" src="${pageContext.request.contextPath}/gfx/save.gif"/>this page to
-        /WEB-INF/jsp${actionBean.actionUri}/list.jsp
+        /WEB-INF/jsp${actionBean.actionUri}/edit.jsp
     </s:link>
 </div>
 
