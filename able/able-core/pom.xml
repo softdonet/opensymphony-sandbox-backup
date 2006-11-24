@@ -191,7 +191,7 @@
 
         <!-- compass dependencies -->
         <dependency>
-            <groupId>opensymphony.compass</groupId>
+            <groupId>opensymphony</groupId>
             <artifactId>compass</artifactId>
             <version>1.1M3</version>
         </dependency>

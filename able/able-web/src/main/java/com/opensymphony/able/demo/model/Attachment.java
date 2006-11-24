@@ -25,8 +25,8 @@ public class Attachment {
     private Integer id;
     @SearchableProperty
     private String name;
-    @Lob
     private long size;
+    @Lob
     private String data;
     private String contentType;
 
