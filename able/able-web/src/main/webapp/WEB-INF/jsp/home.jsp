@@ -54,20 +54,26 @@
                 <c:forEach items="${actionBean.users}" var="user">
                     <li>${user.name} (${user.email})</li>
                 </c:forEach>
+                <li id="newUser"></li>
             </ul>
         </td>
 
-        <%--<td style="padding: 20px">
+        <td style="margin: 5px; padding: 20px; border: none;">
             <a:form beanclass="com.opensymphony.able.demo.action.RegisterActionBean"
-                    title="Register"
-                    submitEvent="register">
+                    title="Add user" noButtons="true"
+                    submitEvent="addUser">
                 <a:formFieldText name="user.username"/>
                 <a:formFieldText name="user.name"/>
                 <a:formFieldText name="user.email"/>
                 <a:formFieldPassword name="password"/>
                 <a:formFieldPassword name="passwordAgain"/>
+                <td></td>
+                <td>
+                    <s:button name="addUser" value="Add user" class="btn"
+                          onclick="invoke(this.form, this.name, 'newUser');"/>
+                </td>
             </a:form>
-        </td>--%>
+        </td>
     </tr>
 </table>
 

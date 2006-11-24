@@ -2,13 +2,13 @@ package com.opensymphony.able.demo.action;
 
 import com.opensymphony.able.demo.service.UserService;
 import com.opensymphony.able.filter.TransactionOutcome;
-import net.sourceforge.stripes.action.DefaultHandler;
-import net.sourceforge.stripes.action.DontValidate;
-import net.sourceforge.stripes.action.RedirectResolution;
-import net.sourceforge.stripes.action.Resolution;
+import net.sourceforge.stripes.action.*;
 import net.sourceforge.stripes.integration.spring.SpringBean;
 import net.sourceforge.stripes.validation.Validate;
 import net.sourceforge.stripes.validation.ValidationMethod;
+
+import java.io.StringReader;
+import java.util.logging.Logger;
 
 public class RegisterActionBean extends AbstractUserActionBean {
     @SpringBean
@@ -32,6 +32,7 @@ public class RegisterActionBean extends AbstractUserActionBean {
         }
     }
 
+
     public Resolution register() {
         user.setPasswordHash(userService.encrypt(password));
         userService.insert(user);
@@ -42,6 +43,21 @@ public class RegisterActionBean extends AbstractUserActionBean {
         ctx.setUser(user);
 
         return new RedirectResolution(HomeActionBean.class);
+    }
+
+      private static final Logger myLogger =
+                     Logger.getLogger(RegisterActionBean.class.getPackage().getName());
+
+    @HandlesEvent("addUser")
+    public Resolution addUser() {
+        user.setPasswordHash(userService.encrypt(password));
+        userService.insert(user);
+
+        TransactionOutcome.shouldCommit();
+
+        String userInfo = user.getName() + "(" + user.getEmail() + ")";
+
+        return new StreamingResolution("newUser", new StringReader(userInfo));
     }
 
     public void setUserService(UserService userService) {

@@ -138,7 +138,7 @@ table.leftrightform th {
 	font-weight: bold;
 	padding: 3px;
 	text-align: right;
-	vertical-align: top;
+	vertical-align: middle;
 }
 
 textarea {
