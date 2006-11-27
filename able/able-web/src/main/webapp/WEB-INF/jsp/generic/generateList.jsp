@@ -15,6 +15,7 @@
             Search:
             &lt;stripes:text name="query"/&gt;
             &lt;stripes:submit name="search" value="Go"/&gt;
+            <a href="http://lucene.apache.org/java/docs/queryparsersyntax.html">Search syntax</a>
         </p>
 
         <table id="entities" class="display sortable autostripe"&gt;

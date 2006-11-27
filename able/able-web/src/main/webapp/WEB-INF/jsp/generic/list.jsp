@@ -12,6 +12,7 @@
         <p>
             <s:text name="query"/>
             <s:image name="search" src="/gfx/search.gif" style="vertical-align: bottom;"/>
+            <a href="http://lucene.apache.org/java/docs/queryparsersyntax.html">Search syntax</a>
         </p>
        <table id="entities" class="display sortable autostripe">
             <thead>
