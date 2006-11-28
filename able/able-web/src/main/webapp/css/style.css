@@ -117,6 +117,10 @@ table.display tr.even {
 	background-color: aliceblue;
 }
 
+table.display tr.odd {
+  background-color: cornflowerblue;
+}
+
 table.display td.buttons {
     vertical-align: top;
     width: 45px;
