@@ -70,7 +70,7 @@
                 <td></td>
                 <td>
                     <s:button name="addUser" value="Add user" class="btn"
-                          onclick="invoke(this.form, this.name, 'newUser');"/>
+                          onclick="invoke(this.form, this.name, 'newUser');this.form.reset()"/>
                 </td>
             </a:form>
         </td>
