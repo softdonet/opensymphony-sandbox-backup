@@ -26,6 +26,7 @@ import com.opensymphony.able.service.JpaCrudService;
 import com.opensymphony.able.stripes.DefaultResolution;
 import com.opensymphony.able.stripes.GenerateResolution;
 import com.opensymphony.able.util.EnumHelper;
+import static com.opensymphony.able.util.StringHelper.notBlank;
 import com.opensymphony.able.xml.JaxbResolution;
 import com.opensymphony.able.xml.JaxbTemplate;
 import net.sourceforge.stripes.action.ActionBean;
@@ -49,7 +50,7 @@ import java.util.Set;
  *
  * @version $Revision$
  */
-public class DefaultCrudActionBean<E> extends DefaultActionBean implements CrudActionBean {
+public class DefaultCrudActionBean<E> extends EntityActionBeanSupport<E> {
     private static final Log log = LogFactory.getLog(DefaultCrudActionBean.class);
 
     private CrudService<E> service;
@@ -59,22 +60,17 @@ public class DefaultCrudActionBean<E> extends DefaultActionBean implements CrudA
     private QueryStrategy queryStrategy;
 
     private E entity;
-    private Class<E> entityClass;
-    private EntityInfo entityInfo;
     private String query;
 
     public DefaultCrudActionBean() {
     }
 
-
     public DefaultCrudActionBean(Class<E> entityClass) {
-        this.entityClass = entityClass;
-        this.entityInfo = new EntityInfo(entityClass);
+        super(entityClass);
     }
 
     public DefaultCrudActionBean(CrudService<E> service) {
         this(service.getEntityClass());
-        this.service = service;
     }
 
     public DefaultCrudActionBean(CrudService<E> service, QueryStrategy queryStrategy, Validator validator) {
@@ -216,53 +212,24 @@ public class DefaultCrudActionBean<E> extends DefaultActionBean implements CrudA
     }
 
     /**
-     * Returns the type of the entity
-     */
-    public Class<E> getEntityClass() {
-        return entityClass;
-    }
-
-    /**
      * Returns the primary key of the entity
      */
     public Object getId() {
         return getEntityInfo().getIdValue(getEntity());
     }
 
-    /**
-     * Returns the type of the primary key of the entity
-     *
-     * @return
-     */
-    public Class getIdClass() {
-        return getEntityInfo().getIdClass();
-    }
-
     @SuppressWarnings("unchecked")
     public List<E> getAllEntities() {
-        if (query != null) {
+        String text = getQuery();
+        if (notBlank(text)) {
             if (queryStrategy == null) {
                 throw new IllegalArgumentException("No QueryStrategy was injected!");
             }
-            List answer = queryStrategy.execute(entityClass, query);
-            log.info("Query with: " + query + " found: " + answer);
+            List answer = queryStrategy.execute(entityClass, text);
+            log.info("Query with: " + text + " found: " + answer);
             return answer;
         }
         return getService().findAll();
-    }
-
-    public EntityInfo getEntityInfo() {
-        if (entityInfo == null) {
-            entityInfo = EntityInfo.newInstance(getService().getEntityClass());
-        }
-        return entityInfo;
-    }
-
-    /**
-     * Returns the URI of the Crud action (i.e. this POJO :)
-     */
-    public String getActionUri() {
-        return getEntityInfo().getActionUri();
     }
 
     public Map<String, Object> getAllValues() {
@@ -350,4 +317,9 @@ public class DefaultCrudActionBean<E> extends DefaultActionBean implements CrudA
     protected CrudService<E> createService() {
         throw new IllegalArgumentException("No service property has been configured!");
     }
+
+    protected EntityInfo createEntityInfo() {
+        return EntityInfo.newInstance(getService().getEntityClass());
+    }
+
 }

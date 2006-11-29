@@ -19,7 +19,6 @@ package com.opensymphony.able.util;
 import java.beans.Introspector;
 
 /**
- *
  * @version $Revision$
  */
 public class StringHelper {
@@ -52,7 +51,16 @@ public class StringHelper {
         }
         return text;
     }
+
     public static String decapitalize(String text) {
         return Introspector.decapitalize(text);
     }
+
+    /**
+     * Returns true if the given string is not null and not blank
+     */
+    public static boolean notBlank(String text) {
+        return text != null && text.trim().length() > 0;
+    }
+
 }
