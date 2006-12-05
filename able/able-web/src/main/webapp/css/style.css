@@ -113,13 +113,17 @@ table.display td {
 	font-size: 7pt;
 }
 
+/*
 table.display tr.even {
 	background-color: aliceblue;
-}
+}*/
 
 table.display tr.odd {
-  background-color: cornflowerblue;
+  background-color: aliceblue;
 }
+
+
+
 
 table.display td.buttons {
     vertical-align: top;

@@ -16,4 +16,6 @@
         taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator"
         %><%@
         taglib prefix="page" uri="http://www.opensymphony.com/sitemesh/page"
+        %><%@
+        taglib prefix="display" uri="http://displaytag.sf.net/el"
         %>
