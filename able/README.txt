@@ -13,3 +13,9 @@ To run the example web application module (able-web)
 	mvn jetty:run
 
 and point your browser at http://localhost:8080/able-web/
+
+you can make IDE projects with both:
+
+	mvn eclipse:eclipse
+and
+	mvn idea:idea
