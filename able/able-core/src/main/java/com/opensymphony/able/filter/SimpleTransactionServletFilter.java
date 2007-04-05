@@ -85,6 +85,9 @@ public class SimpleTransactionServletFilter implements Filter {
                         }
                         return null;
                     }
+                    catch (RuntimeException e) {
+                        throw e;
+                    }
                     catch (Exception e) {
                         return e;
                     }
