@@ -19,3 +19,5 @@ you can make IDE projects with both:
 	mvn eclipse:eclipse
 and
 	mvn idea:idea
+
+------------------
