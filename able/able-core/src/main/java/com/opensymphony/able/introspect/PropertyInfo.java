@@ -22,6 +22,9 @@ import com.opensymphony.able.util.StringHelper;
 
 import javax.persistence.Id;
 import javax.persistence.Transient;
+
+import org.springframework.core.annotation.AnnotationUtils;
+
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -57,7 +60,7 @@ public class PropertyInfo {
         idProperty = findAnnotation(Id.class) != null;
     }
 
-    private <T extends Annotation> T findAnnotation(Class<T> clazz) {
+    protected <T extends Annotation> T findAnnotation(Class<T> clazz) {
         String name = descriptor.getName();
         try {
             Field field = entityClass.getDeclaredField(name);
@@ -71,7 +74,7 @@ public class PropertyInfo {
 
         Method readMethod = descriptor.getReadMethod();
         if (readMethod != null) {
-            return readMethod.getAnnotation(clazz);
+            return AnnotationUtils.getAnnotation(readMethod, clazz);
         }
 
         return null;
